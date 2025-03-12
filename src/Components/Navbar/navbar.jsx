@@ -48,7 +48,7 @@ const Navbar = () => {
         @import
         url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
       </style>
-      <nav className="bg-white w-full px-8 md:px-auto">
+      <nav className="bg-white w-full px-8 md:px-auto" style={{fontFamily:"wantedsans"}}>
         <div className="md:h-16 h-28 mx-auto md:px-4 container flex items-center justify-between flex-wrap md:flex-nowrap">
           <div className="flex items-center flex-shrink-0 text-gray-700 order-1 md:order-none md:mr-6 mx-auto md:mx-0">
             <a href="/" className="flex items-center">

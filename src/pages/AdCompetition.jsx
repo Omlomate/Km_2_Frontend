@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 import useKeywordData from "../hooks/useKeywordData.js";
 import BannerAds from "../Components/ui/Ads/BannerAds.jsx";
 import SearchInput from "../Components/ui/KeywordInput/SearchInput.jsx";
@@ -18,6 +18,14 @@ export const AdCompetition = () => {
   // const handleCountryClick = (countryCode) => {
   //   setSelectedCountry({ code: countryCode, flag: countryFlags[countryCode] });
   // };
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow =
+      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country.name);
@@ -57,7 +65,10 @@ export const AdCompetition = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div
+      className="w-full bg-white p-5 rounded-lg"
+      style={{ fontFamily: "wantedsans" }}
+    >
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -71,7 +82,7 @@ export const AdCompetition = () => {
         </div>
         {/* <CountrySelect onCountryChange={handleCountryChange} /> Add CountrySelect component */}
         <div>
-          {loading ? (
+          {loadingState ? (
             <div className="flex justify-center">
               <Loader />
             </div>
@@ -84,7 +95,10 @@ export const AdCompetition = () => {
                 </style>
                 <div className="flex flex-col lg:flex-row w-full mt-4">
                   <div className="w-full lg:w-1/2 pr-4">
-                    <div className="flex flex-col items-center justify-center   rounded-lg border-1 border-gray-500 w-[435px] h-[140px]">
+                    <div className="flex flex-col items-center justify-center rounded-lg border-1 border-gray-500 w-[435px] h-[140px] "
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}>
                       <h1 className="text-2xl text-[#12153d] font-bold">
                         Ad Competition
                       </h1>
@@ -94,41 +108,51 @@ export const AdCompetition = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="w-[435px] h-[140px] p-8 pt-4 pb-4  mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center">
+                    <div
+                      className="w-[435px] h-[140px] p-8 pt-4 pb-4 mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center "
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <h3 className="text-white mt-3 text-justify">
-                        Scale: Measured on a scale of 0 to 1, with higher
+                        Scale: Measured on a scale of 0 to 1, with higher
                         numbers indicating more competition
                       </h3>
-                      <IndicatorScale value={keywordData?.data[0]?.competition} />
+                      <IndicatorScale
+                        value={keywordData?.data[0]?.competition}
+                      />
                     </div>
-                    <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25">
+                    <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25 hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
                       <h4 className="flex flex-col justify-center items-center text-2xl font-bold">
                         AD
                       </h4>
                     </div>
                   </div>
                   <div className="mt-0 pl-2">
-                    <div className="    rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white   ">
+                    <div className="rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white  "
+                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                     onMouseEnter={handleMouseEnter}
+                     onMouseLeave={handleMouseLeave}>
                       <h1
-                        className="text-3xl "
+                        className="text-3xl"
                         style={{ fontFamily: "Space Grotesk, sans-serif" }}
                       >
                         What is it?
                       </h1>
                       <p className="text-md mt-4">
                         <span className="text-[#E5590F]">Ad Competition</span>{" "}
-                        is a measure of how much competition there is for a
-                        product, keyword, or market. It can help businesses
+                        is a measure of how much competition there is for a
+                        product, keyword, or market. It can help businesses
                         understand how to position themselves in a competitive
-                        market. 
+                        market.
                       </p>
                     </div>
-                    <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center">
+                    <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
                       <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                     </div>
                     <div className="mt-4"></div>
                   </div>
-                  <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center">
+                  <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
                     <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                   </div>
                 </div>

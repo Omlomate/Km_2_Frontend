@@ -6,10 +6,18 @@ import SVG1 from "../assets/releatedKI.svg";
 import Loader from "../Components/Loading/Loader.jsx";
 
 export const KeywordResearch = () => {
-  const [keywordData, setKeywordData] = useState(null); 
+  const [keywordData, setKeywordData] = useState(null);
   const [hover, setHover] = useState(false);
   const [searchEngine, setSearchEngine] = useState("google"); // Default to Bing
   const [searchLoading, setSearchLoading] = useState(false); // Loader state
+
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow = "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm, "Engine:", searchEngine);
@@ -32,7 +40,10 @@ export const KeywordResearch = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div
+      className="w-full bg-white p-5 rounded-lg"
+      style={{ fontFamily: "wantedsans" }}
+    >
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -53,10 +64,7 @@ export const KeywordResearch = () => {
                   <div className="w-full lg:w-1/2">
                     <KeywordContainer keywordData={keywordData} />
                   </div>
-                  <div
-                    className="mt-0 pr-2"
-                    
-                  >
+                  <div className="mt-0 pr-2">
                     <div
                       onMouseEnter={() => setHover(true)}
                       onMouseLeave={() => setHover(false)}
@@ -87,17 +95,11 @@ export const KeywordResearch = () => {
                     </div>
                     <div className="mt-4"></div>
                   </div>
-                  <div
-                    className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center"
-                   
-                  >
+                  <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center">
                     <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                   </div>
                 </div>
-                <div
-                  className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left"
-                  
-                >
+                <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
                   <p className="text-md lg:text-lg">
                     To find more information and get more insights check out{" "}
                     <a href="#" className="text-[#E5590F]">

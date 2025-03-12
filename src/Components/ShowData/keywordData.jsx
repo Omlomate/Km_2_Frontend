@@ -11,36 +11,40 @@ const KeywordData = () => {
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
-  
+
     try {
       // First API call: Scraping keyword data
-      const scrapeResponse = await axios.get(`https://keyword-research3.onrender.com/api/scraper/scrape`, {
-        params: {
-          query: searchTerm,
-          location_code: "in",
-          language_code: "en",
-          engine: "google",
-        },
-      });
-  
+      const scrapeResponse = await axios.get(
+        `https://keyword-research3.onrender.com/api/scraper/scrape`,
+        {
+          params: {
+            query: searchTerm,
+            location_code: "in",
+            language_code: "en",
+            engine: "google",
+          },
+        }
+      );
+
       // Second API call: Fetching volume and difficulty
       const volumeDifficultyResponse = await axios.post(
-        `https://keyword-research3.onrender.com/api/gemini/get-keyword-volume-difficulty`, 
-        { keyword: searchTerm }  // Send `keyword` in the body as per backend's requirement
+        `https://keyword-research3.onrender.com/api/gemini/get-keyword-volume-difficulty`,
+        { keyword: searchTerm } // Send `keyword` in the body as per backend's requirement
       );
-  
+
       setKeywordData({
         relatedKeywords: scrapeResponse.data.keywords,
         relatedKeywordsCount: scrapeResponse.data.keywords.length,
-        volume: volumeDifficultyResponse.data.analysisResult.keywordVolume,  // Ensure correct field names here
-        difficulty: volumeDifficultyResponse.data.analysisResult.keywordDifficulty, // Ensure correct field names
+        volume: volumeDifficultyResponse.data.analysisResult.keywordVolume, // Ensure correct field names here
+        difficulty:
+          volumeDifficultyResponse.data.analysisResult.keywordDifficulty, // Ensure correct field names
       });
     } catch (error) {
       console.error("Error fetching data:", error);
       setKeywordData(null);
     }
   };
-  
+
   const handleGmailClick = () => {
     setSignupVisible(true);
   };
@@ -73,30 +77,31 @@ const KeywordData = () => {
           </div>
         ) : (
           <>
-             <div
-        className="grid bg-[url('/src/assets/bgimage.png')] bg-cover bg-center p-4 rounded-lg text-white mx-auto w-[895px] h-[320px] max-w-full"
-        style={{ fontFamily: "Space Grotesk, sans-serif" }}
-      >
-        <div className="p-4 lg:p-10 sm:pl-4  md:pl-10">
-          <div className="p-4 sm:pl-4 sm:p-4 md:pl-10">
-            <h1 className="text-xl sm:text-xl md:text-4xl lg:text-6xl mb-4  font-semibold">
-              Why do you need SEO?
-            </h1>
-            <ul className="list-disc list-inside mt-2">
-              <li className="text-xs sm:text-sm md:text-base">
-                Guaranteed consistent growth
-              </li>
-              <li className="text-xs sm:text-sm md:text-base">
-                Leads for ideas and content
-              </li>
-              <li className="text-xs sm:text-sm md:text-base">
-                Insights on marketing trends
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-            <div className="w-full max-w-full mt-4 mx-auto shadow-sm p-1 rounded-lg flex items-center border-1 border-gray-500">
+            <div
+              className="grid bg-[url('/src/assets/bgimage.png')] bg-cover bg-center p-4 rounded-lg text-white mx-auto w-[895px] h-[320px] max-w-full"
+              style={{ fontFamily: "Space Grotesk, sans-serif" }}
+            >
+              <div className="p-4 lg:p-10 sm:pl-4  md:pl-10">
+                <div className="p-4 sm:pl-4 sm:p-4 md:pl-10">
+                  <h1 className="text-xl sm:text-xl md:text-4xl lg:text-6xl mb-4  font-semibold">
+                    Why do you need SEO?
+                  </h1>
+                  <ul className="list-disc list-inside mt-2">
+                    <li className="text-xs sm:text-sm md:text-base">
+                      Guaranteed consistent growth
+                    </li>
+                    <li className="text-xs sm:text-sm md:text-base">
+                      Leads for ideas and content
+                    </li>
+                    <li className="text-xs sm:text-sm md:text-base">
+                      Insights on marketing trends
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="w-full max-w-full mt-4 mx-auto shadow-sm p-1 rounded-lg flex items-center border-1 border-gray-500"
+            style={{fontFamily:"wantedsans"}}>
               <input
                 type="text"
                 value={searchTerm}
@@ -126,7 +131,8 @@ const KeywordData = () => {
                   <div className="w-full h-full border-1 border-gray-500 p-4 rounded-lg">
                     <div className="p-4 shadow-lg rounded-lg">
                       <h1 className="text-lg sm:text-xl text-bold">
-                        {keywordData.relatedKeywordsCount} results for{searchTerm}
+                        {keywordData.relatedKeywordsCount} results for
+                        {searchTerm}
                         {searchTerm}
                       </h1>
                     </div>
@@ -179,7 +185,7 @@ const KeywordData = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-4" style={{fontFamily:"wantedsans"}}>
                       <div className="h-25 bg-indigo-900 text-white text-center pt-5 rounded-t-lg">
                         <h1 className="text-lg sm:text-xl">
                           Keyword Difficulty
@@ -221,7 +227,7 @@ const KeywordData = () => {
               className="w-full relative h-30 mt-4 hidden sm:block"
               id="hover"
             >
-              <div className="absolute rounded-lg h-full inset-0 flex items-center justify-center border-1 border-gray-500 text-white text-lg transition-opacity duration-300 ease-in-out z-10 opacity-100 hover:opacity-0 p-4 sm:p-10">
+              <div className="absolute rounded-lg h-full inset-0 flex items-center justify-center border-1 border-gray-500 text-white text-lg transition-opacity duration-300 ease-in-out z-10 opacity-100 hover:opacity-0 p-4 sm:p-10" style={{fontFamily:"wantedsans"}}>
                 <div className="items-center">
                   <p className="text-black text-md sm:text-lg p-2 sm:p-4 lg:text-xl">
                     Want to grow your business, your social media with the right
@@ -229,7 +235,7 @@ const KeywordData = () => {
                   </p>
                 </div>
               </div>
-              <div className="absolute rounded-lg inset-0 flex items-center justify-center bg-orange-500 text-white text-lg transition-opacity duration-500 ease-in-out z-20 opacity-0 hover:opacity-100 p-3 sm:p-10">
+              <div className="absolute rounded-lg inset-0 flex items-center justify-center bg-orange-500 text-white text-lg transition-opacity duration-500 ease-in-out z-20 opacity-0 hover:opacity-100 p-3 sm:p-10" style={{fontFamily:"wantedsans"}}>
                 <div className="flex flex-col items-center">
                   <h1 className="text-md sm:text-lg text-bold lg:text-2xl">
                     Make your account for free
@@ -251,4 +257,3 @@ const KeywordData = () => {
 };
 
 export default KeywordData;
-

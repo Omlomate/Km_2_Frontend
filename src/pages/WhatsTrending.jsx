@@ -23,13 +23,16 @@ const WhatsTrending = () => {
     };
 
     try {
-      const response = await fetch("https://keyword-research3.onrender.com/api/keywords/keyword-Everywhere-Volume", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        "https://keyword-research3.onrender.com/api/keywords/keyword-Everywhere-Volume",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -78,9 +81,20 @@ const WhatsTrending = () => {
       setGraphData(formatTrendData(trendData));
     }
   };
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow =
+      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div
+      className="w-full bg-white p-5 rounded-lg"
+      style={{ fontFamily: "wantedsans" }}
+    >
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -112,7 +126,12 @@ const WhatsTrending = () => {
                       <Bargraph data={graphData} />{" "}
                       {/* Pass graphData as prop */}
                     </div>
-                    <div className="bg-[#12153d] rounded-lg p-8 flex flex-col justify-center items-center space-y-2 mt-13.5">
+                    <div
+                      className="bg-[#12153d] rounded-lg p-8 flex flex-col justify-center items-center space-y-2 mt-13.5"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <button
                         onClick={() => handleTimeRangeChange(8)}
                         className="p-2 font-bold text-md bg-white rounded-full pr-15 pl-15 hover:bg-[#E5590F] hover:text-white"
@@ -134,7 +153,12 @@ const WhatsTrending = () => {
                     </div>
                   </div>
                   <div className="pl-4 pr-4 mt-4 lg:mt-0">
-                    <div className="p-8 bg-[#12153D] rounded-lg text-white h-[330px] w-full lg:w-[300px] text-center lg:text-left">
+                    <div
+                      className="p-8 bg-[#12153D] rounded-lg text-white h-[330px] w-full lg:w-[300px] text-center lg:text-left"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <h1
                         className="text-md lg:text-3xl font-bold mb-2"
                         style={{ fontFamily: "Space Grotesk, sans-serif" }}
@@ -142,9 +166,10 @@ const WhatsTrending = () => {
                         What is it?
                       </h1>
                       <p className="text-justify text-semibold">
-                        <span className="text-[#E5590F]">What’s Trending</span> shows you popularity of specific
-                        keywords over time. These trends show you what topics
-                        are gaining interest and which are fading.
+                        <span className="text-[#E5590F]">What’s Trending</span>{" "}
+                        shows you popularity of specific keywords over time.
+                        These trends show you what topics are gaining interest
+                        and which are fading.
                       </p>
                     </div>
                     <div className="bg-gray-300 h-[250px] w-full lg:w-[300px] mt-4 rounded-md flex justify-center items-center">

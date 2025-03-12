@@ -59,7 +59,7 @@ const Sidebar = () => {
         } md:translate-x-0 md:ml-6 md:mr-4 ${
           isSidebarOpen ? "w-full h-full" : "w-72"
         }`}
-        style={{ height: isSidebarOpen ? "100vh" : "auto" }}
+        style={{ height: isSidebarOpen ? "100vh" : "auto", fontFamily:"wantedsans" }}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex justify-center items-center space-x-5.5">
@@ -91,7 +91,7 @@ const Sidebar = () => {
                 selectedOption === option.name
                   ? "bg-orange-700 text-[#12153d] rounded-lg"
                   : ""
-              }`}
+              } hover:bg-orange-700 hover:text-[#12153d] hover:rounded-lg  `}
               onClick={() => handleOptionClick(option.name)}
             >
               {option.name}

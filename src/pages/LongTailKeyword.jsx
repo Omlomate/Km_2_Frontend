@@ -39,7 +39,7 @@ const LongTailKeywordPage = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div className="w-full bg-white p-5 rounded-lg" style={{fontFamily:"wantedsans"}}>
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
