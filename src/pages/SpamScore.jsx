@@ -10,43 +10,57 @@ const SpamScore = () => {
 
   const { data: data3, loading } = useKeywordData();
 
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow =
+      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
+
   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm);
     const trimmedSearchTerm = searchTerm.trim().toLowerCase();
-  
+
     try {
-      const response = await fetch("https://keyword-research3.onrender.com/api/gemini/get-keyword-spam-score", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ keyword: trimmedSearchTerm }),
-      });
-  
+      const response = await fetch(
+        "https://keyword-research3.onrender.com/api/gemini/get-keyword-spam-score",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ keyword: trimmedSearchTerm }),
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const data = await response.json();
       console.log("API Response:", data);
-  
+
       // Extract first digit from spam_score
       const spamScore = data.analysisResult?.spam_score?.match(/\d/); // Extracts the first number
       const extractedSpamScore = spamScore ? parseInt(spamScore[0]) : 0;
-  
+
       // Updating keywordData with extracted spam score
       setKeywordData({
         ...data.analysisResult,
         spamRiskScore: extractedSpamScore, // Overriding spam_score with first digit
       });
-  
     } catch (error) {
       console.error("Error fetching keyword data:", error);
     }
   };
-  
+
   return (
-    <div className="w-full bg-white   p-5 rounded-lg">
+    <div
+      className="w-full bg-white   p-5 rounded-lg"
+      style={{ fontFamily: "wantedsans" }}
+    >
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -68,7 +82,12 @@ const SpamScore = () => {
                 </style>
                 <div className="flex flex-col lg:flex-row w-full mt-4">
                   <div className="w-full lg:w-1/2">
-                    <div className="p-8 mx-auto bg-white rounded-lg border-1 border-gray-500">
+                    <div
+                      className="p-8 mx-auto bg-white rounded-lg border-1 border-gray-500"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <div className="space-y-6">
                         <div className="text-center ">
                           <h2 className="text-2xl font-bold text-gray-900">
@@ -83,20 +102,33 @@ const SpamScore = () => {
                           </p>
                         </div>
                         <div>
-                        <SpamRiskCircle percentage={keywordData.spamRiskScore} description="Spam Risk Level" />
+                          <SpamRiskCircle
+                            percentage={keywordData.spamRiskScore}
+                            description="Spam Risk Level"
+                          />
 
                           {/* console.log("check",keywordData.spamRiskScore) */}
                         </div>
                       </div>
                     </div>
-                    <div className="p-21 bg-[#12153D] rounded-lg text-white text-center lg:text-left mt-4">
+                    <div
+                      className="p-21 bg-[#12153D] rounded-lg text-white text-center lg:text-left mt-4"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <h1 className="text-xl">
-                      {keywordData.spam_description}
+                        {keywordData.spam_description}
                       </h1>
                     </div>
                   </div>
                   <div className=" pr-4 pl-4">
-                    <div className="p-8 bg-[#12153D] rounded-lg text-white h-[330px] w-[300px] text-center lg:text-left">
+                    <div
+                      className="p-8 bg-[#12153D] rounded-lg text-white h-[330px] w-[300px] text-center lg:text-left"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <h1
                         className="text-md lg:text-3xl font-bold mb-2"
                         style={{ fontFamily: "Space Grotesk, sans-serif" }}

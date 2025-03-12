@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BannerAds from "../Components/ui/Ads/BannerAds.jsx";
 import SearchInput from "../Components/ui/KeywordInput/SearchInput.jsx";
 import Loader from "../Components/Loading/Loader.jsx";
-import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx"; // Import CountrySelect
+import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx";  
 import SelectCurrency from "../Components/ui/KeywordInput/SelectCurrency.jsx";
 
 export const CPCPage = () => {
@@ -11,6 +11,14 @@ export const CPCPage = () => {
   const [selectedCountry, setSelectedCountry] = useState("United States"); // Default country
   const [selectedCurrency, setSelectedCurrency] = useState("USD"); // Default currency
 
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow =
+      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
   const handleCountryChange = (country) => {
     setSelectedCountry(country.name);
   };
@@ -54,7 +62,7 @@ export const CPCPage = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div className="w-full bg-white p-5 rounded-lg" style={{fontFamily:"wantedsans"}}>
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -82,7 +90,10 @@ export const CPCPage = () => {
                 </style>
                 <div className="flex flex-col lg:flex-row w-full mt-4">
                   <div className="w-full lg:w-1/2 pr-4">
-                    <div className="flex flex-col items-center justify-center   rounded-lg border-1 border-gray-500 w-[435px] h-[140px]">
+                    <div className="flex flex-col items-center justify-center   rounded-lg border-1 border-gray-500 w-[435px] h-[140px]"
+                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                     onMouseEnter={handleMouseEnter}
+                     onMouseLeave={handleMouseLeave}>
                       <h1 className="text-2xl text-[#12153d] font-bold">
                         Cost Per Click
                       </h1>
@@ -93,7 +104,10 @@ export const CPCPage = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center">
+                    <div className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"
+                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                     onMouseEnter={handleMouseEnter}
+                     onMouseLeave={handleMouseLeave}>
                       <h3 className="text-white p-8 text-justify">
                         CPC for SEO depends entirely on your industry and
                         desired ROI, a good CPC allows you to achieve your
@@ -107,7 +121,10 @@ export const CPCPage = () => {
                     </div>
                   </div>
                   <div className="mt-0 pl-2">
-                    <div className="    rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white   ">
+                    <div className="    rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white   "
+                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                     onMouseEnter={handleMouseEnter}
+                     onMouseLeave={handleMouseLeave}>
                       <h1
                         className="text-3xl "
                         style={{ fontFamily: "Space Grotesk, sans-serif" }}

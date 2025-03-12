@@ -21,6 +21,14 @@ export const AudienceVolume = () => {
   // const handleCountryClick = (countryCode) => {
   //   setSelectedCountry({ code: countryCode, flag: countryFlags[countryCode] });
   // };
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.boxShadow =
+      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm);
@@ -70,7 +78,10 @@ export const AudienceVolume = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg">
+    <div
+      className="w-full bg-white p-5 rounded-lg"
+      style={{ fontFamily: "wantedsans" }}
+    >
       <div className="w-full lg:min-w-[40rem]">
         <BannerAds />
       </div>
@@ -85,7 +96,7 @@ export const AudienceVolume = () => {
         </div>
         {/* <CountrySelect onCountryChange={handleCountryChange} /> Add CountrySelect component */}
         <div>
-          {loading ? (
+          {loadingState ? (
             <div className="flex justify-center">
               <Loader />
             </div>
@@ -98,7 +109,12 @@ export const AudienceVolume = () => {
                 </style>
                 <div className="flex flex-col lg:flex-row w-full mt-4">
                   <div className="w-full lg:w-1/2 pr-4">
-                    <div className="flex flex-col items-center justify-center space-y-5 rounded-lg border-1 border-gray-500 w-[435px] h-[328px]">
+                    <div
+                      className="flex flex-col items-center justify-center space-y-5 rounded-lg border-1 border-gray-500 w-[435px] h-[328px]"
+                      style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <h1 className="text-2xl text-[#12153d] font-bold">
                         Audience Volume
                       </h1>
@@ -128,6 +144,7 @@ export const AudienceVolume = () => {
                     <div
                       onMouseEnter={() => setHover(true)}
                       onMouseLeave={() => setHover(false)}
+                      
                     >
                       {hover ? (
                         <div className="h-[330px] w-full sm:w-[300px] p-8 bg-[#12153D] rounded-2xl text-white text-center lg:text-left">
