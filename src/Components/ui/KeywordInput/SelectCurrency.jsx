@@ -168,7 +168,7 @@ const SelectCurrency = ({ onCountryChange = () => {} }) => {
             key={`${currency.name}-${currency.symbol}`}
             value={`${currency.symbol}`}
           >
-            {currency.symbol}
+            {currency.name} ({currency.symbol})
           </option>
         ))}
       </select>
