@@ -87,11 +87,11 @@ const Sidebar = () => {
         ].map((option) => (
           <Link to={option.path} key={option.name}>
             <div
-              className={`mb-4  p-3 cursor-pointer rounded ${
+              className={`mb-4 p-3 cursor-pointer rounded ${
                 selectedOption === option.name
                   ? "bg-orange-700 text-[#12153d] rounded-lg"
                   : ""
-              }`}
+              } hover:bg-orange-700 hover:text-[#12153d] hover:rounded-lg  `}
               onClick={() => handleOptionClick(option.name)}
             >
               {option.name}
