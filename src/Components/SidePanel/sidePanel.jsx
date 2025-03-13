@@ -61,7 +61,7 @@ const Sidebar = () => {
         </div>
       )}
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-transform duration-300 ${
+        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-transform   ${
           isSidebarOpen
             ? "translate-x-0 top-0 rounded-none mt-0"
             : "-translate-x-full mt-4 rounded-t-md"
@@ -114,7 +114,7 @@ const Sidebar = () => {
                 selectedOption === option.name
                   ? "bg-[#E5590F] text-[#12153d] rounded-lg"
                   : ""
-              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105 transition-500  delay-150 ease-in-out`}
+              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105 transition-500    ease-in-out`}
               onClick={() => handleOptionClick(option.name)}
             >
               {option.name}
