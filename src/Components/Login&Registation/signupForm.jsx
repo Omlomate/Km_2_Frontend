@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignupPage({ onClose }) {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsOpen(true);
     return () => setIsOpen(false);
   }, []);
 
+
   const handleSignup = async () => {
-    if (!name || !email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       alert("Please fill in all fields");
       return;
     }
@@ -24,16 +26,21 @@ function SignupPage({ onClose }) {
       return;
     }
 
-    const userData = { name, email, password };
+    const userData = { firstName, lastName, email, password };
+
+    
 
     try {
-      const response = await fetch("https://keyword-research3.onrender.com/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        "https://keyword-research3.onrender.com/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       const data = await response.json();
 
@@ -41,7 +48,7 @@ function SignupPage({ onClose }) {
         alert("Signup successful");
         navigate("/", { replace: true });
         handleClose();
-        // You can redirect or reset fields here
+        // Reset form fields if needed
       } else {
         alert(data.message || "Signup failed");
       }
@@ -71,7 +78,9 @@ function SignupPage({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
       <div
-        className={`relative ${isOpen ? "animate-zoomIn" : "animate-zoomOut"} w-full max-w-md sm:max-w-3xl`}
+        className={`relative ${
+          isOpen ? "animate-zoomIn" : "animate-zoomOut"
+        } w-full max-w-md sm:max-w-3xl`}
       >
         <div
           className="bg-white p-4 sm:p-8 rounded-lg w-full"
@@ -89,7 +98,9 @@ function SignupPage({ onClose }) {
           </button>
           <div className="absolute inset-0 opacity-50 pointer-events-none"></div>
           <div className="p-4 sm:p-6 rounded-lg w-full max-w-md mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold mb-1">Create Account</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-1">
+              Create Account
+            </h2>
             <p className="mb-4 sm:mb-6 text-sm sm:text-md text-gray-500 text-bold">
               Grow your business like a Raja
             </p>
@@ -180,11 +191,20 @@ function SignupPage({ onClose }) {
               </button>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Enter Name</label>
+              <label className="block text-gray-700">Enter First Name</label>
               <input
-                type="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Enter Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>

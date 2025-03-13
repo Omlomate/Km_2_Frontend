@@ -12,9 +12,10 @@ const Sidebar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername);
+    const userData = JSON.parse(localStorage.getItem("userData")); // Parse JSON string
+    const storedFirstName = userData ? userData.firstName : null; // Get firstName
+    if (storedFirstName) {
+      setUsername(storedFirstName);
     }
 
     if (!isAuthenticated() && location.pathname !== "/") {

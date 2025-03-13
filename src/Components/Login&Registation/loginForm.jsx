@@ -51,32 +51,31 @@ function LoginPage({ isVisible, onClose }) {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-  
-    try {
-      // Make login request to backend
-      const response = await axios.post("https://keyword-research3.onrender.com/api/auth/login", {
-        email: email,
-        password: password,
-      });
 
-      console.log(response.data);
-  
-      // Store JWT and username in localStorage
-      localStorage.setItem("jwt", response.data.token); // Assuming the JWT is in `response.data.token`
-      localStorage.setItem("username", response.data.name); // Assuming the username is in `response.data.name`
-      localStorage.setItem("userId", response.data._id); 
-      localStorage.setItem("isAdmin", response.data.isAdmin); 
-  
-      // Close the login popup
-      onClose();
-  
-      // Redirect to the /keyword-volume page
-      navigate("/related-keywords", { replace: true });
+    try {
+        // Make login request to backend
+        const response = await axios.post("https://keyword-research3.onrender.com/api/auth/login", {
+            email: email,
+            password: password,
+        });
+
+        console.log(response.data);
+
+        // Store the entire response object in localStorage
+        localStorage.setItem("userData", JSON.stringify(response.data));
+        localStorage.setItem("jwt", response.data.token);
+
+        // Close the login popup
+        onClose();
+
+        // Redirect to the /keyword-volume page
+        navigate("/related-keywords", { replace: true });
     } catch (error) {
-      console.error("Error logging in:", error);
-      alert("Login failed. Please check your credentials.");
+        console.error("Error logging in:", error);
+        alert("Login failed. Please check your credentials.");
     }
-  };
+};
+
 
   if (!isVisible) return null;
 

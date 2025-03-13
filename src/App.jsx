@@ -22,17 +22,22 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/" replace />;
 };
 
+
+
 // AdminRoute Component
 const AdminRoute = ({ children }) => {
-  const token = localStorage.getItem("jwt");
-  const isAdmin = localStorage.getItem("isAdmin") === "true"; // Check isAdmin flag
+  const userData = JSON.parse(localStorage.getItem("userData")); // Retrieve stored user data
+  const token = userData?.jwt;
+  const isAdmin = userData?.isAdmin;
 
   return token && isAdmin ? children : <Navigate to="/" replace />;
 };
 
+
 const AppContent = () => {
   return (
     <Routes>
+       {/* Admin Routes */}
       <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
       <Route
         path="*"
@@ -50,7 +55,7 @@ const AppContent = () => {
               <Route path="/ad-competition" element={<PrivateRoute><AdCompetition /></PrivateRoute>} />
               <Route path="/profile-edit" element={<PrivateRoute><ProfileEdit /></PrivateRoute>} />
 
-              {/* Admin Routes */}
+             
               
             </Routes>
           </Layout>
