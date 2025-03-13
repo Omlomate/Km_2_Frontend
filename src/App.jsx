@@ -1,4 +1,5 @@
 import "./App.css";
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import KeywordData from "./Components/ShowData/keywordData.jsx";
@@ -11,6 +12,7 @@ import WhatsTrending from "./pages/WhatsTrending.jsx";
 import AudienceVolume from "./pages/AudienceVolume.jsx";
 import CPCPage from "./pages/CPCPage.jsx";
 import AdCompetition from "./pages/AdCompetition.jsx";
+import ProfileEdit from "./Components/Profile/ProfileEdit.jsx";
 import AdminDashboard from "./adminPages/AdminDashboard.jsx";
 
 
@@ -31,6 +33,7 @@ const AdminRoute = ({ children }) => {
 const AppContent = () => {
   return (
     <Routes>
+      <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
       <Route
         path="*"
         element={
@@ -45,11 +48,13 @@ const AppContent = () => {
               <Route path ="/search-volume" element={<PrivateRoute><AudienceVolume /></PrivateRoute>} />
               <Route path="/CPC" element={<PrivateRoute><CPCPage /></PrivateRoute>} />
               <Route path="/ad-competition" element={<PrivateRoute><AdCompetition /></PrivateRoute>} />
+              <Route path="/profile-edit" element={<PrivateRoute><ProfileEdit /></PrivateRoute>} />
 
               {/* Admin Routes */}
-              <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
+              
             </Routes>
           </Layout>
+          
         }
       />
     </Routes>

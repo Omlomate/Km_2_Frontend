@@ -20,10 +20,18 @@ const Sidebar = () => {
     if (!isAuthenticated() && location.pathname !== "/") {
       setIsLoginVisible(true);
     }
+    if (location.pathname === "/profile-edit") {
+      setSelectedOption("Profile");
+    }
   }, [location.pathname]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    setIsSidebarOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    setSelectedOption("Profile");
     setIsSidebarOpen(false);
   };
 
@@ -59,13 +67,27 @@ const Sidebar = () => {
         } md:translate-x-0 md:ml-6 md:mr-4 ${
           isSidebarOpen ? "w-full h-full" : "w-72"
         }`}
-        style={{ height: isSidebarOpen ? "100vh" : "auto", fontFamily:"wantedsans" }}
+        style={{
+          height: isSidebarOpen ? "100vh" : "auto",
+          fontFamily: "wantedsans",
+        }}
       >
         <div className="flex items-center justify-between mb-4">
-          <div className="flex justify-center items-center space-x-5.5">
-            <img src={Profile} alt="" />
-            <span className="mr-3">{username}</span>
-          </div>
+          <Link to="/profile-edit">
+            <div
+              className={`flex justify-center items-center space-x-5.5 ${
+                selectedOption === "Profile"
+                  ? "bg-[#E5590F] rounded-lg p-1.5"
+                  : "b"
+              }`}
+              id="profile"
+              onClick={handleProfileClick} // Add this click handler
+            >
+              <img src={Profile} alt="Profile" />
+              <span className="mr-3">{username}</span>
+            </div>
+          </Link>
+
           <button
             onClick={toggleSidebar}
             className="md:hidden bg-transparent border-none"
@@ -83,15 +105,15 @@ const Sidebar = () => {
           { name: "Keyword Spam Score", path: "/Keyword-spam-score" },
           { name: "Keyword Trend", path: "/keyword-trend" },
           { name: "CPC (Cost Per Click)", path: "/CPC" },
-          {name:"Ad Competitions",path:"/ad-Competition"}
+          { name: "Ad Competitions", path: "/ad-Competition" },
         ].map((option) => (
           <Link to={option.path} key={option.name}>
             <div
               className={`mb-4 p-3 cursor-pointer rounded ${
                 selectedOption === option.name
-                  ? "bg-orange-700 text-[#12153d] rounded-lg"
+                  ? "bg-[#E5590F] text-[#12153d] rounded-lg"
                   : ""
-              } hover:bg-orange-700 hover:text-[#12153d] hover:rounded-lg  `}
+              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105 transition-500  delay-150 ease-in-out`}
               onClick={() => handleOptionClick(option.name)}
             >
               {option.name}
