@@ -3,14 +3,17 @@
 
 @font-face {
     font-family: 'wantedsans';
-    src: url('./fonts/WantedSans.otf') format('opentype'),
-         url('./fonts/WantedSans.ttf') format('truetype');
+    src: url('../public/fonts/WantedSans.otf') format('opentype'),
+         url('../public/fonts/WantedSans.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 
-.text{
+/* .text{
     font-size: 48px;
     font-family: "wantedsans", sans-serif;
-}
+} */
+ body{
+    font-family: "wantedsans", sans-serif;
+ }

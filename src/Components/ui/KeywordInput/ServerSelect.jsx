@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GoogleIcon from "../../../assets/googleIcon.svg";
 import Bing from "../../../assets/Bing.svg"
+import Yahoo from "../../../assets/yahoo.svg"
 
 const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
   const [selectedServer, setSelectedServer] = useState("Select");
@@ -17,6 +18,9 @@ const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
     {
       name:"Bing",
       icon: Bing
+    },{
+      name:"Yahoo",
+      icon: Yahoo
     }
   ];
 
