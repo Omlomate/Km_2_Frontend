@@ -11,12 +11,21 @@ import WhatsTrending from "./pages/WhatsTrending.jsx";
 import AudienceVolume from "./pages/AudienceVolume.jsx";
 import CPCPage from "./pages/CPCPage.jsx";
 import AdCompetition from "./pages/AdCompetition.jsx";
+import AdminDashboard from "./adminPages/AdminDashboard.jsx";
 
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("jwt"); // Check for JWT token
   return token ? children : <Navigate to="/" replace />;
+};
+
+// AdminRoute Component
+const AdminRoute = ({ children }) => {
+  const token = localStorage.getItem("jwt");
+  const isAdmin = localStorage.getItem("isAdmin") === "true"; // Check isAdmin flag
+
+  return token && isAdmin ? children : <Navigate to="/" replace />;
 };
 
 const AppContent = () => {
@@ -36,6 +45,9 @@ const AppContent = () => {
               <Route path ="/search-volume" element={<PrivateRoute><AudienceVolume /></PrivateRoute>} />
               <Route path="/CPC" element={<PrivateRoute><CPCPage /></PrivateRoute>} />
               <Route path="/ad-competition" element={<PrivateRoute><AdCompetition /></PrivateRoute>} />
+
+              {/* Admin Routes */}
+              <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
             </Routes>
           </Layout>
         }

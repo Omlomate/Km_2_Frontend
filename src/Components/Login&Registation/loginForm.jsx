@@ -54,14 +54,18 @@ function LoginPage({ isVisible, onClose }) {
   
     try {
       // Make login request to backend
-      const response = await axios.post("https://keyword-research3.onrender.com/api/auth/login", {
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
         email: email,
         password: password,
       });
+
+      console.log(response.data);
   
       // Store JWT and username in localStorage
       localStorage.setItem("jwt", response.data.token); // Assuming the JWT is in `response.data.token`
       localStorage.setItem("username", response.data.name); // Assuming the username is in `response.data.name`
+      localStorage.setItem("userId", response.data._id); 
+      localStorage.setItem("isAdmin", response.data.isAdmin); 
   
       // Close the login popup
       onClose();
