@@ -47,8 +47,8 @@ const SearchInput = ({ onSearch, onCountryChange = () => {}, onServerChange = ()
           ></i>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 flex flex-col justify-center sm:flex-row border border-gray-400 p-1 rounded-xl space-y-14 sm:space-y-0 sm:space-x-14" id="two">
-        <CountrySelect onCountryChange={handleCountryChange} />
+      <div className="w-full lg:w-1/2 flex flex-col justify-center sm:flex-row border border-gray-400 p-1 rounded-xl space-y-14 sm:space-y-0 sm:space-x-14 " id="two">
+        <CountrySelect  onCountryChange={handleCountryChange} />
         {location.pathname === "/CPC" ? (
           <SelectCurrency />
         ) : (

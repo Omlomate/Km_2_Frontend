@@ -135,7 +135,7 @@ const SelectCurrency = ({ onCountryChange = () => {} }) => {
     { name: "Pacific Franc", symbol: "F" },
     { name: "Yemen Riyal", symbol: "YER" },
     { name: "South African Rand", symbol: "R" },
-    { name: "Zambian Kwacha", symbol: "ZMK" }
+    { name: "Zambian Kwacha", symbol: "ZMK" },
   ];
 
   const handleChange = (event) => {
@@ -151,7 +151,7 @@ const SelectCurrency = ({ onCountryChange = () => {} }) => {
   return (
     <div>
       <select
-        className="p-1.5 rounded-xl text-[#12153d] font-light border border-gray-50 outline-none flex-grow appearance-none bg-no-repeat"
+        className="p-1.5 rounded-xl text-[#12153d] font-light border border-gray-50 outline-none flex-grow appearance-none bg-no-repeat hover:shadow-lg hover:scale-105 transition-300 ease-in-out"
         id="country-select"
         value={selectedCurrency}
         onChange={handleChange}

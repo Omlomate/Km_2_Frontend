@@ -29,7 +29,7 @@ const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
   return (
     <div>
       <select
-        className="p-1.5 rounded-xl text-[#12153d] font-light border border-gray-50 outline-none flex-grow appearance-none bg-no-repeat"
+        className="p-1.5 rounded-xl text-[#12153d] font-light border border-gray-50 outline-none flex-grow appearance-none bg-no-repeat hover:shadow-lg hover:scale-105 transition-700 ease-in-out"
         id="server-select"
         value={selectedServer}
         onChange={handleChange}
