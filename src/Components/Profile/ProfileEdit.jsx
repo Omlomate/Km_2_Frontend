@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./ProfileEdit.css";
 import Profile from "../../assets/profile.svg";
 
-
 const countries = ["India", "United States", "United Kingdom", "Canada"];
 const countriesDiallog = ["+1", "+44", "+92", "+91"];
 
@@ -28,7 +27,6 @@ const ProfileEdit = () => {
 
     if (storedUserData) {
       const userData = JSON.parse(storedUserData);
-      
 
       setFormData({
         firstName: userData.firstName || "",
@@ -66,14 +64,6 @@ const ProfileEdit = () => {
     }
   };
 
-  // const handleAvatarChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file);
-  //     setAvatar(imageUrl);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -85,18 +75,16 @@ const ProfileEdit = () => {
     formDataToSend.append("phoneNumber", formData.phoneNumber);
     formDataToSend.append("country", formData.country);
 
+    // ✅ Only append profileImage if the user selected a new file
     if (avatarFile instanceof File) {
-      formDataToSend.append("profileImage", avatarFile); // ✅ Use File, not preview URL
-    } else {
-      console.error("profileImage is not a valid File:", avatarFile);
-      return alert("Invalid file format!");
+      formDataToSend.append("profileImage", avatarFile);
     }
 
     console.log([...formDataToSend.entries()]); // Debugging
 
     try {
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/update-profile/profile",
+        "http://localhost:5000/api/update-profile/profile",
         {
           method: "PUT",
           headers: {
