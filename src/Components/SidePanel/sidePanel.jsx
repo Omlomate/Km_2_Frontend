@@ -10,6 +10,8 @@ const Sidebar = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User"); // Default value
   const location = useLocation();
+  const userData = JSON.parse(localStorage.getItem("userData")); // Get user data from localStorage
+const profileImage = userData?.profileImage; // Check if profile image exists
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData")); // Parse JSON string
@@ -84,7 +86,7 @@ const Sidebar = () => {
               id="profile"
               onClick={handleProfileClick} // Add this click handler
             >
-              <img src={Profile} alt="Profile" />
+             <img src={profileImage || Profile} alt="Profile" className="w-20 h-20 object-cover rounded-full" />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
