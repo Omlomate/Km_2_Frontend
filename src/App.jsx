@@ -27,10 +27,9 @@ const PrivateRoute = ({ children }) => {
 // AdminRoute Component
 const AdminRoute = ({ children }) => {
   const userData = JSON.parse(localStorage.getItem("userData")); // Retrieve stored user data
-  const token = userData?.jwt;
   const isAdmin = userData?.isAdmin;
 
-  return token && isAdmin ? children : <Navigate to="/" replace />;
+  return  isAdmin ? children : <Navigate to="/" replace />;
 };
 
 
