@@ -23,6 +23,8 @@ const Navbar = () => {
     setIsLoginVisible(false);
   };
 
+  const userData = JSON.parse(localStorage.getItem("userData"));
+
   const handleLogout = () => {
     // ✅ Remove all relevant data from localStorage
     localStorage.clear(); // Clears all stored keys
@@ -100,6 +102,9 @@ const Navbar = () => {
               </li>
               <li className="md:px-4 md:py-2 hover:text-gray-400">
                 <a href="#">Course</a>
+              </li>
+              <li className="md:px-4 md:py-2 hover:text-gray-400">
+                {userData?.isAdmin && <a href="/admin-dashboard">Admin</a>}
               </li>
             </ul>
           </div>
