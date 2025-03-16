@@ -9,7 +9,7 @@ export const CPCPage = () => {
   const [keywordData, setKeywordData] = useState(null);
   const [loadingState, setLoading] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("United States"); // Default country
-  const [selectedCurrency, setSelectedCurrency] = useState("USD"); // Default currency
+  const [selectedCurrency, setSelectedCurrency] = useState({ symbol: "$" }); // Default currency
 
   const handleMouseEnter = (e) => {
     e.currentTarget.style.boxShadow =
@@ -24,7 +24,7 @@ export const CPCPage = () => {
   };
 
   const handleCurrencyChange = (currency) => {
-    setSelectedCurrency(currency.symbol);
+    setSelectedCurrency({ symbol: currency.symbol });
   };
 
   const handleSearch = async (searchTerm) => {
@@ -97,11 +97,11 @@ export const CPCPage = () => {
                       <h1 className="text-2xl text-[#12153d] font-bold">
                         Cost Per Click
                       </h1>
-                      <div className="flex flex-col items-center justify-center mt-2 mb-4">
-                        <p className="text-5xl text-[#12153d] font-bold font-sans">
-                          {keywordData?.data[0]?.cpc?.currency}
+                      <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1">
+                        <p className="p-2"> {selectedCurrency.symbol}</p>
+                        <h1 className="p-2">
                           {keywordData?.data[0]?.cpc?.value}
-                        </p>
+                        </h1>
                       </div>
                     </div>
                     <div className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"

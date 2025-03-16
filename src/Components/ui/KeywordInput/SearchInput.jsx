@@ -5,16 +5,24 @@ import CountrySelect from "./CountrySelect";
 import ServerSelect from "./ServerSelect";
 import SelectCurrency from "./SelectCurrency";
 
-const SearchInput = ({ onSearch, onCountryChange = () => {}, onServerChange = () => {} }) => {
+const SearchInput = ({ onSearch, onCountryChange = () => {}, onServerChange = () => {},onCurrencyChange=()=>{}  }) => {
   const { searchTerm, setSearchTerm } = useKeywordData();
   const [country, setCountry] = useState("");
   const [server, setServer] = useState("");
+  const [currency,setCurrency] = useState("");
   const location = useLocation();
 
   const handleSearch = () => {
-    if (!country || (!server && location.pathname !== "/CPC")) {
-      alert("Country and Server are required");
-      return;
+    if (location.pathname === "/CPC") {
+      if (!country || !currency) {
+        alert("Country and Currency are required");
+        return;
+      }
+    } else {
+      if (!country || !server) {
+        alert("Country and Server are required");
+        return;
+      }
     }
     console.log("Searching for:", searchTerm);
     onSearch(searchTerm);
@@ -28,6 +36,11 @@ const SearchInput = ({ onSearch, onCountryChange = () => {}, onServerChange = ()
   const handleServerChange = (selectedServer) => {
     setServer(selectedServer);
     onServerChange(selectedServer);
+  };
+
+  const handleCurrencyChange = (selectedCurrency) => {
+    setCurrency(selectedCurrency);
+    onCurrencyChange(selectedCurrency);
   };
 
   return (
@@ -50,7 +63,7 @@ const SearchInput = ({ onSearch, onCountryChange = () => {}, onServerChange = ()
       <div className="w-full lg:w-1/2 flex flex-col justify-center sm:flex-row border border-gray-400 p-1 rounded-xl space-y-14 sm:space-y-0 sm:space-x-14 " id="two">
         <CountrySelect  onCountryChange={handleCountryChange} />
         {location.pathname === "/CPC" ? (
-          <SelectCurrency />
+          <SelectCurrency onCurrencyChange={handleCurrencyChange} />
         ) : (
           <ServerSelect onServerChange={handleServerChange} />
         )}

@@ -7,6 +7,7 @@ import Loader from "../Components/Loading/Loader";
 
 const SpamScore = () => {
   const [keywordData, setKeywordData] = useState(null);
+  const [loadingState, setLoading] = useState(false);
 
   const { data: data3, loading } = useKeywordData();
 
@@ -22,6 +23,7 @@ const SpamScore = () => {
   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm);
     const trimmedSearchTerm = searchTerm.trim().toLowerCase();
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -53,6 +55,8 @@ const SpamScore = () => {
       });
     } catch (error) {
       console.error("Error fetching keyword data:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +73,7 @@ const SpamScore = () => {
           <SearchInput onSearch={handleSearch} />
         </div>
         <div>
-          {loading ? (
+          {loadingState ? (
             <div className="flex justify-center">
               <Loader />
             </div>

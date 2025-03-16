@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth";
 import Profile from "../../assets/profile.svg";
+ 
 
 const Sidebar = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -43,6 +44,18 @@ const Sidebar = () => {
     setIsLoginVisible(false);
   };
 
+  const menuItems = [
+    { name: "Home", path: "/", icon: "fa-home" },
+    { name: "Related Keywords", path: "/related-keywords", icon: "fa-link" },
+    { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key" },
+    { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line" },
+    { name: "Keyword Difficulty", path: "/keyword-difficulty", icon: "fa-chart-bar" },
+    { name: "Keyword Spam Score", path: "/Keyword-spam-score", icon: "fa-shield-alt" },
+    { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area" },
+    { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign" },
+    { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad" },
+  ];
+
   return (
     <>
       {!isSidebarOpen && (
@@ -60,7 +73,7 @@ const Sidebar = () => {
         </div>
       )}
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-transform   ${
+        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out ${
           isSidebarOpen
             ? "translate-x-0 top-0 rounded-none mt-0"
             : "-translate-x-full mt-4 rounded-t-md"
@@ -75,15 +88,15 @@ const Sidebar = () => {
         <div className="flex items-center justify-between mb-4">
           <Link to="/profile-edit">
             <div
-              className={`flex justify-center items-center space-x-5.5 ${
+              className={`flex justify-center items-center space-x-5.5 transition-all duration-300 ease-in-out transform hover:scale-105 ${
                 selectedOption === "Profile"
                   ? "bg-[#E5590F] rounded-lg p-1.5"
                   : "b"
               }`}
               id="profile"
-              onClick={handleProfileClick} // Add this click handler
+              onClick={handleProfileClick}
             >
-              <img src={Profile} alt="Profile" />
+              <img src={Profile} alt="Profile" className="transition-transform duration-300 hover:rotate-12" />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
@@ -96,26 +109,17 @@ const Sidebar = () => {
           </button>
         </div>
 
-        {[
-          { name: "Home", path: "/" },
-          { name: "Related Keywords", path: "/related-keywords" },
-          { name: "Long-Tail Keywords", path: "/long-tail-keywords" },
-          { name: "Search Volume", path: "/search-volume" },
-          { name: "Keyword Difficulty", path: "/keyword-difficulty" },
-          { name: "Keyword Spam Score", path: "/Keyword-spam-score" },
-          { name: "Keyword Trend", path: "/keyword-trend" },
-          { name: "CPC (Cost Per Click)", path: "/CPC" },
-          { name: "Ad Competitions", path: "/ad-Competition" },
-        ].map((option) => (
+        {menuItems.map((option) => (
           <Link to={option.path} key={option.name}>
             <div
-              className={`mb-4 p-3 cursor-pointer rounded ${
+              className={`mb-4 p-3 cursor-pointer rounded flex items-center transition-all duration-300 ease-in-out transform ${
                 selectedOption === option.name
-                  ? "bg-[#E5590F] text-[#12153d] rounded-lg"
-                  : ""
-              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105 transition-500    ease-in-out`}
+                  ? "bg-[#E5590F] text-[#12153d] rounded-lg translate-x-2"
+                  : "hover:translate-x-2"
+              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105`}
               onClick={() => handleOptionClick(option.name)}
             >
+              <i className={`fas ${option.icon} mr-3 w-5 transition-transform duration-300 group-hover:rotate-12`}></i>
               {option.name}
             </div>
           </Link>

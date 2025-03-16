@@ -5,18 +5,19 @@ import UK from "../../../assets/UK.svg";
 import Canada from "../../../assets/Canada.svg";
 import SA from "../../../assets/SA.svg";
 import NZ from "../../../assets/NZ.svg";
+import IndiaMap from "../../../assets/IndiaMap.svg";
 
 const CountrySelect = ({ onCountryChange }) => {
   const [selectedCountry, setSelectedCountry] = useState("Select");
 
   const countries = [
     { name: "Select Country", flag: "" },
-    { name: "United States", flag: US },
-    { name: "India", flag: India },
-    { name: "UK", flag: UK },
-    { name: "Canada", flag: Canada },
-    { name: "South Africa", flag: SA },
-    { name: "New Zealand", flag: NZ },
+    { name: "United States", flag: US,map:IndiaMap },
+    { name: "India", flag: India,map:IndiaMap },
+    { name: "UK", flag: UK,map:IndiaMap },
+    { name: "Canada", flag: Canada,map:IndiaMap },
+    { name: "South Africa", flag: SA,map:IndiaMap },
+    { name: "New Zealand", flag: NZ,map:IndiaMap },
   ];
 
   const handleChange = (event) => {

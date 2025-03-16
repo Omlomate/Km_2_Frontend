@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 
-const SelectCurrency = ({ onCountryChange = () => {} }) => {
+const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("Select");
+  
+  const handleChange = (event) => {
+    const currency = currencies.find(
+      (currency) => currency.symbol === event.target.value
+    );
+    if (currency) {
+      setSelectedCurrency(currency.symbol);
+      onCurrencyChange(currency);  // Pass the entire currency object
+    }
+  };
 
   const currencies = [
     { name: "Select Currency", symbol: "Select Currency " },
@@ -138,15 +148,6 @@ const SelectCurrency = ({ onCountryChange = () => {} }) => {
     { name: "Zambian Kwacha", symbol: "ZMK" },
   ];
 
-  const handleChange = (event) => {
-    const currency = currencies.find(
-      (currency) => currency.symbol === event.target.value
-    );
-    if (currency) {
-      setSelectedCurrency(currency.symbol);
-      onCountryChange(currency);
-    }
-  };
 
   return (
     <div>

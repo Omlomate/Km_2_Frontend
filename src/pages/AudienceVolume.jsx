@@ -139,12 +139,14 @@ export const AudienceVolume = () => {
                         </div>
                       </div>
                     </div>
+                    <div className="bg-[#12153d] w-[430px] h-[245px] mt-4 p-4 rounded-lg">
+                      <img className="w-[12rem]" src={selectedCountry.map} alt="" />
+                    </div>
                   </div>
                   <div className="mt-0 pr-2">
                     <div
                       onMouseEnter={() => setHover(true)}
                       onMouseLeave={() => setHover(false)}
-                      
                     >
                       {hover ? (
                         <div className="h-[330px] w-full sm:w-[300px] p-8 bg-[#12153D] rounded-2xl text-white text-center lg:text-left">
