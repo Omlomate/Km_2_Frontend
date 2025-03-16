@@ -152,7 +152,14 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
   return (
     <div>
       <select
-        className="p-1.5 rounded-xl text-[#12153d] font-light border border-gray-50 outline-none flex-grow appearance-none bg-no-repeat hover:shadow-lg hover:scale-105 transition-300 ease-in-out"
+        className="p-p-1.5 rounded-xl text-[#12153d] font-light border-2 border-gray-50 
+        outline-none flex-grow appearance-none bg-no-repeat 
+        transform transition-all duration-300 ease-out
+        hover:shadow-[0_0_15px_rgba(229,89,15,0.3)] 
+        hover:scale-105 hover:border-[#E5590F]
+        focus:shadow-[0_0_20px_rgba(229,89,15,0.4)]
+        focus:scale-105 focus:border-[#E5590F]
+        active:scale-95"
         id="country-select"
         value={selectedCurrency}
         onChange={handleChange}
@@ -165,7 +172,8 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
       >
         {currencies.map((currency) => (
           <option
-            className="rounded-lg text-gray-500 font-light bg-white text-center text-sm"
+            className="rounded-lg text-gray-500 font-light bg-white text-center text-sm
+            transition-colors duration-200 hover:bg-gray-100"
             key={`${currency.name}-${currency.symbol}`}
             value={`${currency.symbol}`}
           >
@@ -173,6 +181,9 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
           </option>
         ))}
       </select>
+      <div className="absolute inset-0 rounded-xl bg-[#E5590F]/10 
+        transform scale-0 transition-transform duration-300 ease-out 
+        group-hover:scale-100 -z-10"></div>
     </div>
   );
 };
