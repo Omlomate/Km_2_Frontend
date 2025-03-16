@@ -13,6 +13,7 @@ import AudienceVolume from "./pages/AudienceVolume.jsx";
 import CPCPage from "./pages/CPCPage.jsx";
 import AdCompetition from "./pages/AdCompetition.jsx";
 import ProfileEdit from "./Components/Profile/ProfileEdit.jsx";
+import AdminDashboard from "./adminPages/AdminDashboard.jsx";
 
 
 // PrivateRoute Component
@@ -21,9 +22,22 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/" replace />;
 };
 
+
+
+// AdminRoute Component
+const AdminRoute = ({ children }) => {
+  const userData = JSON.parse(localStorage.getItem("userData")); // Retrieve stored user data
+  const isAdmin = userData?.isAdmin;
+
+  return  isAdmin ? children : <Navigate to="/" replace />;
+};
+
+
 const AppContent = () => {
   return (
     <Routes>
+       {/* Admin Routes */}
+      <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
       <Route
         path="*"
         element={
@@ -39,8 +53,12 @@ const AppContent = () => {
               <Route path="/CPC" element={<PrivateRoute><CPCPage /></PrivateRoute>} />
               <Route path="/ad-competition" element={<PrivateRoute><AdCompetition /></PrivateRoute>} />
               <Route path="/profile-edit" element={<PrivateRoute><ProfileEdit /></PrivateRoute>} />
+
+             
+              
             </Routes>
           </Layout>
+          
         }
       />
     </Routes>

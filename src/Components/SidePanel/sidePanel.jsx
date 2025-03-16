@@ -11,11 +11,14 @@ const Sidebar = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User"); // Default value
   const location = useLocation();
+  const userData = JSON.parse(localStorage.getItem("userData")); // Get user data from localStorage
+const profileImage = userData?.profileImage; // Check if profile image exists
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername);
+    const userData = JSON.parse(localStorage.getItem("userData")); // Parse JSON string
+    const storedFirstName = userData ? userData.firstName : null; // Get firstName
+    if (storedFirstName) {
+      setUsername(storedFirstName);
     }
 
     if (!isAuthenticated() && location.pathname !== "/") {
@@ -96,7 +99,7 @@ const Sidebar = () => {
               id="profile"
               onClick={handleProfileClick}
             >
-              <img src={Profile} alt="Profile" className="transition-transform duration-300 hover:rotate-12" />
+             <img src={profileImage || Profile} alt="Profile" className="w-20 h-20 object-cover rounded-full" className="transition-transform duration-300 hover:rotate-12" />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
