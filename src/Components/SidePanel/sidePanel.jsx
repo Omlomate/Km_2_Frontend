@@ -99,7 +99,7 @@ const profileImage = userData?.profileImage; // Check if profile image exists
               id="profile"
               onClick={handleProfileClick}
             >
-             <img src={profileImage || Profile} alt="Profile" className="w-20 h-20 object-cover rounded-full" className="transition-transform duration-300 hover:rotate-12" />
+             <img src={profileImage || Profile} alt="Profile" className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12" />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
