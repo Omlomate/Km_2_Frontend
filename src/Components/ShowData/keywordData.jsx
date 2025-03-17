@@ -142,7 +142,7 @@ const KeywordData = () => {
                         ADS
                       </h1>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-4" style={{fontFamily:"wantedsans"}}>
                       <div className="h-25 bg-indigo-900 text-white text-center pt-5 rounded-t-lg">
                         <h1 className="text-lg sm:text-xl">Keyword volume</h1>
                         <p className="text-lg sm:text-xl font-bold">
