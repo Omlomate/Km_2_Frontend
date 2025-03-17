@@ -84,7 +84,7 @@ const ProfileEdit = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/update-profile/profile",
+        "https://keyword-research3.onrender.com/api/update-profile/profile",
         {
           method: "PUT",
           headers: {
