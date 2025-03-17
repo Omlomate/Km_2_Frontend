@@ -6,20 +6,24 @@ import Canada from "../../../assets/Canada.svg";
 import SA from "../../../assets/SA.svg";
 import NZ from "../../../assets/NZ.svg";
 import IndiaMap from "../../../assets/IndiaMap.svg";
+import USA from "../../../assets/USAMap.svg";
+import UKMap from "../../../assets/UKMap.svg";
+import CanadaMap from "../../../assets/CanadaMap.svg";
+import SAMap from "../../../assets/SAMap.svg";
+import NZMap from "../../../assets/NZMap.svg";
 
 const CountrySelect = ({ onCountryChange }) => {
   const [selectedCountry, setSelectedCountry] = useState("Select");
 
   const countries = [
     { name: "Select Country", flag: "" },
-    { name: "United States", flag: US, map: IndiaMap },
+    { name: "United States", flag: US, map: USA },
     { name: "India", flag: India, map: IndiaMap },
-    { name: "UK", flag: UK, map: IndiaMap },
-    { name: "Canada", flag: Canada, map: IndiaMap },
-    { name: "South Africa", flag: SA, map: IndiaMap },
-    { name: "New Zealand", flag: NZ, map: IndiaMap },
+    { name: "UK", flag: UK, map: UKMap },
+    { name: "Canada", flag: Canada, map: CanadaMap },
+    { name: "South Africa", flag: SA, map: SAMap },
+    { name: "New Zealand", flag: NZ, map: NZMap },
   ];
-
   const handleChange = (event) => {
     const country = countries.find(
       (country) => country.name === event.target.value

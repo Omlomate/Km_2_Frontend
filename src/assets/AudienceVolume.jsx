@@ -139,11 +139,7 @@ export const AudienceVolume = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="bg-[#12153d] w-[430px] h-[245px] mt-4 p-4 rounded-lg flex items-center justify-center group overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(229,89,15,0.3)]"
-                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                     onMouseEnter={handleMouseEnter}
-                     onMouseLeave={handleMouseLeave}
-                    >
+                    <div className="bg-[#12153d] w-[430px] h-[245px] mt-4 p-4 rounded-lg flex items-center justify-center group overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(229,89,15,0.3)]">
                       <img 
                         className="object-contain w-full h-full max-h-[225px] transition-all duration-500 ease-in-out transform group-hover:scale-110 group-hover:brightness-110 hover:rotate-1" 
                         src={selectedCountry.map} 
