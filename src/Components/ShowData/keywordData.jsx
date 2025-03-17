@@ -109,21 +109,10 @@ const KeywordData = () => {
                 placeholder="Search Keyword"
                 className="w-full p-2 border-none outline-none bg-transparent"
               />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                onClick={handleSearch}
-                className="h-6 w-6 ml-2 text-gray-500 hover:text-gray-700 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M10 18l6-6m0 0l-6-6m6 6H3"
-                />
-              </svg>
+               <i
+            className="fa-solid fa-magnifying-glass cursor-pointer text-2xl p-1 text-gray-500 transition-colors duration-300 hover:text-[#E5590F]"
+            onClick={handleSearch}
+          ></i>
             </div>
             <div className="w-full max-w-[65rem] mx-auto p-1 mt-2 rounded-lg flex flex-col sm:flex-row items-center">
               {keywordData && (
