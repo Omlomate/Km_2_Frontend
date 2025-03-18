@@ -152,7 +152,7 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
   return (
     <div>
       <select
-        className="p-p-1.5 rounded-xl text-[#12153d] font-light border-2 border-gray-50 
+        className="p-1.5 rounded-xl text-[#12153d] font-light border-2 border-gray-50 
         outline-none flex-grow appearance-none bg-no-repeat 
         transform transition-all duration-300 ease-out
         hover:shadow-[0_0_15px_rgba(229,89,15,0.3)] 
@@ -177,7 +177,8 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
             key={`${currency.name}-${currency.symbol}`}
             value={`${currency.symbol}`}
           >
-            {currency.name} ({currency.symbol})
+            {currency.name} 
+            ({currency.symbol})
           </option>
         ))}
       </select>

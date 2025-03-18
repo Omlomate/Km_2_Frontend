@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
+import "./navbar.css"; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,17 +53,14 @@ const Navbar = () => {
 
   return (
     <>
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
-      </style>
+     
       <nav
-        className="bg-white w-full px-8 md:px-auto"
+        className="bg-white w-full px-8 md:px-auto shadow-sm transition-all duration-300"
         style={{ fontFamily: "wantedsans" }}
       >
         <div className="md:h-16 h-28 mx-auto md:px-4 container flex items-center justify-between flex-wrap md:flex-nowrap">
           <div className="flex items-center flex-shrink-0 text-gray-700 order-1 md:order-none md:mr-6 mx-auto md:mx-0">
-            <a href="/" className="flex items-center">
+            <a href="/" className="flex items-center logo-hover">
               <svg
                 width="40" // Changed from 50 to 40 for small screens
                 height="40" // Changed from 50 to 40 for small screens
@@ -81,7 +79,7 @@ const Navbar = () => {
               </svg>
               <div>
                 <span
-                  className="text-xl md:text-3xl font-bold"
+                  className="text-xl md:text-3xl font-bold transition-colors duration-300 hover:text-[#12153d]"
                   style={{ fontFamily: "Space Grotesk, sans-serif" }}
                 >
                   Keyword <span className="text-orange-500">Raja</span>
@@ -91,60 +89,36 @@ const Navbar = () => {
           </div>
           <div className="text-gray-500 order-3 w-full md:w-auto md:order-2">
             <ul className="flex font-semibold justify-between items-center">
-              <li className="md:px-4 md:py-2 text-gray-500">
-                <a href="#">Homepage</a>
+              {/* <li className="md:px-4 md:py-2">
+                <a href="#" className="nav-link">Homepage</a>
+              </li> */}
+              <li className="md:px-4 md:py-2">
+                <a href="#" className="nav-link">Blog</a>
               </li>
-              <li className="md:px-4 md:py-2 hover:text-gray-400">
-                <a href="#">Blog</a>
+              <li className="md:px-4 md:py-2">
+                <a href="#" className="nav-link">Forum</a>
               </li>
-              <li className="md:px-4 md:py-2 hover:text-gray-400">
-                <a href="#">Forum</a>
+              <li className="md:px-4 md:py-2">
+                <a href="#" className="nav-link">Course</a>
               </li>
-              <li className="md:px-4 md:py-2 hover:text-gray-400">
-                <a href="#">Course</a>
-              </li>
-              <li className="md:px-4 md:py-2 hover:text-gray-400">
-                {userData?.isAdmin && <a href="/admin-dashboard">Admin</a>}
+              <li className="md:px-4 md:py-2">
+                {userData?.isAdmin && <a href="/admin-dashboard" className="nav-link">Admin</a>}
               </li>
             </ul>
           </div>
-          <div className="order-2 md:order-3  ">
+          <div className="order-2 md:order-3">
             {loggedIn ? (
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 hover:bg-[#12153D] bg-[#12153de8] text-gray-50 rounded-xl flex items-center gap-2 cursor-pointer"
+                className="nav-button px-4 py-2 hover:bg-[#12153D] bg-[#12153de8] text-gray-50 rounded-xl flex items-center gap-2 cursor-pointer transform hover:scale-105"
               >
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg> */}
                 <span>Logout</span>
               </button>
             ) : (
               <button
                 onClick={showLogin}
-                className="px-4 py-2 bg-orange-400 hover:bg-orange-500 text-gray-50 rounded-xl flex items-center gap-2 cursor-pointer"
+                className="nav-button px-4 py-2 bg-orange-400 hover:bg-orange-500 text-gray-50 rounded-xl flex items-center gap-2 cursor-pointer transform hover:scale-105"
               >
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg> */}
                 <span>Login</span>
               </button>
             )}

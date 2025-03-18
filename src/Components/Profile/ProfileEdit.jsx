@@ -1,6 +1,21 @@
+// Remove framer-motion import
 import React, { useState, useEffect } from "react";
 import "./ProfileEdit.css";
 import Profile from "../../assets/profile.svg";
+
+ // Add default avatars array
+const defaultAvatars = [
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=1",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=2",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=3",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=4",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=5",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=6",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=7",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=8",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=9",
+  "https://api.dicebear.com/6.x/avataaars/svg?seed=10",
+];
 
 const countries = ["India", "United States", "United Kingdom", "Canada"];
 const countriesDiallog = ["+1", "+44", "+92", "+91"];
@@ -19,6 +34,7 @@ const ProfileEdit = () => {
   const [jwtToken, setJwtToken] = useState("");
   const [avatarFile, setAvatarFile] = useState(null); // Stores the actual file
   const [avatarPreview, setAvatarPreview] = useState(null); // Stores preview URL
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   // Load user data from localStorage when the component mounts
   useEffect(() => {
@@ -107,41 +123,37 @@ const ProfileEdit = () => {
     }
   };
 
+  const handleAvatarSelect = (avatarUrl) => {
+    setAvatar(avatarUrl);
+    setAvatarFile(null);
+    setAvatarPreview(null);
+    setShowAvatarModal(false);
+  };
+
   return (
-    <div className="max-w-9xl mx-auto p-4 md:p-10">
-      <h1 className="text-3xl md:text-4xl font-semibold mb-4 md:mb-6">
+    <div className="max-w-7xl mx-auto p-4 z-0 md:p-10 min-h-screen bg-gray-50 animate-fadeIn">
+      <h1 className="text-2xl md:text-4xl font-semibold mb-8 text-[#12153d] px-4 animate-slideIn">
         Edit Profile
       </h1>
 
-      <form onSubmit={handleSubmit}>
-        <div className="flex items-center mb-6">
-          <div className="relative flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-1.5">
-            <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
-              {avatarPreview ? (
-                // Show the selected image preview if a new file is uploaded
-                <img
-                  src={avatarPreview}
-                  alt="Avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : avatar ? (
-                // Show the stored Base64 image if available
-                <img
-                  src={avatar}
-                  alt="Avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                // Default profile image
-                <img
-                  src={Profile}
-                  alt="Default Profile"
-                  className="w-full h-full object-cover"
-                />
-              )}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-xl shadow-sm p-6 md:p-8"
+      >
+        <div className="flex items-center justify-center md:justify-start mb-8">
+          <div className="relative flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-200 overflow-hidden shadow-lg hover-scale transition-transform cursor-pointer"
+              onClick={() => setShowAvatarModal(true)}
+            >
+              <img
+                src={avatarPreview || avatar || Profile}
+                alt="Profile"
+                className="w-full h-full object-cover transition-transform hover:scale-110"
+              />
             </div>
 
-            <label className="mt-2 inline-block px-4 py-2 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200">
+            <label className="px-6 py-3 bg-[#12153d] text-white rounded-lg cursor-pointer hover:bg-[#101447e8] transition-all duration-300 shadow-md hover:scale-105 active:scale-95">
               Upload Photo
               <input
                 type="file"
@@ -153,10 +165,42 @@ const ProfileEdit = () => {
           </div>
         </div>
 
-        <div className="">
-          <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 items-center mt-4">
-            <div className="flex flex-col w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
+        {/* Avatar Selection Modal */}
+        {showAvatarModal && (
+          <div className="fixed inset-0 bg-[#00000057] bg-opacity-50 flex items-center justify-center z-50 mt-4 rounded-lg">
+            <div className="bg-white rounded-xl p-6 w-[90%] max-w-2xl">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold">Choose Avatar</h3>
+                <button
+                  onClick={() => setShowAvatarModal(false)}
+                  className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {defaultAvatars.map((avatarUrl, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleAvatarSelect(avatarUrl)}
+                    className="cursor-pointer rounded-full overflow-hidden border-2 border-transparent hover:border-[#12153d] transition-all duration-300"
+                  >
+                    <img
+                      src={avatarUrl}
+                      alt={`Avatar ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4 hover:scale-[1.01] transition-transform">
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">
                 First Name
               </label>
               <input
@@ -164,53 +208,27 @@ const ProfileEdit = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[24rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
               />
             </div>
-            <div className="w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[24rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
-              />
-            </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 items-center mt-4">
-            <div className="w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
-                User Name
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">
+                Username
               </label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[24rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
-              />
+              <div>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
+                />
+              </div>
             </div>
-            <div className="w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[24rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
-              />
-            </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 items-center mt-4">
-            <div className="w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">
                 Phone Number
               </label>
               <input
@@ -218,18 +236,45 @@ const ProfileEdit = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[20rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
               />
             </div>
-            <div className="w-full md:w-auto">
-              <label className="block font-medium text-lg text-gray-700 ml-3">
+          </div>
+
+          <div className="space-y-4 hover:scale-[1.01] transition-transform">
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-lg text-gray-700 font-medium">
                 Country
               </label>
               <select
                 name="country"
                 value={formData.country}
                 onChange={handleInputChange}
-                className="mt-1 block rounded-lg border-1 border-gray-500 w-full md:w-[24rem] focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#12153d] focus:ring-1 focus:ring-[#12153d] transition-all duration-300"
               >
                 <option value="">Select Country</option>
                 {countries.map((country) => (
@@ -242,12 +287,12 @@ const ProfileEdit = () => {
           </div>
         </div>
 
-        <div className="flex justify-center md:justify-start">
+        <div className="mt-8 flex justify-center md:justify-center">
           <button
             type="submit"
-            className="mt-6 button1 w-full md:w-[12rem] md:ml-69 bg-[#12153d] text-white py-2 px-4 rounded-md hover:bg-[#101447e8]"
+            className="px-8 py-3 bg-[#12153d] text-white rounded-lg hover:bg-[#101447e8] transition-all duration-300 shadow-md w-full md:w-auto hover:scale-105 active:scale-95"
           >
-            Confirm Changes
+            Save Changes
           </button>
         </div>
       </form>

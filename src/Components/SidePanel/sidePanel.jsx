@@ -12,7 +12,7 @@ const Sidebar = () => {
   const [username, setUsername] = useState("Guest User"); // Default value
   const location = useLocation();
   const userData = JSON.parse(localStorage.getItem("userData")); // Get user data from localStorage
-const profileImage = userData?.profileImage; // Check if profile image exists
+  const profileImage = userData?.profileImage || Profile; // Use default profile image if not available
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData")); // Parse JSON string
@@ -76,7 +76,7 @@ const profileImage = userData?.profileImage; // Check if profile image exists
         </div>
       )}
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out ${
+        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 ${
           isSidebarOpen
             ? "translate-x-0 top-0 rounded-none mt-0"
             : "-translate-x-full mt-4 rounded-t-md"
@@ -99,7 +99,7 @@ const profileImage = userData?.profileImage; // Check if profile image exists
               id="profile"
               onClick={handleProfileClick}
             >
-             <img src={profileImage || Profile} alt="Profile" className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12" />
+             <img src={profileImage} alt="Profile" className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12" />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
