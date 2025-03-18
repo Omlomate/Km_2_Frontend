@@ -14,6 +14,7 @@ import CPCPage from "./pages/CPCPage.jsx";
 import AdCompetition from "./pages/AdCompetition.jsx";
 import ProfileEdit from "./Components/Profile/ProfileEdit.jsx";
 import AdminDashboard from "./adminPages/AdminDashboard.jsx";
+import BlogPost from "./adminPages/BlogPostPage.jsx";
 
 
 // PrivateRoute Component
@@ -37,7 +38,9 @@ const AppContent = () => {
   return (
     <Routes>
        {/* Admin Routes */}
-      <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />              
+      <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />     
+      <Route path="/blog-post" element={<AdminRoute><BlogPost /></AdminRoute>} />
+      {/* Public Routes */}         
       <Route
         path="*"
         element={
