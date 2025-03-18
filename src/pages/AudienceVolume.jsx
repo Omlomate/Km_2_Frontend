@@ -12,7 +12,7 @@ export const AudienceVolume = () => {
   const { data: data3, loading } = useKeywordData();
   const [hover, setHover] = useState(false);
   const [loadingState, setLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("United States"); // Default country
+  const [selectedCountry, setSelectedCountry] = useState(""); // Default country
   const [selectedServer, setSelectedServer] = useState({
     name: "Google",
     icon: GoogleIcon,
@@ -63,7 +63,7 @@ export const AudienceVolume = () => {
   };
 
   const handleCountryChange = (country) => {
-    setSelectedCountry(country);
+    setSelectedCountry(country.apiReference);
   };
 
   const handleServerChange = (server) => {

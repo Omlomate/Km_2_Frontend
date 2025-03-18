@@ -9,6 +9,7 @@ const WhatsTrending = () => {
   const [keywordData, setKeywordData] = useState(null);
   const [graphData, setGraphData] = useState([]); // State for graph data
   const [loadingState, setLoading] = useState(false);
+   const [selectedCountry, setSelectedCountry] = useState(""); // Default country
 
   const { data: data3, loading } = useKeywordData();
 
@@ -18,9 +19,10 @@ const WhatsTrending = () => {
 
     const requestBody = {
       keywords: [searchTerm],
-      country: "US",
-      currency: "USD",
+      country: selectedCountry,     
     };
+
+    console.log("selectedCountry Bdy:", selectedCountry);
 
     try {
       const response = await fetch(
@@ -90,6 +92,10 @@ const WhatsTrending = () => {
     e.currentTarget.style.boxShadow = "none";
   };
 
+  const handleCountryChange = (country) => {
+    setSelectedCountry(country.apiReference);
+  };
+
   return (
     <div
       className="w-full bg-white p-5 rounded-lg"
@@ -100,7 +106,8 @@ const WhatsTrending = () => {
       </div>
       <div className="w-full max-w-[895px] mx-auto   mt-2 rounded-lg">
         <div className="w-full lg:min-w-[40rem]">
-          <SearchInput onSearch={handleSearch} />
+          <SearchInput onSearch={handleSearch} 
+          onCountryChange={handleCountryChange}/>
         </div>
         <div>
           {loadingState ? (

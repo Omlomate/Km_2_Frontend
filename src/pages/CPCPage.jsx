@@ -8,7 +8,7 @@ import SelectCurrency from "../Components/ui/KeywordInput/SelectCurrency.jsx";
 export const CPCPage = () => {
   const [keywordData, setKeywordData] = useState(null);
   const [loadingState, setLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("United States"); // Default country
+  const [selectedCountry, setSelectedCountry] = useState(""); // Default country
   const [selectedCurrency, setSelectedCurrency] = useState({ symbol: "$" }); // Default currency
 
   const handleMouseEnter = (e) => {
@@ -20,7 +20,7 @@ export const CPCPage = () => {
     e.currentTarget.style.boxShadow = "none";
   };
   const handleCountryChange = (country) => {
-    setSelectedCountry(country.name);
+    setSelectedCountry(country.apiReference);
   };
 
   const handleCurrencyChange = (currency) => {
@@ -40,7 +40,7 @@ export const CPCPage = () => {
           body: JSON.stringify({
             keywords: [searchTerm],
             country: selectedCountry,
-            currency: selectedCurrency,
+            currency: selectedCurrency.symbol,
           }),
         }
       );
@@ -98,7 +98,7 @@ export const CPCPage = () => {
                         Cost Per Click
                       </h1>
                       <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1">
-                        <p className="p-2"> {selectedCurrency.symbol}</p>
+                        <p className="p-2"> {keywordData?.data[0]?.cpc?.currency}</p>
                         <h1 className="p-2">
                           {keywordData?.data[0]?.cpc?.value}
                         </h1>

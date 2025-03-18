@@ -12,7 +12,7 @@ export const AdCompetition = () => {
   const { data: data3, loading } = useKeywordData();
   const [hover, setHover] = useState(false);
   const [loadingState, setLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("United States"); // Default country
+  const [selectedCountry, setSelectedCountry] = useState(""); // Default country
   const [selectedCurrency, setSelectedCurrency] = useState("USD"); // Default currency
 
   // const handleCountryClick = (countryCode) => {
@@ -28,7 +28,7 @@ export const AdCompetition = () => {
   };
 
   const handleCountryChange = (country) => {
-    setSelectedCountry(country.name);
+    setSelectedCountry(country.apiReference);
   };
 
   const handleSearch = async (searchTerm) => {

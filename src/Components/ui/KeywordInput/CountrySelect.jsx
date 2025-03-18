@@ -16,14 +16,16 @@ const CountrySelect = ({ onCountryChange }) => {
   const [selectedCountry, setSelectedCountry] = useState("Select");
 
   const countries = [
-    { name: "Select Country", flag: "" },
-    { name: "United States", flag: US, map: USA },
-    { name: "India", flag: India, map: IndiaMap },
-    { name: "UK", flag: UK, map: UKMap },
-    { name: "Canada", flag: Canada, map: CanadaMap },
-    { name: "South Africa", flag: SA, map: SAMap },
-    { name: "New Zealand", flag: NZ, map: NZMap },
+    { name: "Select Country", flag: "", apiReference: "" },
+    { name: "Global", flag: "", apiReference: "" },
+    { name: "United States", flag: US, map: USA, apiReference: "us" },
+    { name: "India", flag: India, map: IndiaMap, apiReference: "in" },
+    { name: "UK", flag: UK, map: UKMap, apiReference: "gb" },
+    { name: "Canada", flag: Canada, map: CanadaMap, apiReference: "ca" },
+    { name: "South Africa", flag: SA, map: SAMap, apiReference: "za" },
+    { name: "New Zealand", flag: NZ, map: NZMap, apiReference: "nz" },
   ];
+
   const handleChange = (event) => {
     const country = countries.find(
       (country) => country.name === event.target.value
