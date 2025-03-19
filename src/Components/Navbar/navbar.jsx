@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
 import "./navbar.css"; 
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +94,7 @@ const Navbar = () => {
                 <a href="#" className="nav-link">Homepage</a>
               </li> */}
               <li className="md:px-4 md:py-2">
-                <a href="#" className="nav-link">Blog</a>
+                <Link to="/blog" className="nav-link">Blog</Link>
               </li>
               <li className="md:px-4 md:py-2">
                 <a href="#" className="nav-link">Forum</a>

@@ -80,9 +80,14 @@ const ProfileEdit = () => {
     }
   };
 
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Update handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
+  
     const formDataToSend = new FormData();
     formDataToSend.append("firstName", formData.firstName);
     formDataToSend.append("lastName", formData.lastName);
@@ -90,14 +95,14 @@ const ProfileEdit = () => {
     formDataToSend.append("email", formData.email);
     formDataToSend.append("phoneNumber", formData.phoneNumber);
     formDataToSend.append("country", formData.country);
-
+  
     // ✅ Only append profileImage if the user selected a new file
     if (avatarFile instanceof File) {
       formDataToSend.append("profileImage", avatarFile);
     }
-
+  
     console.log([...formDataToSend.entries()]); // Debugging
-
+  
     try {
       const response = await fetch(
         "https://keyword-research3.onrender.com/api/update-profile/profile",
@@ -109,9 +114,9 @@ const ProfileEdit = () => {
           body: formDataToSend, // ✅ Correct way to send FormData
         }
       );
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         alert("Profile updated successfully!");
         localStorage.setItem("userData", JSON.stringify(data.updatedUser));
@@ -120,6 +125,8 @@ const ProfileEdit = () => {
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -287,12 +294,40 @@ const ProfileEdit = () => {
           </div>
         </div>
 
+        // Update the submit button in the return statement
         <div className="mt-8 flex justify-center md:justify-center">
           <button
             type="submit"
-            className="px-8 py-3 bg-[#12153d] text-white rounded-lg hover:bg-[#101447e8] transition-all duration-300 shadow-md w-full md:w-auto hover:scale-105 active:scale-95"
+            disabled={isLoading}
+            className="px-8 py-3 bg-[#12153d] text-white rounded-lg hover:bg-[#101447e8] transition-all duration-300 shadow-md w-full md:w-auto hover:scale-105 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
           >
-            Save Changes
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Saving...</span>
+              </>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </div>
       </form>
