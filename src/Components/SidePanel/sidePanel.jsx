@@ -3,22 +3,27 @@ import { Link, useLocation } from "react-router-dom";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth";
 import Profile from "../../assets/profile.svg";
- 
 
 const Sidebar = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
-  const [username, setUsername] = useState("Guest User"); // Default value
+  const [username, setUsername] = useState("Guest User");
   const location = useLocation();
-  const userData = JSON.parse(localStorage.getItem("userData")); // Get user data from localStorage
-  const profileImage = userData?.profileImage || Profile; // Use default profile image if not available
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const profileImage = userData?.profileImage || Profile;
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("userData")); // Parse JSON string
-    const storedFirstName = userData ? userData.firstName : null; // Get firstName
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const storedFirstName = userData ? userData.firstName : null;
     if (storedFirstName) {
       setUsername(storedFirstName);
+    }
+
+    // Retrieve the selected menu option from localStorage
+    const storedOption = localStorage.getItem("selectedOption");
+    if (storedOption) {
+      setSelectedOption(storedOption);
     }
 
     if (!isAuthenticated() && location.pathname !== "/") {
@@ -31,11 +36,14 @@ const Sidebar = () => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    // Save the selected option to localStorage
+    localStorage.setItem("selectedOption", option);
     setIsSidebarOpen(false);
   };
 
   const handleProfileClick = () => {
     setSelectedOption("Profile");
+    localStorage.setItem("selectedOption", "Profile");
     setIsSidebarOpen(false);
   };
 
@@ -63,10 +71,7 @@ const Sidebar = () => {
     <>
       {!isSidebarOpen && (
         <div className="md:hidden fixed top-4 left-4 z-50">
-          <button
-            onClick={toggleSidebar}
-            className="bg-transparent border-none"
-          >
+          <button onClick={toggleSidebar} className="bg-transparent border-none">
             <i
               className={`fas ${
                 isSidebarOpen ? "fa-times" : "fa-bars"
@@ -99,7 +104,11 @@ const Sidebar = () => {
               id="profile"
               onClick={handleProfileClick}
             >
-             <img src={profileImage} alt="Profile" className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12" />
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12"
+              />
               <span className="mr-3">{username}</span>
             </div>
           </Link>
@@ -122,7 +131,9 @@ const Sidebar = () => {
               } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105`}
               onClick={() => handleOptionClick(option.name)}
             >
-              <i className={`fas ${option.icon} mr-3 w-5 transition-transform duration-300 group-hover:rotate-12`}></i>
+              <i
+                className={`fas ${option.icon} mr-3 w-5 transition-transform duration-300 group-hover:rotate-12`}
+              ></i>
               {option.name}
             </div>
           </Link>
@@ -134,4 +145,5 @@ const Sidebar = () => {
     </>
   );
 };
+
 export default Sidebar;

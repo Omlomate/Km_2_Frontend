@@ -12,15 +12,28 @@ export const AudienceVolume = () => {
   const { data: data3, loading } = useKeywordData();
   const [hover, setHover] = useState(false);
   const [loadingState, setLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(""); // Default country
+  const [selectedCountry, setSelectedCountry] = useState({
+    name: "",
+    flag: "",
+    map: "",
+    apiReference: ""
+  });
+  // Add a new state to track the displayed country (only updated on search)
+  const [displayedCountry, setDisplayedCountry] = useState({
+    name: "",
+    flag: "",
+    map: "",
+    apiReference: ""
+  });
   const [selectedServer, setSelectedServer] = useState({
     name: "Google",
     icon: GoogleIcon,
-  }); // Add state for selected server
+  });
+  const [displayedServer, setDisplayedServer] = useState({
+    name: "Google",
+    icon: GoogleIcon,
+  });  
 
-  // const handleCountryClick = (countryCode) => {
-  //   setSelectedCountry({ code: countryCode, flag: countryFlags[countryCode] });
-  // };
   const handleMouseEnter = (e) => {
     e.currentTarget.style.boxShadow =
       "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
@@ -35,6 +48,13 @@ export const AudienceVolume = () => {
     setLoading(true);
 
     try {
+      // Only proceed with search if country is selected
+      if (!selectedCountry.apiReference) {
+        alert("Please select a country before searching");
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(
         "https://keyword-research3.onrender.com/api/keywords/keyword-Everywhere-Volume",
         {
@@ -42,7 +62,7 @@ export const AudienceVolume = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: [searchTerm],
-            country: selectedCountry,
+            country: selectedCountry.apiReference
           }),
         }
       );
@@ -54,6 +74,10 @@ export const AudienceVolume = () => {
       const result = await response.json();
       console.log("Search result:", result);
       setKeywordData(result);
+      
+      // Update the displayed country only after successful search
+      setDisplayedCountry(selectedCountry);
+      setDisplayedServer(selectedServer)
     } catch (error) {
       console.error("Error fetching keyword data:", error);
       setKeywordData(null);
@@ -63,7 +87,9 @@ export const AudienceVolume = () => {
   };
 
   const handleCountryChange = (country) => {
-    setSelectedCountry(country.apiReference);
+    console.log("Country changed to:", country);
+    setSelectedCountry(country);
+    // We don't update displayedCountry here anymore
   };
 
   const handleServerChange = (server) => {
@@ -124,33 +150,47 @@ export const AudienceVolume = () => {
                         </p>
 
                         <div className="flex items-center justify-center mt-4">
-                          {selectedCountry && (
-                            <img
-                              className="w-12 h-8 ml-4 cursor-pointer"
-                              src={selectedCountry.flag}
-                              alt={`${selectedCountry.name} Flag`}
-                            />
+                          {displayedCountry.flag && (
+                            <div className="flex flex-col items-center mr-4">
+                              <img
+                                className="w-12 h-8 cursor-pointer"
+                                src={displayedCountry.flag}
+                                alt={`${displayedCountry.name} Flag`}
+                              />
+                              <span className="text-xs mt-1">{displayedCountry.name}</span>
+                            </div>
                           )}
-                          <img
-                            className="w-12 h-8 ml-4"
-                            src={selectedServer.icon} // Update icon based on selected server
-                            alt={`${selectedServer.name} Icon`}
-                          />
+                          <div className="flex flex-col items-center">
+                            <img
+                              className="w-12 h-8"
+                              src={displayedServer.icon}
+                              alt={`${displayedServer.name} Icon`}
+                            />
+                            <span className="text-xs mt-1">{displayedServer.name}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className="bg-[#12153d] w-[430px] h-[245px] mt-4 p-4 rounded-lg flex items-center justify-center group overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(229,89,15,0.3)]"
-                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                     onMouseEnter={handleMouseEnter}
-                     onMouseLeave={handleMouseLeave}
-                    >
-                      <img 
-                        className="object-contain w-full h-full max-h-[225px] transition-all duration-500 ease-in-out transform group-hover:scale-110 group-hover:brightness-110 hover:rotate-1" 
-                        src={selectedCountry.map} 
-                        alt="Country Map"
-                      />
-                    </div>
+                    
+                    {/* Map display with improved visibility - using displayedCountry instead of selectedCountry */}
+                    {displayedCountry.map && (
+                      <div 
+                        className="bg-[#12153d] w-[430px] h-[245px] mt-4 p-4 rounded-lg flex flex-col items-center justify-center group overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(229,89,15,0.3)]"
+                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <h3 className="text-white mb-2">{displayedCountry.name} Map</h3>
+                        <img 
+                          className="object-contain w-full h-full max-h-[200px] transition-all duration-500 ease-in-out transform group-hover:scale-110 group-hover:brightness-110 hover:rotate-1" 
+                          src={displayedCountry.map} 
+                          alt={`${displayedCountry.name} Map`}
+                        />
+                      </div>
+                    )}
                   </div>
+                  
+                  {/* Rest of the component remains unchanged */}
                   <div className="mt-0 pr-2">
                     <div
                       onMouseEnter={() => setHover(true)}
