@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: 'wantedsans';
-    src: url('../public/fonts/WantedSans.ttf') format('truetype');
+    src: url('../fonts/WantedSans.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
