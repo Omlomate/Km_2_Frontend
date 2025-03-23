@@ -74,7 +74,7 @@ const BlogPost = () => {
       const token = localStorage.getItem("jwt"); // Adjust based on where you store the token
       if (!token) throw new Error("No authentication token found. Please log in.");
 
-      const response = await fetch("http://localhost:5000/api/blogs", {
+      const response = await fetch("https://keyword-research3.onrender.com/api/blogs", {
         method: "POST",
         body: formData,
         headers: {

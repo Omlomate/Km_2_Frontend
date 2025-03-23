@@ -10,7 +10,7 @@ const Show = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const baseUrl = "http://localhost:5000"; // Replace with env variable in production
+  const baseUrl = "https://keyword-research3.onrender.com"; // Replace with env variable in production
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -61,7 +61,7 @@ const Show = () => {
         ? blog.images.hero
         : `${baseUrl}${blog.images.hero}`)
     : "https://via.placeholder.com/1600x900?text=No+Image";
-  const blogUrl = `http://localhost:5173/blog/${slug}`;
+  const blogUrl = `https://km-2-frontend.vercel.app/blog/${slug}`;
 
   return (
     <section id="Show-blogs">
