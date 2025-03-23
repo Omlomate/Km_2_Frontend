@@ -1,11 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BlogCard from "./BlogCard";
 
-const Home = ({ blogs }) => {
+const Home = () => {
+  const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const blogsPerPage = 6;
+
+  // Fetch blogs on mount
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("http://localhost:5000/api/blogs", {
+          method: "GET"         
+        });
+        if (!response.ok) throw new Error("Failed to fetch blogs");
+        const data = await response.json();
+        setBlogs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   // Calculate pagination
   const indexOfLastBlog = currentPage * blogsPerPage;
@@ -16,15 +39,14 @@ const Home = ({ blogs }) => {
   const paginate = async (pageNumber) => {
     setIsLoading(true);
     setCurrentPage(pageNumber);
-    // Simulate loading delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate loading delay
     setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="w-full   py-8 sm:py-16">
+      <div className="w-full py-8 sm:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="relative h-[240px] sm:h-[340px] rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
             <div
@@ -34,7 +56,7 @@ const Home = ({ blogs }) => {
               <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
               <div className="relative h-full flex flex-col justify-center items-center p-4 sm:p-8">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-wantedSans text-white font-bold tracking-tight text-center max-w-3xl px-2">
-                  THE BLOG OF KEYWORD RAJAS
+                  THE BLOG OF KEYWORD RAJA
                 </h1>
               </div>
             </div>
@@ -43,7 +65,7 @@ const Home = ({ blogs }) => {
 
         {/* Search Bar */}
         <div className="max-w-6xl mx-auto px-4 mt-6 sm:mt-8">
-          <div className="bg-white/50 backdrop-blur-md rounded-lg  border-1 border-gray-500   flex items-center p-1.5 sm:p-2  ">
+          <div className="bg-white/50 backdrop-blur-md rounded-lg border-1 border-gray-500 flex items-center p-1.5 sm:p-2">
             <input
               type="text"
               placeholder="Search Keyword"
@@ -66,6 +88,8 @@ const Home = ({ blogs }) => {
           <div className="w-16 sm:w-24 h-1 sm:h-1.5 bg-[#E5590F] rounded-full"></div>
         </div>
 
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
             {[...Array(6)].map((_, index) => (
@@ -82,11 +106,13 @@ const Home = ({ blogs }) => {
               </div>
             ))}
           </div>
+        ) : blogs.length === 0 ? (
+          <p className="text-gray-600 text-center">No blogs available yet.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
             {currentBlogs.map((blog, index) => (
               <BlogCard
-                key={indexOfFirstBlog + index}
+                key={blog._id} // Use _id from MongoDB
                 blog={blog}
                 index={indexOfFirstBlog + index}
               />
@@ -95,50 +121,52 @@ const Home = ({ blogs }) => {
         )}
 
         {/* Pagination */}
-        <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-3">
-          <button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1 || isLoading}
-            className={`w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-medium transition-all ${
-              currentPage === 1 || isLoading
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-[#12153d] text-white hover:bg-[#1a1f4d] shadow-md"
-            }`}
-          >
-            Previous
-          </button>
+        {blogs.length > 0 && (
+          <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-3">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1 || isLoading}
+              className={`w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-medium transition-all ${
+                currentPage === 1 || isLoading
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-[#12153d] text-white hover:bg-[#1a1f4d] shadow-md"
+              }`}
+            >
+              Previous
+            </button>
 
-          <div className="flex flex-wrap justify-center gap-2 sm:space-x-2">
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => paginate(index + 1)}
-                disabled={isLoading}
-                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full font-medium transition-all ${
-                  currentPage === index + 1
-                    ? "bg-[#E5590F] text-white shadow-md"
-                    : isLoading
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-[#12153d] border border-gray-200 hover:border-[#E5590F] hover:text-[#E5590F] shadow-sm"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
+            <div className="flex flex-wrap justify-center gap-2 sm:space-x-2">
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => paginate(index + 1)}
+                  disabled={isLoading}
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full font-medium transition-all ${
+                    currentPage === index + 1
+                      ? "bg-[#E5590F] text-white shadow-md"
+                      : isLoading
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-[#12153d] border border-gray-200 hover:border-[#E5590F] hover:text-[#E5590F] shadow-sm"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages || isLoading}
+              className={`w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-medium transition-all ${
+                currentPage === totalPages || isLoading
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-[#12153d] text-white hover:bg-[#1a1f4d] shadow-md"
+              }`}
+            >
+              Next
+            </button>
           </div>
-
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages || isLoading}
-            className={`w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-medium transition-all ${
-              currentPage === totalPages || isLoading
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-[#12153d] text-white hover:bg-[#1a1f4d] shadow-md"
-            }`}
-          >
-            Next
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

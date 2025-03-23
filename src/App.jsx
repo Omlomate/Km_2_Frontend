@@ -21,7 +21,6 @@ import ProfileEdit from "./Components/Profile/ProfileEdit.jsx";
 import AdminDashboard from "./adminPages/AdminDashboard.jsx";
 import BlogPost from "./adminPages/BlogPostPage.jsx";
 import Home from "./Blogs/Home.jsx";
-import New from "./Blogs/New.jsx";
 import Show from "./Blogs/Show.jsx";
 import { useState } from "react";
 import { initialBlogs } from "./assets/blogData.js";
@@ -67,9 +66,8 @@ const AppContent = () => {
         }
       />
       {/* Blogs */}
-      <Route path="/blog" element={<Home blogs={blogs} />} />
-      <Route path="/create" element={<New onAddBlog={addBlog} />} />
-      <Route path="/blog/:id" element={<Show blogs={blogs} />} />
+      <Route path="/blog" element={<Home blogs={blogs} />} />     
+      <Route path="/blog/:slug" element={<Show />} />
 
       {/* Public Routes */}
       <Route
