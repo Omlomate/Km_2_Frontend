@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { UploadCloud } from "lucide-react";
+// import { UploadCloud } from "lucide-react";
+import { UploadCloud, Loader2 } from "lucide-react"; // Import Loader2 icon
 import slugify from "slugify";
 
 const BlogPost = () => {
@@ -17,6 +18,7 @@ const BlogPost = () => {
   const [metaKeywords, setMetaKeywords] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
 
   // Auto-generate slug from title
   const handleTitleChange = (e) => {
@@ -41,17 +43,20 @@ const BlogPost = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
     // Validate required fields
     if (!title || !slug || !topic || !shortDescription || !content) {
       setError("All required fields must be filled.");
       setSuccess(null);
+      setIsSubmitting(false);
       return;
     }
 
     if (!imageFile && !imageUrl) {
       setError("Please provide either an image file or an image URL.");
       setSuccess(null);
+      setIsSubmitting(false);
       return;
     }
 
@@ -67,23 +72,36 @@ const BlogPost = () => {
     if (imageFile) formData.append("image", imageFile);
     if (imageUrl) formData.append("imageUrl", imageUrl);
     if (imageAlt) formData.append("imageAlt", imageAlt);
-    formData.append("tags", tags ? JSON.stringify(tags.split(",").map((tag) => tag.trim())) : "[]");
-    formData.append("metaKeywords", metaKeywords ? JSON.stringify(metaKeywords.split(",").map((kw) => kw.trim())) : "[]");
+    formData.append(
+      "tags",
+      tags ? JSON.stringify(tags.split(",").map((tag) => tag.trim())) : "[]"
+    );
+    formData.append(
+      "metaKeywords",
+      metaKeywords
+        ? JSON.stringify(metaKeywords.split(",").map((kw) => kw.trim()))
+        : "[]"
+    );
 
     try {
       const token = localStorage.getItem("jwt"); // Adjust based on where you store the token
-      if (!token) throw new Error("No authentication token found. Please log in.");
+      if (!token)
+        throw new Error("No authentication token found. Please log in.");
 
-      const response = await fetch("https://keyword-research3.onrender.com/api/blogs", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Authorization": `Bearer ${token}`, // Send JWT token
-        },
-      });
+      const response = await fetch(
+        "https://keyword-research3.onrender.com/api/blogs",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token
+          },
+        }
+      );
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Failed to publish blog");
+      if (!response.ok)
+        throw new Error(result.message || "Failed to publish blog");
 
       setSuccess("Blog published successfully!");
       setError(null);
@@ -103,12 +121,16 @@ const BlogPost = () => {
     } catch (err) {
       setError(err.message);
       setSuccess(null);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10 border border-gray-200">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Create a Blog Post</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Create a Blog Post
+      </h2>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
       {success && <p className="text-green-500 text-center mb-4">{success}</p>}
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -130,7 +152,9 @@ const BlogPost = () => {
             value={metaTitle}
             onChange={(e) => setMetaTitle(e.target.value.slice(0, 60))}
           />
-          <p className="text-sm text-gray-500 mt-1">{metaTitle.length}/60 characters</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {metaTitle.length}/60 characters
+          </p>
         </div>
         <div>
           <input
@@ -138,7 +162,9 @@ const BlogPost = () => {
             placeholder="Slug *"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             value={slug}
-            onChange={(e) => setSlug(slugify(e.target.value, { lower: true, strict: true }))}
+            onChange={(e) =>
+              setSlug(slugify(e.target.value, { lower: true, strict: true }))
+            }
             required
           />
           <p className="text-sm text-gray-500 mt-1">URL: /blog/{slug}</p>
@@ -162,7 +188,9 @@ const BlogPost = () => {
             onChange={(e) => setShortDescription(e.target.value.slice(0, 160))}
             required
           />
-          <p className="text-sm text-gray-500 mt-1">{shortDescription.length}/160 characters</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {shortDescription.length}/160 characters
+          </p>
         </div>
         <div>
           <input
@@ -172,7 +200,9 @@ const BlogPost = () => {
             value={metaDescription}
             onChange={(e) => setMetaDescription(e.target.value.slice(0, 160))}
           />
-          <p className="text-sm text-gray-500 mt-1">{metaDescription.length}/160 characters</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {metaDescription.length}/160 characters
+          </p>
         </div>
         <div>
           <textarea
@@ -186,8 +216,15 @@ const BlogPost = () => {
         <div>
           <label className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <UploadCloud className="text-blue-500 mr-2" />
-            <span className="text-gray-600">{imageFile ? imageFile.name : "Upload an Image"}</span>
-            <input type="file" accept="image/*" className="hidden" onChange={handleImageFileUpload} />
+            <span className="text-gray-600">
+              {imageFile ? imageFile.name : "Upload an Image"}
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageFileUpload}
+            />
           </label>
           {imageFile && (
             <img
@@ -214,7 +251,8 @@ const BlogPost = () => {
             />
           )}
           <p className="text-sm text-gray-500 mt-1">
-            Upload a file or paste a URL. If both are provided, the uploaded file takes priority.
+            Upload a file or paste a URL. If both are provided, the uploaded
+            file takes priority.
           </p>
         </div>
         <div>
@@ -246,9 +284,20 @@ const BlogPost = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all"
+          className={`w-full flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all ${
+            isSubmitting
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          } text-white`}
         >
-          Publish Blog
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Publishing...
+            </>
+          ) : (
+            "Publish Blog"
+          )}
         </button>
       </form>
     </div>
