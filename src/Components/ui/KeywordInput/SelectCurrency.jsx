@@ -120,12 +120,10 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
       <select
         className="p-1.5 rounded-xl text-[#12153d] font-light border-2 border-gray-50 
         outline-none flex-grow appearance-none bg-no-repeat 
-        transform transition-all duration-300 ease-out
         hover:shadow-[0_0_15px_rgba(229,89,15,0.3)] 
-        hover:scale-105 hover:border-[#E5590F]
+        hover:border-[#E5590F]
         focus:shadow-[0_0_20px_rgba(229,89,15,0.4)]
-        focus:scale-105 focus:border-[#E5590F]
-        active:scale-95"
+        focus:border-[#E5590F]"
         id="country-select"
         value={selectedCurrency}
         onChange={handleChange}

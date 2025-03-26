@@ -70,71 +70,61 @@ const Sidebar = () => {
   return (
     <>
       {!isSidebarOpen && (
-        <div className="md:hidden fixed top-4 left-4 z-50">
-          <button onClick={toggleSidebar} className="bg-transparent border-none">
-            <i
-              className={`fas ${
-                isSidebarOpen ? "fa-times" : "fa-bars"
-              } text-2xl`}
-            ></i>
+        <div className="md:hidden fixed top-4 left-4 z-[60]">
+          <button onClick={toggleSidebar} className="bg-white p-2 rounded-lg shadow-md">
+            <i className="fas fa-bars text-xl text-[#12153D]"></i>
           </button>
         </div>
       )}
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 ${
+        className={`bg-[#12153D] text-white p-4 w-full md:w-72 fixed md:relative transition-all duration-300 ease-in-out z-[55] ${
           isSidebarOpen
-            ? "translate-x-0 top-0 rounded-none mt-0"
-            : "-translate-x-full mt-4 rounded-t-md"
-        } md:translate-x-0 md:ml-6 md:mr-4 ${
-          isSidebarOpen ? "w-full h-full" : "w-72"
-        }`}
-        style={{
-          height: isSidebarOpen ? "100vh" : "auto",
-          fontFamily: "wantedsans",
-        }}
+            ? "translate-x-0 top-0 h-screen"
+            : "-translate-x-full"
+        } md:translate-x-0 md:h-screen md:ml-6 md:mr-4`}
+        style={{ fontFamily: "wantedsans" }}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6 pt-2">
           <Link to="/profile-edit">
             <div
-              className={`flex justify-center items-center space-x-5.5 transition-all duration-300 ease-in-out transform hover:scale-105 ${
+              className={`flex items-center gap-4 ${
                 selectedOption === "Profile"
-                  ? "bg-[#E5590F] rounded-lg p-1.5"
-                  : "b"
+                  ? "bg-[#E5590F] rounded-lg p-2"
+                  : ""
               }`}
-              id="profile"
               onClick={handleProfileClick}
             >
               <img
                 src={profileImage}
                 alt="Profile"
-                className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12"
+                className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full"
               />
-              <span className="mr-3">{username}</span>
+              <span className="text-lg">{username}</span>
             </div>
           </Link>
 
-          <button
-            onClick={toggleSidebar}
-            className="md:hidden bg-transparent border-none"
-          >
-            <i className="fas fa-times text-2xl"></i>
-          </button>
+          {isSidebarOpen && (
+            <button
+              onClick={toggleSidebar}
+              className="md:hidden bg-transparent text-white"
+            >
+              <i className="fas fa-times text-2xl"></i>
+            </button>
+          )}
         </div>
 
         {menuItems.map((option) => (
           <Link to={option.path} key={option.name}>
             <div
-              className={`mb-4 p-3 cursor-pointer rounded flex items-center transition-all duration-300 ease-in-out transform ${
+              className={`mb-3 p-3 cursor-pointer rounded-lg flex items-center ${
                 selectedOption === option.name
-                  ? "bg-[#E5590F] text-[#12153d] rounded-lg translate-x-2"
-                  : "hover:translate-x-2"
-              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105`}
+                  ? "bg-[#E5590F] text-[#12153d]"
+                  : "hover:bg-[#E5590F] hover:text-[#12153d]"
+              }`}
               onClick={() => handleOptionClick(option.name)}
             >
-              <i
-                className={`fas ${option.icon} mr-3 w-5 transition-transform duration-300 group-hover:rotate-12`}
-              ></i>
-              {option.name}
+              <i className={`fas ${option.icon} mr-3 w-5`}></i>
+              <span className="text-base">{option.name}</span>
             </div>
           </Link>
         ))}
