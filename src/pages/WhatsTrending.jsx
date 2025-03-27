@@ -131,7 +131,12 @@ const WhatsTrending = () => {
                         What's Trending
                       </h1>
                       <Bargraph data={graphData} />{" "}
-                      {/* Pass graphData as prop */}
+                      <div className="flex items-center justify-center mt-2">
+                        <div className="w-4 h-4 bg-[#12153D] mr-2 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-[#12153d] rounded-full"></div>
+                        </div>
+                        <h1 className="text-[#12153D] font-medium">Monthly Trend</h1>
+                      </div>
                     </div>
                     <div
                       className="bg-[#12153d] rounded-lg p-8 flex flex-col justify-center items-center space-y-2 mt-13.5"

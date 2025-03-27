@@ -50,7 +50,7 @@ const Bargraph = ({ data }) => {
             tickFormatter={formatValue}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend formatter={() => 'Monthly Trend'} />
+          {/* <Legend formatter={() => 'Monthly Trend'} margin={{left:45}}/> */}
           <Bar 
             dataKey="value"  // Use numeric value for bars
             fill="#12153D" 

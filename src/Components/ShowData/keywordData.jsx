@@ -70,7 +70,7 @@ const KeywordData = () => {
         @import
         url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
       </style>
-      <div className="w-full bg-white grid grid-cols-1 p-3 sm:p-6 rounded-lg animate-fade-in">
+      <div className="w-full bg-white grid grid-cols-1 pr-4 pl-4 rounded-lg animate-fade-in">
         {isSignupVisible ? (
           <div>
             <div className="order-2 md:order-3 w-full grid justify-center item-center ">
@@ -162,8 +162,10 @@ const KeywordData = () => {
                       <div className="mt-3 sm:mt-4" style={{fontFamily:"wantedsans"}}>
                         <div className="h-20 sm:h-25 bg-[#12153d] text-white text-center pt-3 sm:pt-5 rounded-t-lg">
                           <h1 className="text-base sm:text-lg font-bold">Keyword volume</h1>
-                          <p className="text-base   text-[#E5590F] sm:text-2xl font-bold" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
-                            {keywordData.volume}
+                          <p className="text-base text-[#E5590F] sm:text-2xl font-bold" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
+                            {keywordData.volume >= 1000 
+                              ? `${Math.round(keywordData.volume / 1000)}k` 
+                              : keywordData.volume}
                           </p>
                         </div>
                         <div className="w-full relative h-20 sm:h-25 border-t-none">
@@ -197,7 +199,7 @@ const KeywordData = () => {
                             Keyword Difficulty
                           </h1>
                           <p className="text-lg text-[#E5590F] sm:text-2xl font-bold" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
-                            {keywordData.difficulty} %
+                           {keywordData.difficulty} %
                           </p>
                         </div>
                         <div className="w-full relative h-25 border-t-none">

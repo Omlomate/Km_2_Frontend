@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
 import "./navbar.css";
-import { Link } from "react-router-dom";
+ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false); // State to track authentication
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Add this state
+
+  // Add this function
+  // const toggleSidebar = () => {
+  //   setIsSidebarOpen(!isSidebarOpen);
+  // };
 
   useEffect(() => {
     setLoggedIn(isAuthenticated()); // Check if user is authenticated on component mount
@@ -59,15 +65,12 @@ const Navbar = () => {
         style={{ fontFamily: "wantedsans" }}
       >
         <div className="h-16 mx-auto md:px-4 container flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={toggleNavbar} className="md:hidden">
-              <i className="fas fa-bars text-xl"></i>
-            </button>
+          <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
-              <a href="/" className="flex items-center gap-2 logo-hover">
+              <a href="/" className="flex items-center gap-2 logo-hover ">
                 {/* Logo mark SVG - smaller on mobile */}
                 <svg 
-                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" 
+                  className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8" 
                   viewBox="0 0 360 398"
                 >
                   <path
@@ -81,12 +84,12 @@ const Navbar = () => {
                 </svg>
                 {/* Text logo SVG - responsive width */}
                 <svg
-                  className="w-20 h-auto sm:w-24 md:w-32 lg:w-52"
+                  className="w-28 h-auto sm:w-24 md:w-32 lg:w-52"
                   viewBox="0 0 208 34"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g clip-path="url(#clip0_520_143)">
+                  <g clipPath="url(#clip0_520_143)">
                     <path
                       d="M0 26.83L0.586206 1.92053H5.09548L4.76051 11.7025H5.41113L13.7429 1.92053H18.9429L9.16027 14.1032L20.0534 26.83H13.7791L5.41113 16.6511H4.76051V26.83H0Z"
                       fill="#12153D"

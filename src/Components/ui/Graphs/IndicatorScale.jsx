@@ -5,8 +5,8 @@ const IndicatorScale = ({ value = 0 }) => {
   const percentage = clampedValue * 100;
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
-      <div className="relative flex items-center mt-8">
+    <div className="w-full mt-4 max-w-md mx-auto p-4">
+      <div className="relative flex items-center">
         {/* Base dotted line */}
         <div className="w-full h-[2px] border-t-2 border-dashed border-orange-500/50" />
 
@@ -15,13 +15,15 @@ const IndicatorScale = ({ value = 0 }) => {
           className="absolute left-0 h-[2px] bg-orange-500 transition-all duration-300"
           style={{ width: `${percentage}%` }}
         />
-          <div 
-          className="absolute -top-8 transform -translate-x-1/2 transition-all duration-300"
+        
+        {/* Indicator marker */}
+        <div 
+          className="absolute transform -translate-x-1/2 transition-all duration-300"
           style={{ left: `${percentage}%` }}
         >
           <svg 
             width="24" 
-            height="34" 
+            height="24" 
             viewBox="0 0 24 34" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -36,19 +38,19 @@ const IndicatorScale = ({ value = 0 }) => {
         </div>
 
         {/* Start point */}
-        <div className="absolute left-0 -translate-x-1/2">
-          <span className="absolute -top-8 text-2xl font-bold  text-white">
+        <div className="absolute left-0 -translate-x-1/2 flex items-center">
+          <span className="mr-2 text-2xl font-bold text-white">
             0
           </span>
           <div className="w-4 h-4 bg-orange-500 rounded-full" />
         </div>
 
         {/* End point */}
-        <div className="absolute right-0 translate-x-1/2">
-          <span className="absolute -top-8 text-2xl font-bold text-white">
+        <div className="absolute right-0 translate-x-1/2 flex items-center">
+          <div className="w-4 h-4 bg-orange-500 rounded-full" />
+          <span className="ml-2 text-2xl font-bold text-white">
             1
           </span>
-          <div className="w-4 h-4 bg-orange-500 rounded-full" />
         </div>
       </div>
     </div>
