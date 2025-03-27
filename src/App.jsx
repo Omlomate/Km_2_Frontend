@@ -66,7 +66,7 @@ const AppContent = () => {
         }
       />
       {/* Blogs */}
-      <Route path="/blog" element={<Home blogs={blogs} />} />     
+      <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
 
       {/* Public Routes */}
@@ -159,8 +159,10 @@ const AppContent = () => {
 function App() {
   return (
     <Router basename="/">
-        <Navbar />
-      <AppContent />
+      <Navbar />
+      <div className="pt-28 md:pt-16">
+        <AppContent />
+      </div>
     </Router>
   );
 }
