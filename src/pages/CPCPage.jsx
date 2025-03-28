@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect
+import { Helmet } from "react-helmet"; // Import Helmet
 import BannerAds from "../Components/ui/Ads/BannerAds.jsx";
 import SearchInput from "../Components/ui/KeywordInput/SearchInput.jsx";
 import Loader from "../Components/Loading/Loader.jsx";
-import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx";  
+import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx";
 import SelectCurrency from "../Components/ui/KeywordInput/SelectCurrency.jsx";
 
 export const CPCPage = () => {
   const [keywordData, setKeywordData] = useState(null);
   const [loadingState, setLoading] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(""); // Default country
-  const [selectedCurrency, setSelectedCurrency] = useState({ symbol: "$" }); // Default currency
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState({ symbol: "$" });
+  const [metaTags, setMetaTags] = useState({ title: "", description: "" }); // State for meta tags
+
+  // Fetch meta tags for the CPC page
+  useEffect(() => {
+    const fetchMetaTags = async () => {
+      try {
+        const response = await fetch("https://www.keywordraja.com/api/meta/cpc");
+        const data = await response.json();
+        setMetaTags({
+          title: data.title,
+          description: data.description,
+        });
+      } catch (error) {
+        console.error("Error fetching meta tags:", error);
+        // Fallback meta tags in case of error
+        setMetaTags({
+          title: "CPC - Keyword Raja",
+          description: "Calculate Cost Per Click (CPC) with Keyword Raja to optimize your ad spend.",
+        });
+      }
+    };
+    fetchMetaTags();
+  }, []);
 
   const handleMouseEnter = (e) => {
     e.currentTarget.style.boxShadow =
@@ -19,6 +43,7 @@ export const CPCPage = () => {
   const handleMouseLeave = (e) => {
     e.currentTarget.style.boxShadow = "none";
   };
+
   const handleCountryChange = (country) => {
     setSelectedCountry(country.apiReference);
   };
@@ -62,107 +87,113 @@ export const CPCPage = () => {
   };
 
   return (
-    <div className="w-full bg-white p-5 rounded-lg" style={{fontFamily:"wantedsans"}}>
-      <div className="w-full lg:min-w-[40rem]">
-        <BannerAds />
-      </div>
-      <div className="w-full max-w-[895px] mx-auto  mt-2 rounded-lg">
-        <div className="flex items-center lg:min-w-[40rem]">
-          <SearchInput
-            onSearch={handleSearch}
-            onCountryChange={handleCountryChange}
-            onCurrencyChange={handleCurrencyChange}
-          />
-        </div>
+    <>
+      {/* Add Helmet to set meta tags */}
+      <Helmet>
+        <title>{metaTags.title}</title>
+        <meta name="description" content={metaTags.description} />
+      </Helmet>
 
-        {/* <CountrySelect onCountryChange={handleCountryChange} /> Add CountrySelect component */}
-        <div>
-          {loadingState ? (
-            <div className="flex justify-center">
-              <Loader />
-            </div>
-          ) : (
-            keywordData && (
-              <>
-                <style>
-                  @import
-                  url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
-                </style>
-                <div className="flex flex-col lg:flex-row w-full mt-4">
-                  <div className="w-full lg:w-1/2 pr-4">
-                    <div className="flex flex-col items-center justify-center   rounded-lg border-1 border-gray-500 w-[435px] h-[140px]"
-                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                     onMouseEnter={handleMouseEnter}
-                     onMouseLeave={handleMouseLeave}>
-                      <h1 className="text-2xl text-[#12153d] font-bold">
-                        Cost Per Click
-                      </h1>
-                      <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1">
-                        <p className="p-2"> {keywordData?.data[0]?.cpc?.currency}</p>
-                        <h1 className="p-2">
-                          {keywordData?.data[0]?.cpc?.value}
-                        </h1>
+      <div className="w-full bg-white p-5 rounded-lg" style={{ fontFamily: "wantedsans" }}>
+        <div className="w-full lg:min-w-[40rem]">
+          <BannerAds />
+        </div>
+        <div className="w-full max-w-[895px] mx-auto mt-2 rounded-lg">
+          <div className="flex items-center lg:min-w-[40rem]">
+            <SearchInput
+              onSearch={handleSearch}
+              onCountryChange={handleCountryChange}
+              onCurrencyChange={handleCurrencyChange}
+            />
+          </div>
+          <div>
+            {loadingState ? (
+              <div className="flex justify-center">
+                <Loader />
+              </div>
+            ) : (
+              keywordData && (
+                <>
+                  <style>
+                    {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
+                  </style>
+                  <div className="flex flex-col lg:flex-row w-full mt-4">
+                    <div className="w-full lg:w-1/2 pr-4">
+                      <div
+                        className="flex flex-col items-center justify-center rounded-lg border-1 border-gray-500 w-[435px] h-[140px]"
+                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <h1 className="text-2xl text-[#12153d] font-bold">Cost Per Click</h1>
+                        <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1">
+                          <p className="p-2">{keywordData?.data[0]?.cpc?.currency}</p>
+                          <h1 className="p-2">{keywordData?.data[0]?.cpc?.value}</h1>
+                        </div>
+                      </div>
+                      <div
+                        className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"
+                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <h3 className="text-white p-8 text-justify">
+                          CPC for SEO depends entirely on your industry and desired ROI, a
+                          good CPC allows you to achieve your marketing goals while
+                          maintaining a positive ROI
+                        </h3>
+                      </div>
+                      <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25">
+                        <h4 className="flex flex-col justify-center items-center text-2xl font-bold">
+                          AD
+                        </h4>
                       </div>
                     </div>
-                    <div className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"
-                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                     onMouseEnter={handleMouseEnter}
-                     onMouseLeave={handleMouseLeave}>
-                      <h3 className="text-white p-8 text-justify">
-                        CPC for SEO depends entirely on your industry and
-                        desired ROI, a good CPC allows you to achieve your
-                        marketing goals while maintaining a positive ROI
-                      </h3>
-                    </div>
-                    <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25">
-                      <h4 className="flex flex-col justify-center items-center text-2xl font-bold">
-                        AD
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="mt-0 pl-2">
-                    <div className="    rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white   "
-                     style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                     onMouseEnter={handleMouseEnter}
-                     onMouseLeave={handleMouseLeave}>
-                      <h1
-                        className="text-3xl "
-                        style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                    <div className="mt-0 pl-2">
+                      <div
+                        className="rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white"
+                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                       >
-                        What is it?
-                      </h1>
-                      <p className="text-md mt-4">
-                        <span className="text-[#E5590F]">CPC</span> is
-                        that's the highest amount that you're willing to pay for
-                        a click on your ad  Your max. CPC is the most you'll be
-                        charged for a click, but you'll often be charged less -
-                        sometimes much less.
-                      </p>
+                        <h1
+                          className="text-3xl"
+                          style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                        >
+                          What is it?
+                        </h1>
+                        <p className="text-md mt-4">
+                          <span className="text-[#E5590F]">CPC</span> is that’s the highest
+                          amount that you're willing to pay for a click on your ad. Your
+                          max. CPC is the most you'll be charged for a click, but you'll
+                          often be charged less - sometimes much less.
+                        </p>
+                      </div>
+                      <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center">
+                        <h1 className="text-md lg:text-2xl font-bold">AD</h1>
+                      </div>
+                      <div className="mt-4"></div>
                     </div>
-                    <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center">
+                    <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center">
                       <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                     </div>
-                    <div className="mt-4"></div>
                   </div>
-                  <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center">
-                    <h1 className="text-md lg:text-2xl font-bold">AD</h1>
+                  <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
+                    <p className="text-md lg:text-lg">
+                      To find more information and get more insights check out{" "}
+                      <a href="#" className="text-[#E5590F]">
+                        SEO difficulty
+                      </a>{" "}
+                      to understand your local and global audience.
+                    </p>
                   </div>
-                </div>
-                <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
-                  <p className="text-md lg:text-lg">
-                    To find more information and get more insights check out{" "}
-                    <a href="#" className="text-[#E5590F]">
-                      SEO difficulty
-                    </a>{" "}
-                    to understand your local and global audience.
-                  </p>
-                </div>
-              </>
-            )
-          )}
+                </>
+              )
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

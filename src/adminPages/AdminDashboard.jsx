@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Home, Users, Settings, BarChart, FileText } from "lucide-react";
+import { Home, Users, Settings, BarChart, FileText, Tag } from "lucide-react"; // Added Tag icon
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -14,6 +14,7 @@ const AdminPanel = () => {
     { name: "Users", icon: <Users size={20} /> },
     { name: "Ads Control", icon: <BarChart size={20} /> },
     { name: "Blog Post", icon: <FileText size={20} /> },
+    { name: "Control Meta Tags", icon: <Tag size={20} /> }, // New menu item
   ];
 
   // Fetch user count & users
@@ -45,7 +46,9 @@ const AdminPanel = () => {
 
   const handleTabClick = (name) => {
     if (name === "Blog Post") {
-      navigate("/blog-post"); // Redirect to BlogPost page
+      navigate("/blog-post");
+    } else if (name === "Control Meta Tags") {
+      navigate("/control-meta-tags"); // Redirect to new page
     } else {
       setActiveTab(name);
     }

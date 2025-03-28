@@ -24,6 +24,7 @@ import Home from "./Blogs/Home.jsx";
 import Show from "./Blogs/Show.jsx";
 import { useState } from "react";
 import { initialBlogs } from "./assets/blogData.js";
+import ControlMetaTags from "./adminPages/ControlMetaTags.jsx";
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -65,9 +66,14 @@ const AppContent = () => {
           </AdminRoute>
         }
       />
+
+      <Route
+        path="/control-meta-tags" element={ <AdminRoute> <ControlMetaTags /> </AdminRoute> }
+      />
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
+      
 
       {/* Public Routes */}
       <Route
