@@ -109,7 +109,7 @@ function LoginPage({ isVisible, onClose }) {
           <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-x-2 sm:space-y-0">
             <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
               <p className="mt-4 text-justify mb-2 sm:text-left">
-                SignIn with
+                Sign In with
                 <a
                   href="#"
                   className="text-blue-500 ml-1.5"
