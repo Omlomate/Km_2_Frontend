@@ -32,7 +32,7 @@ function SignupPage({ onClose }) {
 
     try {
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/auth/register",
+        "https://www.keywordraja.com/api/auth/register",
         {
           method: "POST",
           headers: {

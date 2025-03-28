@@ -14,7 +14,7 @@ const Home = () => {
     const fetchBlogs = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("https://keyword-research3.onrender.com/api/blogs", {
+        const response = await fetch("https://www.keywordraja.com/api/blogs", {
           method: "GET"         
         });
         if (!response.ok) throw new Error("Failed to fetch blogs");

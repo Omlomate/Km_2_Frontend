@@ -33,7 +33,7 @@ export const CPCPage = () => {
 
     try {
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/keywords/keyword-Everywhere-Volume",
+        "https://www.keywordraja.com/api/keywords/keyword-Everywhere-Volume",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

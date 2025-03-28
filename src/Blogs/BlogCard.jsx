@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const BlogCard = ({ blog }) => {
-  const baseUrl = "https://keyword-research3.onrender.com"; // Use env variable in production
+  const baseUrl = "https://www.keywordraja.com"; // Use env variable in production
   const thumbnailUrl = blog.images.thumbnail.startsWith("http")
     ? blog.images.thumbnail // External URL, use as-is
     : `${baseUrl}${blog.images.thumbnail}`; // Local path, prepend base URL

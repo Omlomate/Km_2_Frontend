@@ -21,7 +21,7 @@ const AdminPanel = () => {
     try {
       const token = localStorage.getItem("jwt");
       const { data } = await axios.get(
-        "https://keyword-research3.onrender.com/api/admin/users",
+        "https://www.keywordraja.com/api/admin/users",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -25,7 +25,7 @@ export const KeywordResearch = () => {
 
     try {
       const response = await fetch(
-        `https://keyword-research3.onrender.com/api/scraper/scrape?query=${searchTerm}&engine=${searchEngine}`
+        `https://www.keywordraja.com/api/scraper/scrape?query=${searchTerm}&engine=${searchEngine}`
       );
       const data = await response.json();
 

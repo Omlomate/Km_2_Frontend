@@ -18,7 +18,7 @@ const KeywordData = () => {
     try {
       // First API call: Scraping keyword data
       const scrapeResponse = await axios.get(
-        `https://keyword-research3.onrender.com/api/scraper/scrape`,
+        `https://www.keywordraja.com/api/scraper/scrape`,
         {
           params: {
             query: searchTerm,
@@ -31,7 +31,7 @@ const KeywordData = () => {
 
       // Second API call: Fetching volume and difficulty
       const volumeDifficultyResponse = await axios.post(
-        `https://keyword-research3.onrender.com/api/gemini/get-keyword-volume-difficulty`,
+        `https://www.keywordraja.com/api/gemini/get-keyword-volume-difficulty`,
         { keyword: searchTerm } // Send `keyword` in the body as per backend's requirement
       );
 

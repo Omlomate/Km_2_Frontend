@@ -10,7 +10,7 @@ const Show = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const baseUrl = "https://keyword-research3.onrender.com"; // Replace with env variable in production
+  const baseUrl = "https://www.keywordraja.com"; // Replace with env variable in production
 
   useEffect(() => {
     const fetchBlog = async () => {

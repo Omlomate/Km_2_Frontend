@@ -89,7 +89,7 @@ const BlogPost = () => {
         throw new Error("No authentication token found. Please log in.");
 
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/blogs",
+        "https://www.keywordraja.com/api/blogs",
         {
           method: "POST",
           body: formData,

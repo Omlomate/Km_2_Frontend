@@ -105,7 +105,7 @@ const ProfileEdit = () => {
   
     try {
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/update-profile/profile",
+        "https://www.keywordraja.com/api/update-profile/profile",
         {
           method: "PUT",
           headers: {

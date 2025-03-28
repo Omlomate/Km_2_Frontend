@@ -27,7 +27,7 @@ const SpamScore = () => {
 
     try {
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/gemini/get-keyword-spam-score",
+        "https://www.keywordraja.com/api/gemini/get-keyword-spam-score",
         {
           method: "POST",
           headers: {

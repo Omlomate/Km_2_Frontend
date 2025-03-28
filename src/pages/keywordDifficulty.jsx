@@ -26,7 +26,7 @@ const KeywordDifficulty = () => {
     try {
       // Fetch keyword difficulty from the API
       const response = await fetch(
-        "https://keyword-research3.onrender.com/api/gemini/get-keyword-difficulty",
+        "https://www.keywordraja.com/api/gemini/get-keyword-difficulty",
         {
           method: "POST",
           headers: {
