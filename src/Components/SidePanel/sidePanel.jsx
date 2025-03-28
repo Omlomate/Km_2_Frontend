@@ -72,16 +72,22 @@ const Sidebar = () => {
       {!isSidebarOpen && (
         <div className="md:hidden fixed top-4 left-4 z-50">
           <button onClick={toggleSidebar} className="border-none">
-            <i
-              className={`fas fa-arrow-right text-2xl text-black/50`}
-            ></i>
+            <i className="fas fa-arrow-right text-2xl text-black/50"></i>
+          </button>
+        </div>
+      )}
+      
+      {isSidebarOpen && (
+        <div className="md:hidden fixed top-4 left-4 z-50">
+          <button onClick={toggleSidebar} className="border-none">
+            <i className="fas fa-times text-2xl text-black/50"></i>
           </button>
         </div>
       )}
       
     
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 top-16 md:top-0 ${
+        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 top-25 md:top-0 ${
           isSidebarOpen
             ? "translate-x-0 rounded-none"
             : "-translate-x-full rounded-t-md"
@@ -113,12 +119,7 @@ const Sidebar = () => {
             </div>
           </Link>
 
-          <button
-            onClick={toggleSidebar}
-            className="md:hidden bg-transparent border-none"
-          >
-            <i className="fas fa-times text-2xl"></i>
-          </button>
+       
         </div>
 
         {menuItems.map((option) => (

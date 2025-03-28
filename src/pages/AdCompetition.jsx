@@ -66,7 +66,7 @@ export const AdCompetition = () => {
 
   return (
     <div
-      className="w-full bg-white p-5 rounded-lg"
+      className="w-full bg-white  pr-4 pl-4  rounded-lg"
       style={{ fontFamily: "wantedsans" }}
     >
       <div className="w-full lg:min-w-[40rem]">

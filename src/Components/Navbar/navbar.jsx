@@ -64,6 +64,7 @@ const Navbar = () => {
         className="bg-white w-full px-4 md:px-8 shadow-sm transition-all duration-300 fixed top-0 z-50"
         style={{ fontFamily: "wantedsans" }}
       >
+        {/* Main navbar row */}
         <div className="h-16 mx-auto md:px-4 container flex items-center justify-between">
           <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
@@ -149,6 +150,7 @@ const Navbar = () => {
             </div>
           </div>
 
+          {/* Desktop menu - hidden on mobile */}
           <div className="hidden md:block text-gray-500">
             <ul className="flex font-semibold items-center space-x-6">
               <li>
@@ -176,6 +178,7 @@ const Navbar = () => {
             </ul>
           </div>
 
+          {/* Login/Logout button */}
           <div className="flex items-center">
             {loggedIn ? (
               <button
@@ -192,45 +195,32 @@ const Navbar = () => {
                 Login
               </button>
             )}
-            <button 
-              onClick={toggleNavbar} 
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100"
-            >
-              {isOpen ? (
-                <i className="fas fa-times text-xl"></i>
-              ) : (
-                <i className="fas fa-bars text-xl"></i>
-              )}
-            </button>
+            {/* Remove hamburger menu button for small screens */}
           </div>
         </div>
 
-        {/* Mobile menu - Slide down */}
-        <div 
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
-          } overflow-hidden`}
-        >
-          <div className="px-2 py-3 border-t">
-            <ul className="space-y-2">
+        {/* Mobile menu - Second row for small screens */}
+        <div className="md:hidden w-full border-t border-gray-100">
+          <div className="overflow-x-auto">
+            <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
               <li>
-                <Link to="/blog" className="block px-3 py-2 rounded-lg hover:bg-gray-50 nav-link">
+                <Link to="/blog" className="nav-link text-sm">
                   Blog
                 </Link>
               </li>
               <li>
-                <a href="#" className="block px-3 py-2 rounded-lg hover:bg-gray-50 nav-link">
+                <a href="#" className="nav-link text-sm">
                   Forum
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-3 py-2 rounded-lg hover:bg-gray-50 nav-link">
+                <a href="#" className="nav-link text-sm">
                   Course
                 </a>
               </li>
               {userData?.isAdmin && (
                 <li>
-                  <a href="/admin-dashboard" className="block px-3 py-2 rounded-lg hover:bg-gray-50 nav-link">
+                  <a href="/admin-dashboard" className="nav-link text-sm">
                     Admin
                   </a>
                 </li>
@@ -238,6 +228,8 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
+
+        {/* Remove the slide-down mobile menu */}
       </nav>
       {isLoginVisible && (
         <LoginPage isVisible={isLoginVisible} onClose={hideLogin} />

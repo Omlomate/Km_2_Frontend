@@ -42,7 +42,7 @@ export const KeywordResearch = () => {
   return (
     <div className=" flex justify-center items-center">
       <div
-        className="w-full max-w-[95%] sm:max-w-[895px] bg-white p-3 sm:p-5 rounded-lg mx-auto my-4"
+        className="w-full max-w-[95%] sm:max-w-[895px] bg-white   pr-4 pl-4  rounded-lg mx-auto  "
         style={{ fontFamily: "wantedsans" }}
       >
         <div className="w-full flex justify-center">
