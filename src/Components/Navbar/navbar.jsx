@@ -159,9 +159,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="nav-link">
+                <Link to="/forum"  className="nav-link">
                   Forum
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="nav-link">
@@ -178,24 +178,58 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Login/Logout button */}
+          {/* Login/Logout button - updated styling */}
           <div className="flex items-center">
             {loggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="nav-button px-3 py-1.5 hover:bg-[#12153D] bg-[#12153de8] text-gray-50 rounded-xl"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-2">
+                {userData && (
+                  <span className="hidden md:block text-[#12153D] font-medium">
+                    Hi, {userData.firstName || "User"}
+                  </span>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-1.5 px-4 py-1.5 bg-[#12153D] hover:bg-[#12153D]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
+                >
+                  <span>Logout</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                </button>
+              </div>
             ) : (
               <button
                 onClick={showLogin}
-                className="nav-button px-3 py-1.5 bg-orange-400 hover:bg-orange-500 text-gray-50 rounded-xl"
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
               >
-                Login
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span>Login</span>
               </button>
             )}
-            {/* Remove hamburger menu button for small screens */}
           </div>
         </div>
 
@@ -209,9 +243,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="nav-link text-sm">
+                <Link to="/forum" className="nav-link text-sm">
                   Forum
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="nav-link text-sm">
@@ -228,11 +262,24 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-
-        {/* Remove the slide-down mobile menu */}
       </nav>
+      
+      {/* Login dialog */}
       {isLoginVisible && (
-        <LoginPage isVisible={isLoginVisible} onClose={hideLogin} />
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4">
+          <div className=" ">
+            {/* <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#12153D]">Login</h2>
+              <button 
+                onClick={hideLogin} 
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                &times;
+              </button>
+            </div> */}
+            <LoginPage isVisible={isLoginVisible} onClose={hideLogin} />
+          </div>
+        </div>
       )}
     </>
   );

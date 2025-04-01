@@ -25,6 +25,11 @@ import Show from "./Blogs/Show.jsx";
 import { useState } from "react";
 import { initialBlogs } from "./assets/blogData.js";
 
+import Forum from "./Forum/Forum.jsx";
+import {forumPosts} from "./Forum/ForumData.js";
+import CreateForum from "./Forum/CreateForum.jsx";
+import ShowForum from "./Forum/ShowForum.jsx";
+
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("jwt"); // Check for JWT token
@@ -40,6 +45,31 @@ const AdminRoute = ({ children }) => {
 };
 
 const AppContent = () => {
+  // Forum
+  const [posts, setPosts] = useState(forumPosts);
+  const addPost = (newPost) => {
+    const postWithId = {
+      ...newPost,
+      id: posts.length + 1,
+      votes: 0,
+      comments: [],
+      createdAt: new Date().toISOString(),
+    };
+    setPosts([...posts, postWithId]);
+  };
+  const addComment = (postId, comment) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [...post.comments, comment],
+          };
+        }
+        return post;
+      })
+    );
+  };
   // blogs
   const [blogs, setBlogs] = useState(initialBlogs);
 
@@ -65,6 +95,14 @@ const AppContent = () => {
           </AdminRoute>
         }
       />
+      {/* Forum */}
+      <Route path="/forum" element={<Forum posts={posts} />} />
+      <Route path="/create" element={<CreateForum onAddPost={addPost} />} />
+      <Route
+        path="/forum/:id"
+        element={<ShowForum posts={posts} onAddComment={addComment} />}
+      />
+
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
