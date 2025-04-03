@@ -8,7 +8,7 @@ const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
 
   const servers = [
     {
-      name: "Select Server",
+      name: "Select Search Engine",
       icon: null,
     },
     {

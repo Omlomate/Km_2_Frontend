@@ -8,13 +8,13 @@ function SignupPage({ onClose }) {
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsOpen(true);
     return () => setIsOpen(false);
   }, []);
-
 
   const handleSignup = async () => {
     if (!firstName || !lastName || !email || !password) {
@@ -25,10 +25,8 @@ function SignupPage({ onClose }) {
       alert("You must agree to the privacy policy");
       return;
     }
-
+    setIsLoading(true);
     const userData = { firstName, lastName, email, password };
-
-    
 
     try {
       const response = await fetch(
@@ -55,6 +53,8 @@ function SignupPage({ onClose }) {
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -110,41 +110,27 @@ function SignupPage({ onClose }) {
                 className="flex-1 cursor-pointer bg-gray-100 p-2 rounded-lg flex items-center justify-center"
               >
                 <svg
-                  width="20px"
-                  height="20px"
-                  viewBox="0 0 32 32"
-                  data-name="Layer 1"
-                  id="Layer_1"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 48 48"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M23.75,16A7.7446,7.7446,0,0,1,8.7177,18.6259L4.2849,22.1721A13.244,13.244,0,0,0,29.25,16"
-                    fill="#00ac47"
-                  />
+                    fill="#FFC107"
+                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
                   <path
-                    d="M23.75,16a7.7387,7.7387,0,0,1-3.2516,6.2987l4.3824,3.5059A13.2042,13.2042,0,0,0,29.25,16"
-                    fill="#4285f4"
-                  />
+                    fill="#FF3D00"
+                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                  ></path>
                   <path
-                    d="M8.25,16a7.698,7.698,0,0,1,.4677-2.6259L4.2849,9.8279a13.177,13.177,0,0,0,0,12.3442l4.4328-3.5462A7.698,7.698,0,0,1,8.25,16Z"
-                    fill="#ffba00"
-                  />
-                  <polygon
-                    fill="#2ab2db"
-                    points="8.718 13.374 8.718 13.374 8.718 13.374 8.718 13.374"
-                  />
+                    fill="#4CAF50"
+                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                  ></path>
                   <path
-                    d="M16,8.25a7.699,7.699,0,0,1,4.558,1.4958l4.06-3.7893A13.2152,13.2152,0,0,0,4.2849,9.8279l4.4328,3.5462A7.756,7.756,0,0,1,16,8.25Z"
-                    fill="#ea4435"
-                  />
-                  <polygon
-                    fill="#2ab2db"
-                    points="8.718 18.626 8.718 18.626 8.718 18.626 8.718 18.626"
-                  />
-                  <path
-                    d="M29.25,15v1L27,19.5H16.5V14H28.25A1,1,0,0,1,29.25,15Z"
-                    fill="#4285f4"
-                  />
+                    fill="#1976D2"
+                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
                 </svg>
                 Google
               </button>
@@ -153,41 +139,28 @@ function SignupPage({ onClose }) {
                 className="flex-1 cursor-pointer bg-gray-100 p-2 rounded-lg flex items-center justify-center"
               >
                 <svg
-                  width="20px"
-                  height="20px"
-                  viewBox="-1.5 0 20 20"
-                  version="1.1"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 48 48"
                   xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
                 >
-                  <title>apple [#173]</title>
-                  <desc>Created with Sketch.</desc>
-                  <defs></defs>
-                  <g
-                    id="Page-1"
-                    stroke="none"
-                    strokeWidth="1"
-                    fill="none"
-                    fillRule="evenodd"
-                  >
-                    <g
-                      id="Dribbble-Light-Preview"
-                      transform="translate(-102.000000, -7439.000000)"
-                      fill="#000000"
-                    >
-                      <g
-                        id="icons"
-                        transform="translate(56.000000, 160.000000)"
-                      >
-                        <path
-                          d="M57.5708873,7282.19296 C58.2999598,7281.34797 58.7914012,7280.17098 58.6569121,7279 C57.6062792,7279.04 56.3352055,7279.67099 55.5818643,7280.51498 C54.905374,7281.26397 54.3148354,7282.46095 54.4735932,7283.60894 C55.6455696,7283.69593 56.8418148,7283.03894 57.5708873,7282.19296 M60.1989864,7289.62485 C60.2283111,7292.65181 62.9696641,7293.65879 63,7293.67179 C62.9777537,7293.74279 62.562152,7295.10677 61.5560117,7296.51675 C60.6853718,7297.73474 59.7823735,7298.94772 58.3596204,7298.97372 C56.9621472,7298.99872 56.5121648,7298.17973 54.9134635,7298.17973 C53.3157735,7298.17973 52.8162425,7298.94772 51.4935978,7298.99872 C50.1203933,7299.04772 49.0738052,7297.68074 48.197098,7296.46676 C46.4032359,7293.98379 45.0330649,7289.44985 46.8734421,7286.3899 C47.7875635,7284.87092 49.4206455,7283.90793 51.1942837,7283.88393 C52.5422083,7283.85893 53.8153044,7284.75292 54.6394294,7284.75292 C55.4635543,7284.75292 57.0106846,7283.67793 58.6366882,7283.83593 C59.3172232,7283.86293 61.2283842,7284.09893 62.4549652,7285.8199 C62.355868,7285.8789 60.1747177,7287.09489 60.1989864,7289.62485"
-                          id="apple-[#173]"
-                        ></path>
-                      </g>
-                    </g>
-                  </g>
+                  <path d="M 44.527344 34.75 C 43.449219 37.144531 42.929688 38.214844 41.542969 40.328125 C 39.601563 43.28125 36.863281 46.96875 33.480469 46.992188 C 30.46875 47.019531 29.691406 45.027344 25.601563 45.0625 C 21.515625 45.082031 20.664063 47.03125 17.648438 47 C 14.261719 46.96875 11.671875 43.648438 9.730469 40.699219 C 4.300781 32.429688 3.726563 22.734375 7.082031 17.578125 C 9.457031 13.921875 13.210938 11.773438 16.738281 11.773438 C 20.332031 11.773438 22.589844 13.746094 25.558594 13.746094 C 28.441406 13.746094 30.195313 11.769531 34.351563 11.769531 C 37.492188 11.769531 40.8125 13.480469 43.1875 16.433594 C 35.421875 20.691406 36.683594 31.78125 44.527344 34.75 Z M 31.195313 8.46875 C 32.707031 6.527344 33.855469 3.789063 33.4375 1 C 30.972656 1.167969 28.089844 2.742188 26.40625 4.78125 C 24.878906 6.640625 23.613281 9.398438 24.105469 12.066406 C 26.796875 12.152344 29.582031 10.546875 31.195313 8.46875 Z"></path>
                 </svg>
                 Apple
+              </button>
+              <button className="flex-1 cursor-pointer bg-gray-100 p-2 rounded-lg flex items-center justify-center">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill="#ff5722" d="M6 6H22V22H6z"></path>
+                  <path fill="#4caf50" d="M26 6H42V22H26z"></path>
+                  <path fill="#ffc107" d="M26 26H42V42H26z"></path>
+                  <path fill="#03a9f4" d="M6 26H22V42H6z"></path>
+                </svg>
+                Microsoft
               </button>
             </div>
             <div className="mb-4">
@@ -239,9 +212,36 @@ function SignupPage({ onClose }) {
             </div>
             <button
               onClick={handleSignup}
-              className="w-full bg-blue-900 text-white p-2 rounded-lg"
+              disabled={isLoading}
+              className="w-full bg-blue-900 text-white p-2 rounded-lg flex items-center justify-center"
             >
-              Sign Up
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Creating Account...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
         </div>

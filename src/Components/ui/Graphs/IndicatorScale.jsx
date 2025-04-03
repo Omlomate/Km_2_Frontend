@@ -3,6 +3,11 @@ import React from "react";
 const IndicatorScale = ({ value = 0 }) => {
   const clampedValue = Math.min(Math.max(0, value), 1);
   const percentage = clampedValue * 100;
+  
+  // Calculate position with limits to prevent overlap with endpoints
+  const markerPosition = percentage === 0 ? 2 : 
+                         percentage === 100 ? 97 : 
+                         percentage;
 
   return (
     <div className="w-full mt-4 max-w-md mx-auto p-4">
@@ -16,10 +21,10 @@ const IndicatorScale = ({ value = 0 }) => {
           style={{ width: `${percentage}%` }}
         />
         
-        {/* Indicator marker */}
+        {/* Indicator marker - positioned above the line */}
         <div 
-          className="absolute transform -translate-x-1/2 transition-all duration-300"
-          style={{ left: `${percentage}%` }}
+          className="absolute transform -translate-x-1/2 -translate-y-3 transition-all duration-300"
+          style={{ left: `${markerPosition}%` }}
         >
           <svg 
             width="24" 
@@ -27,6 +32,7 @@ const IndicatorScale = ({ value = 0 }) => {
             viewBox="0 0 24 34" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
+            className="drop-shadow-sm"
           >
             <path 
               d="M22.5 11.9459C22.5 15.2119 20.8275 19.117 18.6041 22.8045C16.4114 26.441 13.8217 29.6432 12.2656 31.4504C12.1823 31.5472 12.0865 31.581 12 31.581C11.9135 31.581 11.8177 31.5472 11.7344 31.4504C10.1783 29.6432 7.58855 26.441 5.39592 22.8045C3.17246 19.117 1.5 15.2119 1.5 11.9459C1.5 7.53935 2.75029 5.04432 4.47601 3.60364C6.25563 2.11797 8.83618 1.5 12 1.5C15.1638 1.5 17.7444 2.11797 19.524 3.60364C21.2497 5.04432 22.5 7.53935 22.5 11.9459Z" 
@@ -42,12 +48,16 @@ const IndicatorScale = ({ value = 0 }) => {
           <span className="mr-2 text-2xl font-bold text-white">
             0
           </span>
-          <div className="w-4 h-4 bg-orange-500 rounded-full" />
+          <div className="relative w-1 h-3 bg-orange-500 rounded-sm">
+            <div className="absolute top-1/2 -translate-y-1/2 left-0 w-3 h-[2px] bg-orange-500"></div>
+          </div>
         </div>
 
         {/* End point */}
         <div className="absolute right-0 translate-x-1/2 flex items-center">
-          <div className="w-4 h-4 bg-orange-500 rounded-full" />
+          <div className="relative w-1 h-3 bg-orange-500 rounded-sm">
+            <div className="absolute top-1/2 -translate-y-1/2 right-0 w-3 h-[2px] bg-orange-500"></div>
+          </div>
           <span className="ml-2 text-2xl font-bold text-white">
             1
           </span>

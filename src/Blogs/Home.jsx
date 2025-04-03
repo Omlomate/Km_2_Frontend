@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BlogCard from "./BlogCard";
+import { Search } from "lucide-react";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const blogsPerPage = 6;
 
   // Fetch blogs on mount
@@ -20,6 +23,7 @@ const Home = () => {
         if (!response.ok) throw new Error("Failed to fetch blogs");
         const data = await response.json();
         setBlogs(data);
+        setFilteredBlogs(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,16 +34,40 @@ const Home = () => {
     fetchBlogs();
   }, []);
 
-  // Calculate pagination
+  // Handle Search
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on search
+    
+    const trimmedQuery = query.trim().toLowerCase();
+    if (!trimmedQuery) {
+      setFilteredBlogs(blogs);
+      return;
+    }
+
+    const filtered = blogs.filter(blog => {
+      const titleMatch = blog.title?.toLowerCase().includes(trimmedQuery);
+      const contentMatch = blog.content?.toLowerCase().includes(trimmedQuery);
+      return titleMatch || contentMatch;
+    });
+    setFilteredBlogs(filtered);
+  };
+
+  // Handle search button click
+  const handleSearchButtonClick = () => {
+    handleSearch(searchQuery);
+  };
+
+  // Calculate pagination using filteredBlogs instead of blogs
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
-  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog); // Fixed to use filteredBlogs
+  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage); // Fixed to use filteredBlogs
 
   const paginate = async (pageNumber) => {
     setIsLoading(true);
     setCurrentPage(pageNumber);
-    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate loading delay
+    await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
   };
 
@@ -68,11 +96,16 @@ const Home = () => {
           <div className="bg-white/50 backdrop-blur-md rounded-lg border-1 border-gray-500 flex items-center p-1.5 sm:p-2">
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Only update query here
               placeholder="Search Keyword"
               className="w-full px-3 sm:px-4 py-1.5 sm:py-2 bg-transparent text-gray-900 placeholder-gray-300 outline-none text-sm sm:text-base"
               style={{ fontFamily: "wantedsans" }}
             />
-            <button className="p-1.5 sm:p-2 hover:bg-white/10 rounded-full transition-all">
+            <button 
+              onClick={handleSearchButtonClick}
+              className="p-1.5 sm:p-2 hover:bg-white/10 cursor-pointer rounded-full transition-all"
+            >
               <i className="fa-solid fa-magnifying-glass text-xl sm:text-2xl text-gray-700 hover:text-[#E5590F]"></i>
             </button>
           </div>
@@ -88,7 +121,11 @@ const Home = () => {
           <div className="w-16 sm:w-24 h-1 sm:h-1.5 bg-[#E5590F] rounded-full"></div>
         </div>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-center mb-4">
+            {error}. Please try refreshing the page.
+          </p>
+        )}
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
@@ -106,13 +143,17 @@ const Home = () => {
               </div>
             ))}
           </div>
-        ) : blogs.length === 0 ? (
-          <p className="text-gray-600 text-center">No blogs available yet.</p>
+        ) : filteredBlogs.length === 0 ? ( // Changed to check filteredBlogs
+          <p className="text-gray-600 text-center">
+            {searchQuery 
+              ? `No posted blogs found matching "${searchQuery}"`
+              : "No blogs have been posted yet."}
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
             {currentBlogs.map((blog, index) => (
               <BlogCard
-                key={blog._id} // Use _id from MongoDB
+                key={blog._id}
                 blog={blog}
                 index={indexOfFirstBlog + index}
               />
@@ -121,7 +162,7 @@ const Home = () => {
         )}
 
         {/* Pagination */}
-        {blogs.length > 0 && (
+        {filteredBlogs.length > 0 && ( // Changed to check filteredBlogs
           <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-3">
             <button
               onClick={() => paginate(currentPage - 1)}

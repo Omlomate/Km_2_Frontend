@@ -29,9 +29,7 @@ const Show = () => {
         if (!blogsResponse.ok) throw new Error("Failed to fetch related blogs");
         const allBlogs = await blogsResponse.json();
 
-        const related = allBlogs
-          .filter((b) => b.slug !== slug)
-          .slice(0, 4);
+        const related = allBlogs.filter((b) => b.slug !== slug).slice(0, 4);
         setRelatedBlogs(related);
       } catch (err) {
         setError(err.message);
@@ -57,22 +55,35 @@ const Show = () => {
 
   const isAbsoluteUrl = (url) => /^(https?:\/\/)/i.test(url);
   const heroUrl = blog.images.hero
-    ? (isAbsoluteUrl(blog.images.hero)
-        ? blog.images.hero
-        : `${baseUrl}${blog.images.hero}`)
+    ? isAbsoluteUrl(blog.images.hero)
+      ? blog.images.hero
+      : `${baseUrl}${blog.images.hero}`
     : "https://via.placeholder.com/1600x900?text=No+Image";
   const blogUrl = `https://km-2-frontend.vercel.app/blog/${slug}`;
 
   return (
-    <section id="Show-blogs">
+    <section id="Show-blogs" className="mt-4">
       <Helmet>
         <title>{blog.metaTitle || blog.title} | Keyword Rajas</title>
-        <meta name="description" content={blog.metaDescription || blog.shortDescription} />
-        <meta name="keywords" content={blog.metaKeywords?.join(", ") || blog.tags?.join(", ") || "blog, SEO, keywords"} />
+        <meta
+          name="description"
+          content={blog.metaDescription || blog.shortDescription}
+        />
+        <meta
+          name="keywords"
+          content={
+            blog.metaKeywords?.join(", ") ||
+            blog.tags?.join(", ") ||
+            "blog, SEO, keywords"
+          }
+        />
         <meta name="author" content={blog.author?.name || "xyz"} />
         <link rel="canonical" href={blogUrl} />
         <meta property="og:title" content={blog.metaTitle || blog.title} />
-        <meta property="og:description" content={blog.metaDescription || blog.shortDescription} />
+        <meta
+          property="og:description"
+          content={blog.metaDescription || blog.shortDescription}
+        />
         <meta property="og:image" content={heroUrl} />
         <meta property="og:url" content={blogUrl} />
         <meta property="og:type" content="article" />
@@ -88,7 +99,10 @@ const Show = () => {
             publisher: {
               "@type": "Organization",
               name: "Keyword Rajas",
-              logo: { "@type": "ImageObject", url: "http://localhost:5173/logo.png" },
+              logo: {
+                "@type": "ImageObject",
+                url: "http://localhost:5173/logo.png",
+              },
             },
           })}
         </script>
@@ -96,14 +110,20 @@ const Show = () => {
 
       <div className="min-h-screen bg-gray-50">
         <div className="w-full px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="relative h-[200px] sm:h-[240px] md:h-[340px] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl">
-              <img
+          <div className="max-w-4xl mx-auto">
+            <div
+              className="relative h-[200px] sm:h-[240px] md:h-[340px] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl 
+              
+              "
+              style={{ fontFamily: "Space Grotesk, sans-serif" }}
+            >
+              {/* <div className="relative h-[200px] sm:h-[240px] md:h-[340px] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"> */}
+              {/* <img
                 src={heroUrl}
                 alt={blog.imageAlt || blog.title}
                 className="absolute inset-0 w-full h-full object-cover"
                 loading="lazy"
-              />
+              /> */}
               <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
               <div className="relative h-full flex flex-col justify-center items-center p-3 sm:p-4 md:p-8">
                 <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-wantedSans text-white font-bold tracking-tight text-center max-w-[90%] sm:max-w-3xl">
@@ -111,18 +131,85 @@ const Show = () => {
                 </h1>
               </div>
             </div>
+            <p className="text-gray-600 text-lg line-clamp-3 p-3 font-bold">
+              {blog.shortDescription || "Short description of the blog here"}
+            </p>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="text-center mb-6 sm:mb-8">
-            <p className="text-gray-600 text-xs sm:text-sm">
-              Published by - <span className="font-medium">{blog.author?.name || "xyz"}</span>
-            </p>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="row flex justify-between items-center mb-6">
+            <div className="text-center">
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Published by -{" "}
+                <span className="font-medium">
+                  {blog.author?.name || "xyz"}
+                </span>
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <a
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  blogUrl
+                )}&text=${encodeURIComponent(blog.metaTitle || blog.title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex flex-col items-center"
+                aria-label="Share on X"
+              >
+                <div className="text-blue-500 hover:text-blue-700 transition-colors">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </div>
+                <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs font-medium">
+                  X
+                </span>
+              </a>
+              <a
+                href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
+                  blogUrl
+                )}&title=${encodeURIComponent(blog.metaTitle || blog.title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex flex-col items-center"
+                aria-label="Share on LinkedIn"
+              >
+                <div className="text-blue-700 hover:text-blue-900 transition-colors">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </div>
+                <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs font-medium">
+                  LinkedIn
+                </span>
+              </a>
+            </div>
           </div>
+          <div className="w-full aspect-[2/1] relative mb-6 rounded-lg overflow-hidden">
+            <img
+              src={heroUrl}
+              alt={blog.imageAlt || blog.title}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <hr className="text-gray-400" />
 
-          <article className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
-            <div className="bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-sm">
+          <article className="prose prose-sm sm:prose-base lg:prose-lg max-w-none mt-4">
+            <div className="bg-white rounded-lg  ">
               <div className="text-gray-700 leading-relaxed space-y-4 sm:space-y-6">
                 {blog.content.split("\n\n").map((paragraph, index) => (
                   <p key={index} className="text-sm sm:text-base">
@@ -132,25 +219,6 @@ const Show = () => {
               </div>
             </div>
           </article>
-
-          <div className="mt-6 flex justify-center gap-4">
-            <a
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(blogUrl)}&text=${encodeURIComponent(blog.metaTitle || blog.title)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              Share on X
-            </a>
-            <a
-              href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(blogUrl)}&title=${encodeURIComponent(blog.metaTitle || blog.title)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 hover:underline"
-            >
-              Share on LinkedIn
-            </a>
-          </div>
 
           <div className="mt-8 sm:mt-12 md:mt-16">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-8 px-2">
