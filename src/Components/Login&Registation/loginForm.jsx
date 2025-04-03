@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import SignupPage from "./signupForm";
-import { useNavigate } from "react-router-dom"; // To navigate to /keyword-volume after login
-import axios from "axios"; // Axios for HTTP requests
-import { isAuthenticated } from "../../utils/auth"; // Import the isAuthenticated function
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { isAuthenticated } from "../../utils/auth";
 
 function LoginPage({ isVisible, onClose }) {
   const modalRef = useRef(null);
   const [transform, setTransform] = useState("scale(0)");
   const [email, setEmail] = useState("");
+  const [forgotEmail, setForgotEmail] = useState(""); // Separate state for forgot password email
   const [password, setPassword] = useState("");
   const [isSignupVisible, setSignupVisible] = useState(false);
-  const navigate = useNavigate(); // For redirecting to /keyword-volume after login
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (isVisible) {
@@ -23,6 +28,7 @@ function LoginPage({ isVisible, onClose }) {
       setTransform("scale(1)");
       setTimeout(() => {
         setTransform("scale(0)");
+        setTimeout(onClose, 300);
       }, 0);
     }
   }, [isVisible]);
@@ -39,50 +45,83 @@ function LoginPage({ isVisible, onClose }) {
     setEmail(e.target.value);
   };
 
+  const handleForgotEmailChange = (e) => {
+    setForgotEmail(e.target.value);
+  };
+
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleGmailClick = () => {    
-    setSignupVisible(true);    
+  const handleGmailClick = () => {
+    setSignupVisible(true);
   };
 
   const handleCloseSignup = () => {
     setSignupVisible(false);
     handleClose();
-
   };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-        // Make login request to backend
-        const response = await axios.post("https://www.keywordraja.com/api/auth/login", {
-            email: email,
-            password: password,
-        });
-
-        console.log(response.data);
-
-        // Store the entire response object in localStorage
-        localStorage.setItem("userData", JSON.stringify(response.data));
-        localStorage.setItem("jwt", response.data.token);
-
-        // Close the login popup
-        onClose();
-
-        // Redirect to the /keyword-volume page
-        navigate("/related-keywords", { replace: true });
+      const response = await axios.post("https://keywordraja.com/api/auth/login", {
+        email: email,
+        password: password,
+      });
+      localStorage.setItem("userData", JSON.stringify(response.data));
+      localStorage.setItem("jwt", response.data.token);
+      onClose();
+      navigate("/related-keywords", { replace: true });
     } catch (error) {
-        console.error("Error logging in:", error);
-        alert("Login failed. Please check your credentials.");
-    }finally {
-        setIsLoading(false);
+      console.error("Error logging in:", error);
+      alert("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
-};
+  };
 
+  const handleForgotPasswordClick = () => {
+    setIsForgotPassword(true);
+    setMessage("");
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await axios.post("https://keywordraja.com/api/auth/forgot-password", {
+        email: forgotEmail,
+      });
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Error sending OTP");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await axios.post("https://keywordraja.com/api/auth/reset-password", {
+        email: forgotEmail,
+        otp,
+        newPassword,
+      });
+      setMessage(response.data.message);
+      setIsForgotPassword(false);
+      setOtp("");
+      setNewPassword("");
+      setForgotEmail("");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Error resetting password");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -90,7 +129,7 @@ function LoginPage({ isVisible, onClose }) {
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
       {isSignupVisible ? (
         <div>
-          <div className="order-2 md:order-3 w-full grid justify-center item-center ">
+          <div className="order-2 md:order-3 w-full grid justify-center item-center">
             <SignupPage onClose={handleCloseSignup} />
           </div>
         </div>
@@ -104,74 +143,177 @@ function LoginPage({ isVisible, onClose }) {
             onClick={handleClose}
             className="absolute top-2 right-2 text-gray-500"
           >
-            &times;
+            ×
           </button>
-          <h1
-            className="text-2xl font-extrabold p-4 pl-9 text-center sm:text-left"
-            style={{ wordSpacing: "7px" }}
-          >
-            Login to your Keyword Raja account and access all the free of cost
-            services
-          </h1>
-          <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-x-2 sm:space-y-0">
-            <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
-              <p className="mt-4 text-justify mb-2 sm:text-left">
-                Sign In with
-                <a
-                  href="#"
-                  className="text-blue-500 ml-1.5"
-                  onClick={handleGmailClick}
-                >
-                  Gmail
-                </a>
-              </p>
-              <form onSubmit={handleLoginSubmit}>
-                <div className="mb-4">
-                  <input
-                    type="email"
-                    placeholder="Enter email or phone number"
-                    className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
-                    value={email}
-                    onChange={handleEmailChange}
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <input
-                    type="password"
-                    placeholder="Enter a new password"
-                    className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
+          
+          {isForgotPassword ? (
+            <>
+              <h1 className="text-2xl font-extrabold p-4 pl-9 text-center">
+                Reset Your Password
+              </h1>
+              <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
+                <form onSubmit={otp ? handleResetPassword : handleForgotPassword}>
+                  <div className="mb-4">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                      value={forgotEmail}
+                      onChange={handleForgotEmailChange}
+                      required
+                    />
+                  </div>
+                  {message === "OTP sent to your email" && (
                     <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Logging in...
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="Enter OTP"
+                          className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <input
+                          type="password"
+                          placeholder="Enter new password"
+                          className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          required
+                        />
+                      </div>
                     </>
-                  ) : (
-                    "Login"
                   )}
-                </button>
-              </form>
-              <p className="mt-4 text-justify sm:text-left">
-                forgot password? Click
-                <a href="#" className="text-blue-500 ml-1.5">
-                  Here
-                </a>
-              </p>
-            </div>
-          </div>
+                  <button
+                    type="submit"
+                    className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Processing...
+                      </>
+                    ) : otp ? "Reset Password" : "Send OTP"}
+                  </button>
+                </form>
+                {message && (
+                  <p className="mt-4 text-center text-red-500">{message}</p>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <h1
+                className="text-2xl font-extrabold p-4 pl-9 text-center sm:text-left"
+                style={{ wordSpacing: "7px" }}
+              >
+                Login to your Keyword Raja account and access all the free of cost
+                services
+              </h1>
+              <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-x-2 sm:space-y-0">
+                <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
+                  <p className="mt-4 text-justify mb-2 sm:text-left">
+                    Sign In with
+                    <a
+                      href="#"
+                      className="text-blue-500 ml-1.5"
+                      onClick={handleGmailClick}
+                    >
+                      Gmail
+                    </a>
+                  </p>
+                  <form onSubmit={handleLoginSubmit}>
+                    <div className="mb-4">
+                      <input
+                        type="email"
+                        placeholder="Enter email or phone number"
+                        className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                        value={email}
+                        onChange={handleEmailChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <input
+                        type="password"
+                        placeholder="Enter a new password"
+                        className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Logging in...
+                        </>
+                      ) : (
+                        "Login"
+                      )}
+                    </button>
+                  </form>
+                  <p className="mt-4 text-justify sm:text-left">
+                    Forgot password?{" "}
+                    <a
+                      href="#"
+                      className="text-blue-500 ml-1.5"
+                      onClick={handleForgotPasswordClick}
+                    >
+                      Click Here
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
           <svg
             className="absolute right-0 bottom-0 hidden sm:block sm:mr-4 sm:mb-4"
             width="250"
