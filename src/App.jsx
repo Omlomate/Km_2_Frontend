@@ -1,5 +1,4 @@
 import "./App.css";
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,11 +24,13 @@ import Show from "./Blogs/Show.jsx";
 import { useState } from "react";
 import { initialBlogs } from "./assets/blogData.js";
 import ControlMetaTags from "./adminPages/ControlMetaTags.jsx";
-
 import Forum from "./Forum/Forum.jsx";
-import {forumPosts} from "./Forum/ForumData.js";
+import { forumPosts } from "./Forum/ForumData.js";
 import CreateForum from "./Forum/CreateForum.jsx";
 import ShowForum from "./Forum/ShowForum.jsx";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -41,7 +42,6 @@ const PrivateRoute = ({ children }) => {
 const AdminRoute = ({ children }) => {
   const userData = JSON.parse(localStorage.getItem("userData")); // Retrieve stored user data
   const isAdmin = userData?.isAdmin;
-
   return isAdmin ? children : <Navigate to="/" replace />;
 };
 
@@ -71,12 +71,13 @@ const AppContent = () => {
       })
     );
   };
-  // blogs
-  const [blogs, setBlogs] = useState(initialBlogs);
 
+  // Blogs
+  const [blogs, setBlogs] = useState(initialBlogs);
   const addBlog = (blog) => {
     setBlogs([...blogs, blog]);
   };
+
   return (
     <Routes>
       {/* Admin Routes */}
@@ -96,9 +97,13 @@ const AppContent = () => {
           </AdminRoute>
         }
       />
-
       <Route
-        path="/control-meta-tags" element={ <AdminRoute> <ControlMetaTags /> </AdminRoute> }
+        path="/control-meta-tags"
+        element={
+          <AdminRoute>
+            <ControlMetaTags />
+          </AdminRoute>
+        }
       />
       {/* Forum */}
       <Route path="/forum" element={<Forum posts={posts} />} />
@@ -107,11 +112,9 @@ const AppContent = () => {
         path="/forum/:id"
         element={<ShowForum posts={posts} onAddComment={addComment} />}
       />
-
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
-      
 
       {/* Public Routes */}
       <Route
@@ -202,12 +205,14 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router basename="/">
-      <Navbar />
-      <div className="pt-28 md:pt-16">
-        <AppContent />
-      </div>
-    </Router>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Router basename="/">
+        <Navbar />
+        <div className="pt-28 md:pt-16">
+          <AppContent />
+        </div>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

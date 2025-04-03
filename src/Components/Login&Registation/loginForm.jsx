@@ -34,6 +34,7 @@ function LoginPage({ isVisible, onClose }) {
       setTimeout(onClose, 300);
     }, 0);
   };
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -42,12 +43,13 @@ function LoginPage({ isVisible, onClose }) {
     setPassword(e.target.value);
   };
 
-  const handleGmailClick = () => {
-    setSignupVisible(true);
+  const handleGmailClick = () => {    
+    setSignupVisible(true);    
   };
 
   const handleCloseSignup = () => {
     setSignupVisible(false);
+    handleClose();
 
   };
 
