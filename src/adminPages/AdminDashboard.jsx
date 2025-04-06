@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Home, Users, Settings, BarChart, FileText, Tag } from "lucide-react"; // Added Tag icon
+import { Home, Users, Settings, BarChart, FileText, Tag } from "lucide-react";
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [userCount, setUserCount] = useState(0);
   const [users, setUsers] = useState([]);
+  const [blogCounts, setBlogCounts] = useState({
+    publishedCount: 0,
+    draftCount: 0,
+    totalCount: 0,
+  });
   const navigate = useNavigate();
 
   const menuItems = [
@@ -14,7 +19,7 @@ const AdminPanel = () => {
     { name: "Users", icon: <Users size={20} /> },
     { name: "Ads Control", icon: <BarChart size={20} /> },
     { name: "Blog Post", icon: <FileText size={20} /> },
-    { name: "Control Meta Tags", icon: <Tag size={20} /> }, // New menu item
+    { name: "Control Meta Tags", icon: <Tag size={20} /> },
   ];
 
   // Fetch user count & users
@@ -34,8 +39,29 @@ const AdminPanel = () => {
     }
   };
 
+  // Fetch blog counts
+  const fetchBlogCounts = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const { data } = await axios.get(
+        "https://www.keywordraja.com/api/admin/blogs/count",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setBlogCounts({
+        publishedCount: data.publishedCount,
+        draftCount: data.draftCount,
+        totalCount: data.totalCount,
+      });
+    } catch (error) {
+      console.error("Error fetching blog counts:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUserData();
+    fetchBlogCounts(); // Fetch blog counts on mount
   }, []);
 
   useEffect(() => {
@@ -48,7 +74,7 @@ const AdminPanel = () => {
     if (name === "Blog Post") {
       navigate("/blog-post");
     } else if (name === "Control Meta Tags") {
-      navigate("/control-meta-tags"); // Redirect to new page
+      navigate("/control-meta-tags");
     } else {
       setActiveTab(name);
     }
@@ -83,9 +109,28 @@ const AdminPanel = () => {
 
         {activeTab === "Dashboard" && (
           <div className="grid grid-cols-3 gap-4 mt-6">
+            {/* User Count Card */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="text-xl font-bold">Users</p>
               <p className="text-2xl text-blue-600">{userCount}</p>
+            </div>
+
+            {/* Total Blogs Card */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-xl font-bold">Total Blogs</p>
+              <p className="text-2xl text-blue-600">{blogCounts.totalCount}</p>
+            </div>
+
+            {/* Published Blogs Card */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-xl font-bold">Published Blogs</p>
+              <p className="text-2xl text-green-600">{blogCounts.publishedCount}</p>
+            </div>
+
+            {/* Draft Blogs Card */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-xl font-bold">Draft Blogs</p>
+              <p className="text-2xl text-orange-600">{blogCounts.draftCount}</p>
             </div>
           </div>
         )}
