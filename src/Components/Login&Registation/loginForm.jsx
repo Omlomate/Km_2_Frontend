@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SignupPage from "./signupForm";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
 import { isAuthenticated } from "../../utils/auth";
 
 function LoginPage({ isVisible, onClose }) {
@@ -66,10 +67,13 @@ function LoginPage({ isVisible, onClose }) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post("https://keywordraja.com/api/auth/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "https://keywordraja.com/api/auth/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
       localStorage.setItem("userData", JSON.stringify(response.data));
       localStorage.setItem("jwt", response.data.token);
       onClose();
@@ -91,9 +95,12 @@ function LoginPage({ isVisible, onClose }) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post("https://keywordraja.com/api/auth/forgot-password", {
-        email: forgotEmail,
-      });
+      const response = await axios.post(
+        "https://keywordraja.com/api/auth/forgot-password",
+        {
+          email: forgotEmail,
+        }
+      );
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response?.data?.message || "Error sending OTP");
@@ -106,11 +113,14 @@ function LoginPage({ isVisible, onClose }) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post("https://keywordraja.com/api/auth/reset-password", {
-        email: forgotEmail,
-        otp,
-        newPassword,
-      });
+      const response = await axios.post(
+        "https://keywordraja.com/api/auth/reset-password",
+        {
+          email: forgotEmail,
+          otp,
+          newPassword,
+        }
+      );
       setMessage(response.data.message);
       setIsForgotPassword(false);
       setOtp("");
@@ -123,23 +133,40 @@ function LoginPage({ isVisible, onClose }) {
     }
   };
 
-  // Add new handler for Google login
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (credentialResponse) => {
     setIsLoading(true);
     try {
-      // Redirect to Google OAuth endpoint or use a popup
-      // This is a placeholder - you'll need to implement the actual Google OAuth flow
-      window.location.href = "https://keywordraja.com/api/auth/google";
-      
-      // If using a popup approach instead of redirect:
-      // const response = await axios.get("https://keywordraja.com/api/auth/google");
-      // localStorage.setItem("userData", JSON.stringify(response.data));
-      // localStorage.setItem("jwt", response.data.token);
-      // onClose();
-      // navigate("/related-keywords", { replace: true });
+      const response = await fetch(
+        "https://www.keywordraja.com/api/auth/google",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: credentialResponse.credential }), // Send ID token
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("jwt", data.token);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            _id: data._id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            isAdmin: data.isAdmin,
+          })
+        );
+        alert("Google Signup successful");
+        navigate("/related-keywords", { replace: true });
+        handleClose();
+      } else {
+        alert(data.message || "Google Signup failed");
+      }
     } catch (error) {
-      console.error("Error logging in with Google:", error);
-      setMessage("Google login failed. Please try again.");
+      console.error("Google Signup Error:", error);
+      alert("An error occurred during Google signup");
     } finally {
       setIsLoading(false);
     }
@@ -167,14 +194,16 @@ function LoginPage({ isVisible, onClose }) {
           >
             ×
           </button>
-          
+
           {isForgotPassword ? (
             <>
               <h1 className="text-2xl font-extrabold p-4 pl-9 text-center">
                 Reset Your Password
               </h1>
               <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
-                <form onSubmit={otp ? handleResetPassword : handleForgotPassword}>
+                <form
+                  onSubmit={otp ? handleResetPassword : handleForgotPassword}
+                >
                   <div className="mb-4">
                     <input
                       type="email"
@@ -238,7 +267,11 @@ function LoginPage({ isVisible, onClose }) {
                         </svg>
                         Processing...
                       </>
-                    ) : otp ? "Reset Password" : "Send OTP"}
+                    ) : otp ? (
+                      "Reset Password"
+                    ) : (
+                      "Send OTP"
+                    )}
                   </button>
                 </form>
                 {message && (
@@ -252,8 +285,8 @@ function LoginPage({ isVisible, onClose }) {
                 className="text-2xl font-extrabold p-4 pl-9 text-center sm:text-left"
                 style={{ wordSpacing: "7px" }}
               >
-                Login to your Keyword Raja account and access all the free of cost
-                services
+                Login to your Keyword Raja account and access all the free of
+                cost services
               </h1>
               <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-x-2 sm:space-y-0">
                 <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
@@ -322,7 +355,7 @@ function LoginPage({ isVisible, onClose }) {
                       )}
                     </button>
                   </form>
-                  
+
                   {/* Add Google login button */}
                   <div className="mt-4">
                     <div className="relative flex items-center justify-center">
@@ -331,22 +364,74 @@ function LoginPage({ isVisible, onClose }) {
                         Or continue with
                       </div>
                     </div>
-                    
-                    <button
-                      onClick={handleGoogleLogin}
-                      className="mt-4 p-3 bg-white border border-gray-300 rounded-lg w-full flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
-                      disabled={isLoading}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
-                        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-                        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-                        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
-                      </svg>
-                      <span>Login with Google</span>
-                    </button>
+
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() => {
+                        console.log("Google Login Failed");
+                        alert("Google Login Failed");
+                        setIsLoading(false);
+                      }}
+                      render={(renderProps) => (
+                        <button
+                          onClick={renderProps.onClick}
+                          disabled={isLoading || renderProps.disabled}
+                          className="mt-4 p-3 bg-white border border-gray-300 rounded-lg w-full flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                        >
+                          {isLoading ? (
+                            <svg
+                              className="animate-spin h-5 w-5 text-gray-500"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                          ) : (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 48 48"
+                                width="24px"
+                                height="24px"
+                              >
+                                <path
+                                  fill="#FFC107"
+                                  d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                                />
+                                <path
+                                  fill="#FF3D00"
+                                  d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                                />
+                                <path
+                                  fill="#4CAF50"
+                                  d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                                />
+                                <path
+                                  fill="#1976D2"
+                                  d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                                />
+                              </svg>
+                              <span>Login with Google</span>
+                            </>
+                          )}
+                        </button>
+                      )}
+                    />
                   </div>
-                  
+
                   <p className="mt-4 text-justify sm:text-left">
                     Forgot password?{" "}
                     <a
