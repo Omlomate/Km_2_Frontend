@@ -19,6 +19,7 @@ import AdCompetition from "./pages/AdCompetition.jsx";
 import ProfileEdit from "./Components/Profile/ProfileEdit.jsx";
 import AdminDashboard from "./adminPages/AdminDashboard.jsx";
 import BlogPost from "./adminPages/BlogPostPage.jsx";
+import EditBlogPage from "./adminPages/EditBlogPage.jsx";
 import Home from "./Blogs/Home.jsx";
 import Show from "./Blogs/Show.jsx";
 import { useState } from "react";
@@ -94,6 +95,14 @@ const AppContent = () => {
         element={
           <AdminRoute>
             <BlogPost />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/edit-blog/:slug"
+        element={
+          <AdminRoute>
+            <EditBlogPage />
           </AdminRoute>
         }
       />

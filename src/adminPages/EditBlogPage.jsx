@@ -1,17 +1,21 @@
-import { useState } from "react";
+// adminPages/EditBlogPage.jsx
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { UploadCloud, Loader2 } from "lucide-react";
 import slugify from "slugify";
-import ReactQuill from "react-quill"; // Import React Quill
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
-const BlogPost = () => {
+const EditBlogPage = () => {
+  const { slug } = useParams(); // Get slug from URL
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [metaTitle, setMetaTitle] = useState("");
-  const [slug, setSlug] = useState("");
+  const [newSlug, setNewSlug] = useState(""); // Renamed to avoid confusion with fetched slug
   const [topic, setTopic] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
-  const [content, setContent] = useState(""); // Content will now be HTML
+  const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [imageAlt, setImageAlt] = useState("");
@@ -22,12 +26,68 @@ const BlogPost = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Quill configuration
+  const quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link"],
+    ],
+  };
+  const quillFormats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "list",
+    "bullet",
+    "link",
+  ];
+
+  // Fetch blog data on mount
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const response = await fetch(
+          `https://www.keywordraja.com/api/blogs/${slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Failed to fetch blog");
+        const blogData = await response.json();
+        setTitle(blogData.title);
+        setMetaTitle(blogData.metaTitle || "");
+        setNewSlug(blogData.slug);
+        setTopic(blogData.topic);
+        setShortDescription(blogData.shortDescription);
+        setMetaDescription(blogData.metaDescription || "");
+        setContent(blogData.content);
+        setImageUrl(blogData.images.original || "");
+        setImageAlt(blogData.imageAlt || "");
+        setTags(blogData.tags?.join(", ") || "");
+        setMetaKeywords(blogData.metaKeywords?.join(", ") || "");
+        setPublishedBy(blogData.publishedBy);
+        setPublisherLinkedIn(blogData.publisherLinkedIn || "");
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlog();
+  }, [slug]);
 
   // Auto-generate slug from title
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    setSlug(slugify(newTitle, { lower: true, strict: true }));
+    setNewSlug(slugify(newTitle, { lower: true, strict: true }));
   };
 
   const handleImageFileUpload = (event) => {
@@ -44,32 +104,11 @@ const BlogPost = () => {
     setImageFile(null);
   };
 
-  // Quill toolbar configuration
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }], // H1, H2, H3, normal
-      ["bold", "italic", "underline"], // Bold, italic, underline
-      [{ list: "ordered" }, { list: "bullet" }], // Ordered and bullet lists
-      ["link"], // Add links
-    ],
-  };
-
-  const quillFormats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "list",
-    "bullet",
-    "link",
-  ];
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
 
-    // Validate required fields
-    if (!title || !slug || !topic || !shortDescription || !content || !publishedBy) {
+    if (!title || !newSlug || !topic || !shortDescription || !content || !publishedBy) {
       setError("All required fields must be filled.");
       setSuccess(null);
       setIsSubmitting(false);
@@ -83,15 +122,14 @@ const BlogPost = () => {
       return;
     }
 
-    // Prepare form data
     const formData = new FormData();
     formData.append("title", title);
     formData.append("metaTitle", metaTitle);
-    formData.append("slug", slug);
+    formData.append("slug", newSlug);
     formData.append("topic", topic);
     formData.append("shortDescription", shortDescription);
     formData.append("metaDescription", metaDescription);
-    formData.append("content", content); // Content is now HTML
+    formData.append("content", content);
     if (imageFile) formData.append("image", imageFile);
     if (imageUrl) formData.append("imageUrl", imageUrl);
     if (imageAlt) formData.append("imageAlt", imageAlt);
@@ -110,13 +148,12 @@ const BlogPost = () => {
 
     try {
       const token = localStorage.getItem("jwt");
-      if (!token)
-        throw new Error("No authentication token found. Please log in.");
+      if (!token) throw new Error("No authentication token found. Please log in.");
 
       const response = await fetch(
-        "https://www.keywordraja.com/api/blogs",
+        `https://www.keywordraja.com/api/admin/blogs/${slug}`,
         {
-          method: "POST",
+          method: "PUT", // Use PUT for updates
           body: formData,
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,26 +162,11 @@ const BlogPost = () => {
       );
 
       const result = await response.json();
-      if (!response.ok)
-        throw new Error(result.message || "Failed to publish blog");
+      if (!response.ok) throw new Error(result.message || "Failed to update blog");
 
-      setSuccess("Blog published successfully!");
+      setSuccess("Blog updated successfully!");
       setError(null);
-      // Reset form
-      setTitle("");
-      setMetaTitle("");
-      setSlug("");
-      setTopic("");
-      setShortDescription("");
-      setMetaDescription("");
-      setContent("");
-      setImageFile(null);
-      setImageUrl("");
-      setImageAlt("");
-      setTags("");
-      setMetaKeywords("");
-      setPublishedBy("");
-      setPublisherLinkedIn("");
+      setTimeout(() => navigate("/admin-dashboard"), 2000); // Redirect after success
     } catch (err) {
       setError(err.message);
       setSuccess(null);
@@ -153,10 +175,13 @@ const BlogPost = () => {
     }
   };
 
+  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (error && !success) return <div className="text-center py-10 text-red-500">{error}</div>;
+
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10 border border-gray-200">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Create a Blog Post
+        Edit Blog Post
       </h2>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
       {success && <p className="text-green-500 text-center mb-4">{success}</p>}
@@ -188,13 +213,13 @@ const BlogPost = () => {
             type="text"
             placeholder="Slug *"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            value={slug}
+            value={newSlug}
             onChange={(e) =>
-              setSlug(slugify(e.target.value, { lower: true, strict: true }))
+              setNewSlug(slugify(e.target.value, { lower: true, strict: true }))
             }
             required
           />
-          <p className="text-sm text-gray-500 mt-1">URL: /blog/{slug}</p>
+          <p className="text-sm text-gray-500 mt-1">URL: /blog/{newSlug}</p>
         </div>
         <div>
           <input
@@ -243,11 +268,11 @@ const BlogPost = () => {
             required
           />
         </div>
-        <div className="pt-12"> {/* Added padding to account for Quill toolbar height */}
+        <div className="pt-12">
           <label className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100">
             <UploadCloud className="text-blue-500 mr-2" />
             <span className="text-gray-600">
-              {imageFile ? imageFile.name : "Upload an Image"}
+              {imageFile ? imageFile.name : "Upload a New Image"}
             </span>
             <input
               type="file"
@@ -256,9 +281,9 @@ const BlogPost = () => {
               onChange={handleImageFileUpload}
             />
           </label>
-          {imageFile && (
+          {(imageFile || imageUrl) && (
             <img
-              src={URL.createObjectURL(imageFile)}
+              src={imageFile ? URL.createObjectURL(imageFile) : imageUrl}
               alt="Preview"
               className="mt-2 max-w-xs rounded-lg"
             />
@@ -272,17 +297,8 @@ const BlogPost = () => {
             value={imageUrl}
             onChange={handleImageUrlChange}
           />
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt="URL Preview"
-              className="mt-2 max-w-xs rounded-lg"
-              onError={() => setError("Invalid image URL")}
-            />
-          )}
           <p className="text-sm text-gray-500 mt-1">
-            Upload a file or paste a URL. If both are provided, the uploaded
-            file takes priority.
+            Upload a file or paste a URL. If both are provided, the uploaded file takes priority.
           </p>
         </div>
         <div>
@@ -342,10 +358,10 @@ const BlogPost = () => {
           {isSubmitting ? (
             <>
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Publishing...
+              Updating...
             </>
           ) : (
-            "Publish Blog"
+            "Update Blog"
           )}
         </button>
       </form>
@@ -353,4 +369,4 @@ const BlogPost = () => {
   );
 };
 
-export default BlogPost;
+export default EditBlogPage;

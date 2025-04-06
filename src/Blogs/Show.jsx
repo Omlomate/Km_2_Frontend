@@ -9,8 +9,16 @@ const Show = () => {
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
 
   const baseUrl = "https://www.keywordraja.com"; // Replace with env variable in production
+
+  // Check if user is admin on mount
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const adminStatus = userData?.isAdmin || false;
+    setIsAdmin(adminStatus);
+  }, []);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -59,7 +67,14 @@ const Show = () => {
       ? blog.images.hero
       : `${baseUrl}${blog.images.hero}`
     : "https://via.placeholder.com/1600x900?text=No+Image";
-  const blogUrl = `https://km-2-frontend.vercel.app/blog/${slug}`;
+  const blogUrl = `https://www.keywordraja.com/blog/${slug}`;
+
+  // Format the publish date
+  const formattedDate = new Date(blog.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <section id="Show-blogs" className="mt-4">
@@ -98,11 +113,8 @@ const Show = () => {
             datePublished: blog.createdAt,
             publisher: {
               "@type": "Organization",
-              name: "Keyword Rajas",
-              logo: {
-                "@type": "ImageObject",
-                url: "http://localhost:5173/logo.png",
-              },
+              name: blog.publishedBy || "Keyword Rajas",
+              url: blog.publisherLinkedIn || "https://www.keywordraja.com",
             },
           })}
         </script>
@@ -112,7 +124,10 @@ const Show = () => {
         <div className="w-full px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="py-6 mb-4">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-start"  style={{ fontFamily: "Space Grotesk, sans-serif" }}>
+              <h1
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-start"
+                style={{ fontFamily: "Space Grotesk, sans-serif" }}
+              >
                 {blog.title}
               </h1>
             </div>
@@ -127,12 +142,32 @@ const Show = () => {
             <div className="text-center">
               <p className="text-gray-600 text-xs sm:text-sm">
                 Published by -{" "}
-                <span className="font-medium">
-                  {blog.author?.name || "xyz"}
-                </span>
+                <span className="font-medium">{blog.publishedBy || "xyz"}</span>{" "}
+                on {formattedDate}
+                {blog.publisherLinkedIn && (
+                  <span>
+                    {" | "}
+                    <a
+                      href={blog.publisherLinkedIn}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      LinkedIn
+                    </a>
+                  </span>
+                )}
               </p>
             </div>
             <div className="flex items-center gap-4">
+              {isAdmin && (
+                <Link
+                  to={`/edit-blog/${slug}`}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                >
+                  Edit Blog
+                </Link>
+              )}
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
                   blogUrl
@@ -192,16 +227,12 @@ const Show = () => {
             />
           </div>
           <hr className="text-gray-400" />
-
           <article className="prose prose-sm sm:prose-base lg:prose-lg max-w-none mt-4">
-            <div className="bg-white rounded-lg  ">
-              <div className="text-gray-700 leading-relaxed space-y-4 sm:space-y-6">
-                {blog.content.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="text-sm sm:text-base">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+            <div className="bg-white rounded-lg">
+              <div
+                className="text-gray-700 leading-relaxed space-y-4 sm:space-y-6"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
             </div>
           </article>
 
