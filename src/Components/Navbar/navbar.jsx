@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
 import "./navbar.css";
- import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,13 +10,25 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false); // State to track authentication
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Add this state
 
-  // Add this function
-  // const toggleSidebar = () => {
-  //   setIsSidebarOpen(!isSidebarOpen);
-  // };
-
+  // Check authentication status whenever component mounts or when localStorage changes
   useEffect(() => {
-    setLoggedIn(isAuthenticated()); // Check if user is authenticated on component mount
+    const checkAuth = () => {
+      setLoggedIn(isAuthenticated());
+    };
+    
+    // Check auth on mount
+    checkAuth();
+    
+    // Add event listener for storage changes (in case user logs in from another tab)
+    window.addEventListener('storage', checkAuth);
+    
+    // Custom event for login success
+    window.addEventListener('login-success', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('login-success', checkAuth);
+    };
   }, []);
 
   const toggleNavbar = () => {
@@ -29,8 +41,27 @@ const Navbar = () => {
 
   const hideLogin = () => {
     setIsLoginVisible(false);
+    // Check authentication status after login modal is closed
+    const isUserAuthenticated = isAuthenticated();
+    setLoggedIn(isUserAuthenticated);
+    
+    // If user just logged in, redirect to home page
+    if (isUserAuthenticated && !loggedIn) {
+      // Set Home as default in localStorage for sidebar consistency
+      localStorage.setItem("selectedOption", "Home");
+      
+      // Force a refresh of the sidebar state by dispatching a custom event
+      const loginEvent = new CustomEvent('login-success', { detail: { redirectTo: '/' } });
+      window.dispatchEvent(loginEvent);
+      
+      // Redirect to home page with replace to avoid back navigation issues
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
+    }
   };
 
+  // Get user data from localStorage
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const handleLogout = () => {
@@ -51,7 +82,7 @@ const Navbar = () => {
     });
 
     // ✅ Redirect user to login or home page
-    window.location.href = "/login"; // OR use navigate("/login");
+    window.location.href = "/"; // Changed to redirect to home page
   };
 
   // useEffect(() => {

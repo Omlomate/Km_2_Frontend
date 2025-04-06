@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ForumPosts from "./ForumPost.jsx";
+import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 
 const ShowForum = ({ posts, onAddComment }) => {
   const { id } = useParams();
@@ -122,7 +123,23 @@ const ShowForum = ({ posts, onAddComment }) => {
         </div>
         <div className="mt-4 px-2">
           <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-          <p className="text-gray-800 mb-6">{post.content}</p>
+          
+          {/* Render content based on contentType */}
+          {post.contentType === "html" ? (
+            <div 
+              className="text-gray-800 mb-6 forum-content"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+              onClick={(e) => {
+                if (e.target.tagName === 'A') {
+                  // Don't stop propagation - let the default link behavior work
+                  // Just prevent the parent container from capturing the click
+                  e.stopPropagation();
+                }
+              }}
+            />
+          ) : (
+            <p className="text-gray-800 mb-6">{post.content}</p>
+          )}
 
           {post.image && (
             <div className="mb-6">

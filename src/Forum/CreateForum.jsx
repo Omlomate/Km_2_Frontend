@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import TextEditor from "../Components/TextEditor/TextEditor.jsx"
 
 const CreateForum = ({ onAddPost }) => {
   const [title, setTitle] = useState("");
@@ -16,7 +17,7 @@ const CreateForum = ({ onAddPost }) => {
       return;
     }
 
-    if (activeTab === "images" && !image) {
+    if (activeTab === "images/video" && !image) {
       alert("Please upload an image or video");
       return;
     }
@@ -27,8 +28,9 @@ const CreateForum = ({ onAddPost }) => {
     // Create the new post object
     const newPost = {
       title: title || "Untitled Post",
-      content: activeTab === "text" ? content : "",
-      image: activeTab === "images" ? image : null,
+      content: content,
+      contentType: "html",
+      image: image,
       author,
       createdAt: new Date().toISOString(),
       comments: [],
@@ -75,17 +77,16 @@ const CreateForum = ({ onAddPost }) => {
 
   return (
     <section id="createForum">
-      {" "}
       <div className="p-6 max-w-2xl mx-auto bg-gray-50 min-h-screen">
         <h1 className="text-3xl font-bold mb-6">Create a post</h1>
 
         {/* Tabs */}
-        <div className="mb-6 border-b border-gray-200">
-          <div className="flex">
+        <div className="mb-6">
+          <div className="flex space-x-4">
             <button
-              className={`mr-6 pb-2 ${
+              className={`pb-2 ${
                 activeTab === "text"
-                  ? "border-b-2 cursor-pointer border-orange-500 text-lg font-semibold"
+                  ? "border-b-2 border-orange-500 font-semibold text-gray-800"
                   : "text-gray-500"
               }`}
               onClick={() => setActiveTab("text")}
@@ -94,11 +95,11 @@ const CreateForum = ({ onAddPost }) => {
             </button>
             <button
               className={`pb-2 ${
-                activeTab === "images"
-                  ? "border-b-2 border-orange-500 font-semibold cursor-pointer text-lg"
+                activeTab === "images/video"
+                  ? "border-b-2 border-orange-500 font-semibold text-gray-800"
                   : "text-gray-500"
               }`}
-              onClick={() => setActiveTab("images")}
+              onClick={() => setActiveTab("images/video")}
             >
               images/video
             </button>
@@ -106,37 +107,32 @@ const CreateForum = ({ onAddPost }) => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {activeTab === "text" && (
-            <>
-              {/* Title Input */}
-              <div className="mb-4">
-                <input
-                  type="text"
-                  id="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none"
-                  placeholder="Add Title"
-                />
-              </div>
+          {/* Title Input - Always visible */}
+          <div className="mb-4">
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none bg-white"
+              placeholder="Add Title"
+            />
+          </div>
 
-              {/* Content Area */}
-              <div className="mb-6 border border-gray-300 rounded-lg bg-white">
-                <textarea
-                  id="content"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-4 py-3 focus:outline-none min-h-[200px] resize-none"
-                  placeholder="Add Body"
-                  required
-                ></textarea>
-              </div>
-            </>
+          {activeTab === "text" && (
+            <div className="mb-6">
+              
+                
+                <div className=" ">
+                  <TextEditor value={content} onChange={setContent} placeholder="Add Body" />
+                </div>
+               
+            </div>
           )}
 
-          {activeTab === "images" && (
+          {activeTab === "images/video" && (
             <div
-              className="mb-6 border border-gray-300 rounded-lg bg-white h-[36vh] flex items-center justify-center"
+              className="mb-6 border border-gray-300   bg-white h-[332px] flex items-center justify-center"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
             >
@@ -167,8 +163,8 @@ const CreateForum = ({ onAddPost }) => {
                   </button>
                 </div>
               ) : (
-                <div className="flex space-x-2 text-center">
-                  <p className="text-gray-500 mb-2">Drag and drop or upload</p>
+                <div className="flex flex-col items-center space-y-2 text-center">
+                  <p className="text-gray-500">Drag and drop or upload</p>
                   <label className="cursor-pointer">
                     <div className="bg-[#12153d] text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto">
                       <svg

@@ -111,25 +111,10 @@ const Show = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="w-full px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
-            <div
-              className="relative h-[200px] sm:h-[240px] md:h-[340px] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl 
-              
-              "
-              style={{ fontFamily: "Space Grotesk, sans-serif" }}
-            >
-              {/* <div className="relative h-[200px] sm:h-[240px] md:h-[340px] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"> */}
-              {/* <img
-                src={heroUrl}
-                alt={blog.imageAlt || blog.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
-              /> */}
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-              <div className="relative h-full flex flex-col justify-center items-center p-3 sm:p-4 md:p-8">
-                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-wantedSans text-white font-bold tracking-tight text-center max-w-[90%] sm:max-w-3xl">
-                  {blog.title}
-                </h1>
-              </div>
+            <div className="py-6 mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-start"  style={{ fontFamily: "Space Grotesk, sans-serif" }}>
+                {blog.title}
+              </h1>
             </div>
             <p className="text-gray-600 text-lg line-clamp-3 p-3 font-bold">
               {blog.shortDescription || "Short description of the blog here"}
@@ -137,7 +122,7 @@ const Show = () => {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
           <div className="row flex justify-between items-center mb-6">
             <div className="text-center">
               <p className="text-gray-600 text-xs sm:text-sm">

@@ -8,7 +8,7 @@ const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
 
   const servers = [
     {
-      name: "Select Search Engine",
+      name: "  Search Engine",
       icon: null,
     },
     {
@@ -51,7 +51,7 @@ const ServerSelect = ({ onServerChange }) => { // Accept onServerChange callback
       >
         {servers.map((server) => (
           <option
-            className="rounded-lg text-gray-500 font-light bg-white text-center text-sm
+            className="rounded-lg text-gray-500 font-light bg-white text-center text-sm px-4
             transition-colors duration-200 hover:bg-gray-100"
             key={server.name}
             value={server.name}

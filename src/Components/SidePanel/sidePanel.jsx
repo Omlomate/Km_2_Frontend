@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth";
 import Profile from "../../assets/profile.svg";
@@ -9,11 +9,27 @@ const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User");
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
   const location = useLocation();
+  const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const profileImage = userData?.profileImage || Profile;
 
   useEffect(() => {
+    // Check authentication status
+    const authStatus = isAuthenticated();
+    
+    // If authentication status changed from not logged in to logged in
+    if (authStatus && !isLoggedIn) {
+      setIsLoggedIn(authStatus);
+      setSelectedOption("Home");
+      localStorage.setItem("selectedOption", "Home");
+      navigate("/");
+      return; // Exit early after redirecting
+    }
+    
+    setIsLoggedIn(authStatus);
+
     const userData = JSON.parse(localStorage.getItem("userData"));
     const storedFirstName = userData ? userData.firstName : null;
     if (storedFirstName) {
@@ -24,21 +40,60 @@ const Sidebar = () => {
     const storedOption = localStorage.getItem("selectedOption");
     if (storedOption) {
       setSelectedOption(storedOption);
+    } else if (authStatus) {
+      // If no option is stored but user is logged in, default to Home
+      setSelectedOption("Home");
+      localStorage.setItem("selectedOption", "Home");
     }
 
-    if (!isAuthenticated() && location.pathname !== "/") {
+    if (!authStatus && location.pathname !== "/") {
       setIsLoginVisible(true);
     }
     if (location.pathname === "/profile-edit") {
       setSelectedOption("Profile");
     }
-  }, [location.pathname]);
+  }, [location.pathname, isLoggedIn, navigate]);
+
+  // Listen for login events with stronger redirect behavior
+  useEffect(() => {
+    const handleLoginSuccess = () => {
+      setIsLoggedIn(true);
+      setSelectedOption("Home");
+      localStorage.setItem("selectedOption", "Home");
+      // Force navigation to home route
+      navigate("/", { replace: true });
+    };
+
+    window.addEventListener('login-success', handleLoginSuccess);
+    
+    return () => {
+      window.removeEventListener('login-success', handleLoginSuccess);
+    };
+  }, [navigate]);
+
+  // const hideLogin = () => {
+  //   setIsLoginVisible(false);
+    
+  //   // Check if user just logged in and force redirect to home
+  //   if (isAuthenticated() && !isLoggedIn) {
+  //     setIsLoggedIn(true);
+  //     setSelectedOption("Home");
+  //     localStorage.setItem("selectedOption", "Home");
+  //     navigate("/", { replace: true });
+  //   }
+  // };
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     // Save the selected option to localStorage
     localStorage.setItem("selectedOption", option);
     setIsSidebarOpen(false);
+    
+    // Make sure we're not triggering unnecessary navigation if we're already on the page
+    const currentPath = menuItems.find(item => item.name === option)?.path;
+    if (currentPath && location.pathname !== currentPath) {
+      navigate(currentPath);
+    }
   };
 
   const handleProfileClick = () => {
@@ -53,6 +108,14 @@ const Sidebar = () => {
 
   const hideLogin = () => {
     setIsLoginVisible(false);
+    
+    // Check if user just logged in
+    if (isAuthenticated() && !isLoggedIn) {
+      setIsLoggedIn(true);
+      setSelectedOption("Home");
+      localStorage.setItem("selectedOption", "Home");
+      navigate("/");
+    }
   };
 
   const menuItems = [
@@ -60,8 +123,16 @@ const Sidebar = () => {
     { name: "Related Keywords", path: "/related-keywords", icon: "fa-link" },
     { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key" },
     { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line" },
-    { name: "Keyword Difficulty", path: "/keyword-difficulty", icon: "fa-chart-bar" },
-    { name: "Keyword Spam Score", path: "/Keyword-spam-score", icon: "fa-shield-alt" },
+    {
+      name: "Keyword Difficulty",
+      path: "/keyword-difficulty",
+      icon: "fa-chart-bar",
+    },
+    {
+      name: "Keyword Spam Score",
+      path: "/Keyword-spam-score",
+      icon: "fa-shield-alt",
+    },
     { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area" },
     { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign" },
     { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad" },
@@ -76,7 +147,7 @@ const Sidebar = () => {
           </button>
         </div>
       )}
-      
+
       {isSidebarOpen && (
         <div className="md:hidden fixed top-4 left-4 z-50">
           <button onClick={toggleSidebar} className="border-none">
@@ -84,8 +155,7 @@ const Sidebar = () => {
           </button>
         </div>
       )}
-      
-    
+
       <div
         className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 top-25 md:top-0 ${
           isSidebarOpen
@@ -118,8 +188,6 @@ const Sidebar = () => {
               <span className="mr-3">{username}</span>
             </div>
           </Link>
-
-       
         </div>
 
         {menuItems.map((option) => (

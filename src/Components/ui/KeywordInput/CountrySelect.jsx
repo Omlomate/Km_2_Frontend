@@ -16,7 +16,7 @@ const CountrySelect = ({ onCountryChange }) => {
   const [selectedCountry, setSelectedCountry] = useState("Select");
 
   const countries = [
-    { name: "Select Country", flag: "", apiReference: "" },
+    { name: " Country", flag: "", apiReference: "" },
     { name: "Global", flag: "", apiReference: "" },
     { name: "United States", flag: US, map: USA, apiReference: "us" },
     { name: "India", flag: India, map: IndiaMap, apiReference: "in" },

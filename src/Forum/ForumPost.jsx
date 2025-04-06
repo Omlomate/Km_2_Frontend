@@ -1,82 +1,70 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 // Reusable PostCard component
 export const ForumPosts = ({ post }) => {
   return (
-    <div className="bg-white w-[45rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
-      <Link to={`/forum/${post.id}`} aria-label={`View post: ${post.title}`}>
-        <div className=" ">
-          <div className="p-4">
-            <div className="flex items-center mb-2">
-              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
-                {post.authorImage ? (
-                  <img
-                    src={post.authorImage}
-                    alt="Author"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                )}
-              </div>
-              <span className="text-sm text-gray-500">
-                {post.author || "Anonymous"}
-              </span>
-              <div className="ml-auto flex items-center">
-                {/* <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-500 mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                clipRule="evenodd"
-              />
-            </svg> */}
-                {/* <span className="text-gray-500 text-sm">
-              {post.comments?.length || 0}
-            </span> */}
-              </div>
-            </div>
-
-            <h3 className="text-lg font-medium line-clamp-2">{post.title}</h3>
-            <p className="text-sm text-gray-500 line-clamp-2 mt-1 mb-3">
-              {post.content}
-            </p>
-          </div>
-
-          {/* Image row - moved to bottom */}
-          {post.image ? (
-            <div className="w-full h-full overflow-hidden">
+    <div className="bg-white w-full md:w-[45rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
+      <div className="p-4">
+        {/* Author info */}
+        <div className="flex items-center mb-2">
+          <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
+            {post.authorImage ? (
               <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-full object-cover"
+                src={post.authorImage}
+                alt="Author"
+                className="h-full w-full object-cover"
               />
-            </div>
-          ) : (
-            <div className="bg-gray-200 h-100 flex items-center justify-center">
-              <h2 className="text-2xl font-bold text-center">Keyword Raja</h2>
-            </div>
-          )}
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            )}
+          </div>
+          <span className="text-sm text-gray-500">
+            {post.author || "Anonymous"}
+          </span>
+          <div className="ml-auto flex items-center">
+            {/* Comment count icons removed for brevity */}
+          </div>
         </div>
-      </Link>
+
+        {/* Title */}
+        <h3 className="text-lg font-medium mb-2">{post.title}</h3>
+        
+        {/* Content - always display regardless of image */}
+        {post.contentType === "html" ? (
+          <div 
+            className="text-sm text-gray-700 mb-4 forum-content"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        ) : (
+          <p className="text-sm text-gray-700 mb-4">
+            {post.content}
+          </p>
+        )}
+      </div>
+
+      {/* Image - only show if exists */}
+      {post.image && (
+        <div className="w-full overflow-hidden max-h-[300px]">
+          <img
+            src={post.image}
+            alt={post.title}
+            className="w-full object-cover"
+          />
+        </div>
+      )}
 
       {/* Horizontal line for separation */}
       <div className="border-t border-gray-200 mt-2"></div>
