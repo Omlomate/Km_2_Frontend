@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { UploadCloud, Loader2 } from "lucide-react";
 import slugify from "slugify";
-import ReactQuill from "react-quill"; // Import React Quill
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import ReactQuill from "react-quill-new"; // Import React Quill
+import "react-quill-new/dist/quill.snow.css"; // Import Quill styles
 
 const BlogPost = () => {
   const [title, setTitle] = useState("");

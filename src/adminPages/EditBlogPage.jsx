@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { UploadCloud, Loader2 } from "lucide-react";
 import slugify from "slugify";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const EditBlogPage = () => {
   const { slug } = useParams(); // Get slug from URL
