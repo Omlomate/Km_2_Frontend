@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
-function SignupPage({ onClose }) {
+function SignupPage({ onClose, isVisible }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,12 +10,22 @@ function SignupPage({ onClose }) {
   const [agree, setAgree] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [transform, setTransform] = useState("scale(0)");
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsOpen(true);
-    return () => setIsOpen(false);
-  }, []);
+    if (isVisible) {
+      setTransform("scale(0)");
+      setTimeout(() => {
+        setTransform("scale(1)");
+      }, 0);
+    }
+    return () => {
+      setIsOpen(false);
+      setTransform("scale(0)");
+    };
+  }, [isVisible]);
 
   const handleSignup = async () => {
     if (!firstName || !lastName || !email || !password) {
@@ -111,8 +121,14 @@ function SignupPage({ onClose }) {
   };
 
   const handleClose = () => {
-    setIsOpen(false);
-    setTimeout(onClose, 300);
+    setTransform("scale(1)");
+    setTimeout(() => {
+      setTransform("scale(0)");
+      setTimeout(() => {
+        setIsOpen(false);
+        onClose();
+      }, 300);
+    }, 0);
   };
 
   if (!isOpen) return null;
@@ -120,9 +136,8 @@ function SignupPage({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
       <div
-        className={`relative ${
-          isOpen ? "animate-zoomIn" : "animate-zoomOut"
-        } w-full max-w-md sm:max-w-3xl`}
+        className="relative w-full max-w-md sm:max-w-3xl transition-transform duration-300"
+        style={{ transform }}
       >
         <div
           className="bg-white p-4 sm:p-8 rounded-lg w-full"
@@ -332,6 +347,15 @@ function SignupPage({ onClose }) {
                 "Sign Up"
               )}
             </button>
+            <p className="text-center mt-4 text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={onClose}
+                className="text-blue-900 font-semibold hover:text-blue-700 transition-colors cursor-pointer"
+              >
+                click here
+              </button>
+            </p>
           </div>
         </div>
       </div>

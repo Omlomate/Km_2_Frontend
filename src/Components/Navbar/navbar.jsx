@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
+import SignupPage from "../Login&Registation/signupForm";
 import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
 import "./navbar.css";
 import { Link } from "react-router-dom";
@@ -7,6 +8,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
+  const [isRegisterVisible, setIsRegisterVisible] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false); // State to track authentication
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Add this state
 
@@ -15,19 +17,19 @@ const Navbar = () => {
     const checkAuth = () => {
       setLoggedIn(isAuthenticated());
     };
-    
+
     // Check auth on mount
     checkAuth();
-    
+
     // Add event listener for storage changes (in case user logs in from another tab)
-    window.addEventListener('storage', checkAuth);
-    
+    window.addEventListener("storage", checkAuth);
+
     // Custom event for login success
-    window.addEventListener('login-success', checkAuth);
-    
+    window.addEventListener("login-success", checkAuth);
+
     return () => {
-      window.removeEventListener('storage', checkAuth);
-      window.removeEventListener('login-success', checkAuth);
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("login-success", checkAuth);
     };
   }, []);
 
@@ -37,6 +39,12 @@ const Navbar = () => {
 
   const showLogin = () => {
     setIsLoginVisible(true);
+    setIsRegisterVisible(false);
+  };
+
+  const showRegister = () => {
+    setIsRegisterVisible(true);
+    setIsLoginVisible(false);
   };
 
   const hideLogin = () => {
@@ -44,16 +52,42 @@ const Navbar = () => {
     // Check authentication status after login modal is closed
     const isUserAuthenticated = isAuthenticated();
     setLoggedIn(isUserAuthenticated);
-    
+
     // If user just logged in, redirect to home page
     if (isUserAuthenticated && !loggedIn) {
       // Set Home as default in localStorage for sidebar consistency
       localStorage.setItem("selectedOption", "Home");
-      
+
       // Force a refresh of the sidebar state by dispatching a custom event
-      const loginEvent = new CustomEvent('login-success', { detail: { redirectTo: '/' } });
+      const loginEvent = new CustomEvent("login-success", {
+        detail: { redirectTo: "/" },
+      });
       window.dispatchEvent(loginEvent);
-      
+
+      // Redirect to home page with replace to avoid back navigation issues
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
+    }
+  };
+
+  const hideRegister = () => {
+    setIsRegisterVisible(false);
+    // Check authentication status after register modal is closed
+    const isUserAuthenticated = isAuthenticated();
+    setLoggedIn(isUserAuthenticated);
+
+    // If user just registered and logged in, redirect to home page
+    if (isUserAuthenticated && !loggedIn) {
+      // Set Home as default in localStorage for sidebar consistency
+      localStorage.setItem("selectedOption", "Home");
+
+      // Force a refresh of the sidebar state by dispatching a custom event
+      const loginEvent = new CustomEvent("login-success", {
+        detail: { redirectTo: "/" },
+      });
+      window.dispatchEvent(loginEvent);
+
       // Redirect to home page with replace to avoid back navigation issues
       setTimeout(() => {
         window.location.href = "/";
@@ -92,7 +126,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="bg-white w-full px-4 md:px-8 shadow-sm transition-all duration-300 fixed top-0 z-50"
+        className="bg-white w-full px-4 md:px-8 shadow-sm transition-all duration-300 fixed top-0 z-50 animate-navbar"
         style={{ fontFamily: "wantedsans" }}
       >
         {/* Main navbar row */}
@@ -101,8 +135,8 @@ const Navbar = () => {
             <div className="flex items-center flex-shrink-0 text-gray-700">
               <a href="/" className="flex items-center gap-2 logo-hover ">
                 {/* Logo mark SVG - smaller on mobile */}
-                <svg 
-                  className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8" 
+                <svg
+                  className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8"
                   viewBox="0 0 360 398"
                 >
                   <path
@@ -190,7 +224,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/forum"  className="nav-link">
+                <Link to="/forum" className="nav-link">
                   Forum
                 </Link>
               </li>
@@ -209,8 +243,8 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Login/Logout button - updated styling */}
-          <div className="flex items-center">
+          {/* Login/Register/Logout buttons */}
+          <div className="flex items-center gap-3"> {/* Added gap-3 here */}
             {loggedIn ? (
               <div className="flex items-center gap-2">
                 {userData && (
@@ -240,26 +274,42 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <button
-                onClick={showLogin}
-                className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                  />
-                </svg>
-                <span>Login</span>
-              </button>
+              <div className="flex items-center gap-3"> {/* Added gap-3 here */}
+                <button onClick={showLogin} className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  <span>Login</span>
+                </button>
+                <button onClick={showRegister} className="flex items-center gap-1.5 px-4 py-1.5 bg-[#12153D] hover:bg-[#12153D]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                    />
+                  </svg>
+                  <span className="hidden sm:inline">Register</span>
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -294,24 +344,33 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      
-      {/* Login dialog */}
-      {isLoginVisible && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4">
-          <div className=" ">
-            {/* <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg sm:text-xl font-semibold text-[#12153D]">Login</h2>
-              <button 
-                onClick={hideLogin} 
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                &times;
-              </button>
-            </div> */}
-            <LoginPage isVisible={isLoginVisible} onClose={hideLogin} />
+      <div className="space-x-1">
+        {/* Login dialog */}
+        {isLoginVisible && (
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4 modal-overlay">
+            <div className="modal-content">
+              <LoginPage
+                isVisible={isLoginVisible}
+                onClose={hideLogin}
+                initialTab="login"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Register dialog */}
+        {isRegisterVisible && (
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4 modal-overlay">
+            <div className="modal-content">
+              <SignupPage
+                isVisible={isRegisterVisible}
+                onClose={hideRegister}
+                initialTab="register"
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };

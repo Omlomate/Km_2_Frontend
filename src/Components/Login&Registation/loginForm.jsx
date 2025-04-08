@@ -54,8 +54,10 @@ function LoginPage({ isVisible, onClose }) {
     setPassword(e.target.value);
   };
 
-  const handleGmailClick = () => {
+  const handleGmailClick = (e) => {
+    e.preventDefault();
     setSignupVisible(true);
+    setTransform("scale(1)");
   };
 
   const handleCloseSignup = () => {
@@ -177,10 +179,11 @@ function LoginPage({ isVisible, onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
       {isSignupVisible ? (
-        <div>
-          <div className="order-2 md:order-3 w-full grid justify-center item-center">
-            <SignupPage onClose={handleCloseSignup} />
-          </div>
+        <div className="w-full max-w-2xl">
+          <SignupPage 
+            onClose={handleCloseSignup} 
+            isVisible={isSignupVisible}
+          />
         </div>
       ) : (
         <div
