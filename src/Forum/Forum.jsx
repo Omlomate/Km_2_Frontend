@@ -103,13 +103,14 @@ const Forum = ({ posts }) => {
               <div className="flex flex-col space-y-4">
                 {posts.map((post) => (
                   <div key={post.id}>
-                    <Link
+                    {/* <Link
                       to={`/forum/${post.id}`}
                       className="block"
                       aria-label={`View post: ${post.title}`}
                     >
-                      <ForumPosts post={post} />
-                    </Link>
+                     
+                    </Link> */}
+                     <ForumPosts post={post} />
                   </div>
                 ))}
               </div>
