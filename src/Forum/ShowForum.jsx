@@ -36,19 +36,46 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
   const handleSubmitComment = (e) => {
     e.preventDefault();
 
-    if (!comment.trim()) return;
+    if (!comment.trim() && !document.getElementById('comment-image-upload').files[0]) return;
 
     const userData = JSON.parse(localStorage.getItem("userData")) || {};
     const author = userData.firstName || "Anonymous";
-
-    onAddComment(postId, {
-      id: post.comments.length + 1,
-      text: comment,
-      author,
-      createdAt: new Date().toISOString(),
-    });
-
-    setComment("");
+    
+    // Get image if available
+    const imageFile = document.getElementById('comment-image-upload').files[0];
+    
+    if (imageFile) {
+      // For immediate display, use FileReader to get base64
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        
+        // Add comment with image
+        onAddComment(postId, {
+          id: post.comments.length + 1,
+          text: comment,
+          author,
+          createdAt: new Date().toISOString(),
+          image: imageData
+        });
+        
+        // Reset form
+        setComment("");
+        document.getElementById('comment-image-upload').value = '';
+        document.getElementById('comment-image-preview').classList.add('hidden');
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      // Add comment without image
+      onAddComment(postId, {
+        id: post.comments.length + 1,
+        text: comment,
+        author,
+        createdAt: new Date().toISOString(),
+      });
+      
+      setComment("");
+    }
   };
 
   const toggleOptions = (commentId) => {
@@ -258,34 +285,78 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
               </div>
               <section id="comment">
                 <div className="mt-8 border-t pt-6">
-                  <div className="flex items-center gap-2 mb-6">
-                    <input
-                      type="text"
-                      placeholder="Add a comment..."
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      className="w-full py-3 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#12153d] border border-gray-200"
-                    />
-                    <button
-                      onClick={handleSubmitComment}
-                      className="bg-[#12153d] text-white p-3 rounded-full hover:bg-blue-700 transition-colors flex-shrink-0"
-                      aria-label="Send comment"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 transform rotate-90"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  <div className="flex flex-col gap-2 mb-6">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="Add a comment..."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        className="w-full py-3 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#12153d] border border-gray-200"
+                      />
+                      <label htmlFor="comment-image-upload" className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <input 
+                          type="file" 
+                          id="comment-image-upload" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              // Create a preview
+                              const reader = new FileReader();
+                              reader.onload = function(e) {
+                                const previewDiv = document.getElementById('comment-image-preview');
+                                const previewImg = previewDiv.querySelector('img');
+                                previewImg.src = e.target.result;
+                                previewDiv.classList.remove('hidden');
+                              }
+                              reader.readAsDataURL(file);
+                            }
+                          }}
                         />
-                      </svg>
-                    </button>
+                      </label>
+                      <button
+                        onClick={handleSubmitComment}
+                        className="bg-[#12153d] text-white p-3 rounded-full cursor-pointer hover:bg-[#12153d]/90 transition-colors flex-shrink-0"
+                        aria-label="Send comment"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 transform rotate-90"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    {/* Preview area for selected image */}
+                    <div id="comment-image-preview" className="hidden mt-2 relative">
+                      <img src="" alt="Preview" className="max-h-40 rounded-lg" />
+                      <button 
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                        onClick={() => {
+                          // Clear the file input and hide preview
+                          document.getElementById('comment-image-upload').value = '';
+                          document.getElementById('comment-image-preview').classList.add('hidden');
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-4">
@@ -382,23 +453,55 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                             
                             {/* Reply input field */}
                             {replyingTo === comment.id && (
-                              <div className="mt-3 pl-10">
+                              <div className="flex flex-col gap-2">
                                 <div className="flex items-center gap-2">
                                   <input
                                     type="text"
                                     placeholder="Write a reply..."
                                     value={replyText}
                                     onChange={(e) => setReplyText(e.target.value)}
-                                    className="w-full py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
+                                    className="w-full mt-4 py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
                                   />
+                                  <label htmlFor={`reply-image-${comment.id}`} className="cursor-pointer p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <input 
+                                      type="file" 
+                                      id={`reply-image-${comment.id}`} 
+                                      accept="image/*" 
+                                      className="hidden mt-4" 
+                                      onChange={(e) => {
+                                        // Handle image upload here
+                                        console.log("Image selected:", e.target.files[0]);
+                                        // You would typically upload to server or convert to base64
+                                      }}
+                                    />
+                                  </label>
                                   <button
                                     onClick={() => handleReplySubmit(comment.id)}
-                                    className="bg-[#12153d] text-white p-2 rounded-full hover:bg-blue-700 transition-colors flex-shrink-0"
+                                    className="bg-[#12153d] text-white p-2 rounded-full hover:bg-[#12153d]/90 cursor-pointer transition-colors flex-shrink-0"
                                   >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                     </svg>
                                   </button>
+                                  {/* Preview area for selected image */}
+                                  <div id={`image-preview-${comment.id}`} className="hidden mt-2 relative">
+                                    <img src="" alt="Preview" className="max-h-32 rounded-lg" />
+                                    <button 
+                                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                                      onClick={() => {
+                                        // Clear the file input and hide preview
+                                        document.getElementById(`reply-image-${comment.id}`).value = '';
+                                        document.getElementById(`image-preview-${comment.id}`).classList.add('hidden');
+                                      }}
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             )}
@@ -430,7 +533,7 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                           onClick={() => handleLikeComment(reply.id)}
                                         >
                                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill={likedComments[reply.id] ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
                                           </svg>
                                           <span>{likedComments[reply.id] ? ((reply.likes || 0) + 1) : (reply.likes || 0)}</span>
                                         </button>

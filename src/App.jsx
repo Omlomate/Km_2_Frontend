@@ -30,6 +30,7 @@ import { forumPosts } from "./Forum/ForumData.js";
 import CreateForum from "./Forum/CreateForum.jsx";
 import ShowForum from "./Forum/ShowForum.jsx";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Footer from "./Components/Footer/Footer.jsx";
 
 
 
@@ -220,6 +221,7 @@ function App() {
         <div className="pt-28 md:pt-16">
           <AppContent />
         </div>
+        <Footer/>
       </Router>
     </GoogleOAuthProvider>
   );
