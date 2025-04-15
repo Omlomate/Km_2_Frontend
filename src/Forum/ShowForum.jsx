@@ -1,20 +1,203 @@
-import React, { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom"; // Add Link import
-import ForumPosts from "./ForumPost.jsx";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 
-const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => {
+const ShowForum = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
+  const [commentImage, setCommentImage] = useState(null);
+  const [error, setError] = useState(null);
   const [showOptions, setShowOptions] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [replyingTo, setReplyingTo] = useState(null);
   const [likedComments, setLikedComments] = useState({});
   const [dislikedComments, setDislikedComments] = useState({});
 
-  const postId = parseInt(id);
-  const post = posts.find((p) => p.id === postId);
+  // Fetch post on mount
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`https://www.keywordraja.com/api/forum/posts/${id}`);
+        setPost(response.data);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        setError("Failed to load post. Please try again.");
+        setPost(null);
+      }
+    };
+    fetchPost();
+  }, [id]);
+
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+
+    if (!comment.trim() && !commentImage) return;
+
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData")) || {};
+      const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
+      const token = localStorage.getItem("jwt");
+
+      const formData = new FormData();
+      formData.append("content", comment);
+      formData.append("author", author);
+      if (commentImage) {
+        formData.append("image", commentImage);
+      }
+
+      const response = await axios.post(`https://www.keywordraja.com/api/forum/posts/${id}/comments`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update post with new comment
+      setPost((prev) => ({
+        ...prev,
+        comments: [...(prev.comments || []), response.data],
+      }));
+      setComment("");
+      setCommentImage(null);
+      document.getElementById("comment-image-upload").value = "";
+      document.getElementById("comment-image-preview").classList.add("hidden");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to add comment. Please try again.");
+    }
+  };
+
+  const handleReplySubmit = async (commentId) => {
+    if (!replyText.trim()) return;
+
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData")) || {};
+      const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
+      const token = localStorage.getItem("jwt");
+
+      const response = await axios.post(
+        `https://www.keywordraja.com/api/forum/posts/${id}/comments`,
+        {
+          content: replyText,
+          author,
+          parentId: commentId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPost((prev) => ({
+        ...prev,
+        comments: [...(prev.comments || []), response.data],
+      }));
+      setReplyText("");
+      setReplyingTo(null);
+    } catch (error) {
+      console.error("Error adding reply:", error);
+      alert("Failed to add reply. Please try again.");
+    }
+  };
+
+  const toggleOptions = (commentId) => {
+    setShowOptions(showOptions === commentId ? null : commentId);
+  };
+
+  const handleLikeComment = async (commentId) => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const isLiked = likedComments[commentId];
+      await axios.post(
+        `https://www.keywordraja.com/api/forum/posts/${id}/comments/${commentId}/${isLiked ? "unlike" : "like"}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setLikedComments((prev) => ({
+        ...prev,
+        [commentId]: !prev[commentId],
+      }));
+      setDislikedComments((prev) => ({
+        ...prev,
+        [commentId]: false,
+      }));
+
+      // Update comment likes
+      setPost((prev) => ({
+        ...prev,
+        comments: prev.comments.map((c) =>
+          c._id === commentId
+            ? { ...c, likes: isLiked ? (c.likes || 0) - 1 : (c.likes || 0) + 1 }
+            : c
+        ),
+      }));
+    } catch (error) {
+      console.error("Error liking comment:", error);
+      alert("Failed to like comment.");
+    }
+  };
+
+  const handleDislikeComment = async (commentId) => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const isDisliked = dislikedComments[commentId];
+      await axios.post(
+        `https://www.keywordraja.com/api/forum/posts/${id}/comments/${commentId}/${isDisliked ? "undislike" : "dislike"}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setDislikedComments((prev) => ({
+        ...prev,
+        [commentId]: !prev[commentId],
+      }));
+      setLikedComments((prev) => ({
+        ...prev,
+        [commentId]: false,
+      }));
+
+      // Update comment dislikes
+      setPost((prev) => ({
+        ...prev,
+        comments: prev.comments.map((c) =>
+          c._id === commentId
+            ? {
+                ...c,
+                dislikes: isDisliked ? (c.dislikes || 0) - 1 : (c.dislikes || 0) + 1,
+              }
+            : c
+        ),
+      }));
+    } catch (error) {
+      console.error("Error disliking comment:", error);
+      alert("Failed to dislike comment.");
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto text-center">
+        <h2 className="text-2xl font-bold mb-4">Error</h2>
+        <p className="mb-6 text-red-500">{error}</p>
+        <button
+          onClick={() => navigate("/forum")}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Back to Forum
+        </button>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -33,124 +216,10 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
     );
   }
 
-  const handleSubmitComment = (e) => {
-    e.preventDefault();
-
-    if (!comment.trim() && !document.getElementById('comment-image-upload').files[0]) return;
-
-    const userData = JSON.parse(localStorage.getItem("userData")) || {};
-    const author = userData.firstName || "Anonymous";
-    
-    // Get image if available
-    const imageFile = document.getElementById('comment-image-upload').files[0];
-    
-    if (imageFile) {
-      // For immediate display, use FileReader to get base64
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageData = e.target.result;
-        
-        // Add comment with image
-        onAddComment(postId, {
-          id: post.comments.length + 1,
-          text: comment,
-          author,
-          createdAt: new Date().toISOString(),
-          image: imageData
-        });
-        
-        // Reset form
-        setComment("");
-        document.getElementById('comment-image-upload').value = '';
-        document.getElementById('comment-image-preview').classList.add('hidden');
-      };
-      reader.readAsDataURL(imageFile);
-    } else {
-      // Add comment without image
-      onAddComment(postId, {
-        id: post.comments.length + 1,
-        text: comment,
-        author,
-        createdAt: new Date().toISOString(),
-      });
-      
-      setComment("");
-    }
-  };
-
-  const toggleOptions = (commentId) => {
-    setShowOptions(showOptions === commentId ? null : commentId);
-  };
-
-  const handleLikeComment = (commentId) => {
-    // Toggle like state
-    setLikedComments(prev => {
-      const newState = { ...prev };
-      newState[commentId] = !prev[commentId];
-      
-      // If we're liking, remove any dislike
-      if (newState[commentId]) {
-        setDislikedComments(prev => ({
-          ...prev,
-          [commentId]: false
-        }));
-      }
-      
-      return newState;
-    });
-    
-    // Call parent handler if provided
-    if (onLikeComment) {
-      onLikeComment(postId, commentId, !likedComments[commentId]);
-    }
-  };
-
-  const handleDislikeComment = (commentId) => {
-    // Toggle dislike state
-    setDislikedComments(prev => {
-      const newState = { ...prev };
-      newState[commentId] = !prev[commentId];
-      
-      // If we're disliking, remove any like
-      if (newState[commentId]) {
-        setLikedComments(prev => ({
-          ...prev,
-          [commentId]: false
-        }));
-      }
-      
-      return newState;
-    });
-    
-    // Call parent handler if provided
-    if (onDislikeComment) {
-      onDislikeComment(postId, commentId, !dislikedComments[commentId]);
-    }
-  };
-
-  const handleReplySubmit = (commentId) => {
-    if (!replyText.trim()) return;
-
-    const userData = JSON.parse(localStorage.getItem("userData")) || {};
-    const author = userData.firstName || "Anonymous";
-
-    // Add reply to the comment
-    onAddComment(postId, {
-      id: Date.now(), // Generate unique ID
-      text: replyText,
-      author,
-      createdAt: new Date().toISOString(),
-      parentId: commentId
-    });
-
-    setReplyText("");
-    setReplyingTo(null);
-  };
-
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-6">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar - Hidden on mobile, shown as top section */}
+        {/* Sidebar */}
         <div className="hidden lg:block w-full lg:w-64 lg:flex-shrink-0 order-2 lg:order-1">
           <div className="bg-white rounded-lg shadow-lg p-4 mb-4 sticky top-4">
             <Link
@@ -162,22 +231,6 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
               </div>
               <span className="font-medium">Edit Profile</span>
             </Link>
-
-            {/* <div className="mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-700 font-medium">All Time:</span>
-                <div className="relative">
-                  <select className="appearance-none bg-transparent px-4 pr-8 py-2 outline-none text-sm border rounded-lg">
-                    <option className="px-4">All Time</option>
-                    <option>Today</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                    <i className="fa-solid fa-chevron-down text-xs text-gray-500"></i>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
             <div className="mt-8 text-center hidden lg:block">
               <div className="bg-gray-100 h-40 rounded-lg flex items-center justify-center text-gray-500 font-medium shadow-inner">
                 AD
@@ -214,9 +267,9 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {post.authorImage ? (
+                    {post.profileImage ? (
                       <img
-                        src={post.authorImage}
+                        src={post.profileImage}
                         alt="Author"
                         className="h-full w-full object-cover"
                       />
@@ -227,13 +280,9 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                     )}
                   </div>
                   <div>
-                    <span className="font-medium text-lg block">
-                      {post.author || "Username"}
-                    </span>
+                    <span className="font-medium text-lg block">{post.author}</span>
                     <p className="text-sm text-gray-500">
-                      {new Date(
-                        post.createdAt || Date.now()
-                      ).toLocaleDateString()}
+                      {new Date(post.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
@@ -283,6 +332,8 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                   </div>
                 )}
               </div>
+
+              {/* Comments Section */}
               <section id="comment">
                 <div className="mt-8 border-t pt-6">
                   <div className="flex flex-col gap-2 mb-6">
@@ -294,27 +345,45 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                         onChange={(e) => setComment(e.target.value)}
                         className="w-full py-3 px-4 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#12153d] border border-gray-200"
                       />
-                      <label htmlFor="comment-image-upload" className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <label
+                        htmlFor="comment-image-upload"
+                        className="cursor-pointer p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-gray-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
-                        <input 
-                          type="file" 
-                          id="comment-image-upload" 
-                          accept="image/*" 
-                          className="hidden" 
+                        <input
+                          type="file"
+                          id="comment-image-upload"
+                          accept="image/*"
+                          className="hidden"
                           onChange={(e) => {
                             const file = e.target.files[0];
                             if (file) {
-                              // Create a preview
+                              setCommentImage(file);
                               const reader = new FileReader();
-                              reader.onload = function(e) {
-                                const previewDiv = document.getElementById('comment-image-preview');
-                                const previewImg = previewDiv.querySelector('img');
+                              reader.onload = function (e) {
+                                const previewDiv = document.getElementById(
+                                  "comment-image-preview"
+                                );
+                                const previewImg = previewDiv.querySelector("img");
                                 previewImg.src = e.target.result;
-                                previewDiv.classList.remove('hidden');
-                              }
+                                previewDiv.classList.remove("hidden");
+                              };
                               reader.readAsDataURL(file);
+                            } else {
+                              setCommentImage(null);
                             }
                           }}
                         />
@@ -340,20 +409,31 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                         </svg>
                       </button>
                     </div>
-                    
+
                     {/* Preview area for selected image */}
                     <div id="comment-image-preview" className="hidden mt-2 relative">
                       <img src="" alt="Preview" className="max-h-40 rounded-lg" />
-                      <button 
+                      <button
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
                         onClick={() => {
-                          // Clear the file input and hide preview
-                          document.getElementById('comment-image-upload').value = '';
-                          document.getElementById('comment-image-preview').classList.add('hidden');
+                          setCommentImage(null);
+                          document.getElementById("comment-image-upload").value = "";
+                          document.getElementById("comment-image-preview").classList.add("hidden");
                         }}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -362,12 +442,9 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                   <div className="space-y-4">
                     {post.comments && post.comments.length > 0 ? (
                       post.comments
-                        .filter(comment => !comment.parentId) // Only show top-level comments here
+                        .filter((comment) => !comment.parentId)
                         .map((comment) => (
-                          <div
-                            key={comment.id}
-                            className="bg-gray-50 p-4 rounded-lg"
-                          >
+                          <div key={comment._id} className="bg-gray-50 p-4 rounded-lg relative">
                             <div className="flex items-start justify-between">
                               <div className="flex items-start gap-3">
                                 <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -377,57 +454,108 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                 </div>
                                 <div>
                                   <div className="flex items-center gap-2">
-                                    <span className="font-medium">
-                                      {comment.author}
-                                    </span>
+                                    <span className="font-medium">{comment.author}</span>
                                     <span className="text-xs text-gray-500">
-                                      {new Date(
-                                        comment.createdAt
-                                      ).toLocaleDateString()}
+                                      {new Date(comment.createdAt).toLocaleDateString()}
                                     </span>
                                   </div>
-                                  <p className="mt-1 text-gray-700">
-                                    {comment.text}
-                                  </p>
-                                  
-                                  {/* Comment interaction buttons */}
+                                  <p className="mt-1 text-gray-700">{comment.content}</p>
+                                  {comment.image && (
+                                    <img
+                                      src={comment.image}
+                                      alt="Comment attachment"
+                                      className="mt-2 max-w-xs rounded-lg"
+                                    />
+                                  )}
                                   <div className="flex items-center mt-2 space-x-4">
-                                    <button 
-                                      className={`flex items-center text-xs space-x-1 ${likedComments[comment.id] ? 'text-blue-500' : 'text-gray-500'} hover:text-blue-500`}
-                                      onClick={() => handleLikeComment(comment.id)}
+                                    <button
+                                      className={`flex items-center text-xs space-x-1 ${
+                                        likedComments[comment._id]
+                                          ? "text-blue-500"
+                                          : "text-gray-500"
+                                      } hover:text-blue-500`}
+                                      onClick={() => handleLikeComment(comment._id)}
                                     >
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill={likedComments[comment.id] ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4"
+                                        fill={likedComments[comment._id] ? "currentColor" : "none"}
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={1.5}
+                                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                        />
                                       </svg>
-                                      <span>{likedComments[comment.id] ? ((comment.likes || 0) + 1) : (comment.likes || 0)}</span>
+                                      <span>
+                                        {(comment.likes || 0) +
+                                          (likedComments[comment._id] ? 1 : 0)}
+                                      </span>
                                     </button>
-                                    
-                                    <button 
-                                      className={`flex items-center text-xs space-x-1 ${dislikedComments[comment.id] ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
-                                      onClick={() => handleDislikeComment(comment.id)}
+                                    <button
+                                      className={`flex items-center text-xs space-x-1 ${
+                                        dislikedComments[comment._id]
+                                          ? "text-red-500"
+                                          : "text-gray-500"
+                                      } hover:text-red-500`}
+                                      onClick={() => handleDislikeComment(comment._id)}
                                     >
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill={dislikedComments[comment.id] ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4"
+                                        fill={
+                                          dislikedComments[comment._id]
+                                            ? "currentColor"
+                                            : "none"
+                                        }
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={1.5}
+                                          d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c-.5 0-.905-.405-.905-.905 0 .714.211 1.412.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                        />
                                       </svg>
-                                      <span>{dislikedComments[comment.id] ? ((comment.dislikes || 0) + 1) : (comment.dislikes || 0)}</span>
+                                      <span>
+                                        {(comment.dislikes || 0) +
+                                          (dislikedComments[comment._id] ? 1 : 0)}
+                                      </span>
                                     </button>
-                                    
-                                    <button 
+                                    <button
                                       className="flex items-center text-xs space-x-1 text-gray-500 hover:text-green-500"
-                                      onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                                      onClick={() =>
+                                        setReplyingTo(
+                                          replyingTo === comment._id ? null : comment._id
+                                        )
+                                      }
                                     >
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={1.5}
+                                          d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                                        />
                                       </svg>
                                       <span>Reply</span>
                                     </button>
                                   </div>
                                 </div>
                               </div>
-
                               <button
                                 className="text-gray-400 hover:text-gray-600"
-                                onClick={() => toggleOptions(comment.id)}
+                                onClick={() => toggleOptions(comment._id)}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -439,8 +567,7 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                 </svg>
                               </button>
                             </div>
-
-                            {showOptions === comment.id && (
+                            {showOptions === comment._id && (
                               <div className="absolute right-4 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                                 <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                   Edit
@@ -450,9 +577,7 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                 </button>
                               </div>
                             )}
-                            
-                            {/* Reply input field */}
-                            {replyingTo === comment.id && (
+                            {replyingTo === comment._id && (
                               <div className="flex flex-col gap-2">
                                 <div className="flex items-center gap-2">
                                   <input
@@ -462,55 +587,35 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                     onChange={(e) => setReplyText(e.target.value)}
                                     className="w-full mt-4 py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
                                   />
-                                  <label htmlFor={`reply-image-${comment.id}`} className="cursor-pointer p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <input 
-                                      type="file" 
-                                      id={`reply-image-${comment.id}`} 
-                                      accept="image/*" 
-                                      className="hidden mt-4" 
-                                      onChange={(e) => {
-                                        // Handle image upload here
-                                        console.log("Image selected:", e.target.files[0]);
-                                        // You would typically upload to server or convert to base64
-                                      }}
-                                    />
-                                  </label>
                                   <button
-                                    onClick={() => handleReplySubmit(comment.id)}
+                                    onClick={() => handleReplySubmit(comment._id)}
                                     className="bg-[#12153d] text-white p-2 rounded-full hover:bg-[#12153d]/90 cursor-pointer transition-colors flex-shrink-0"
                                   >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 rotate-90"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                      />
                                     </svg>
                                   </button>
-                                  {/* Preview area for selected image */}
-                                  <div id={`image-preview-${comment.id}`} className="hidden mt-2 relative">
-                                    <img src="" alt="Preview" className="max-h-32 rounded-lg" />
-                                    <button 
-                                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                                      onClick={() => {
-                                        // Clear the file input and hide preview
-                                        document.getElementById(`reply-image-${comment.id}`).value = '';
-                                        document.getElementById(`image-preview-${comment.id}`).classList.add('hidden');
-                                      }}
-                                    >
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                      </svg>
-                                    </button>
-                                  </div>
                                 </div>
                               </div>
                             )}
-                            
-                            {/* Display replies if any */}
                             {post.comments
-                              .filter(reply => reply.parentId === comment.id)
-                              .map(reply => (
-                                <div key={reply.id} className="mt-3 pl-10 pt-3 border-t border-gray-100">
+                              .filter((reply) => reply.parentId === comment._id)
+                              .map((reply) => (
+                                <div
+                                  key={reply._id}
+                                  className="mt-3 pl-10 pt-3 border-t border-gray-100"
+                                >
                                   <div className="flex items-start gap-2">
                                     <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                                       <span className="text-gray-600 font-bold text-sm">
@@ -519,40 +624,89 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                                     </div>
                                     <div className="flex-1">
                                       <div className="flex items-center gap-2">
-                                        <span className="font-medium text-sm">{reply.author}</span>
+                                        <span className="font-medium text-sm">
+                                          {reply.author}
+                                        </span>
                                         <span className="text-xs text-gray-500">
                                           {new Date(reply.createdAt).toLocaleDateString()}
                                         </span>
                                       </div>
-                                      <p className="text-sm text-gray-700">{reply.text}</p>
-                                      
-                                      {/* Reply interaction buttons */}
+                                      <p className="text-sm text-gray-700">{reply.content}</p>
+                                      {reply.image && (
+                                        <img
+                                          src={reply.image}
+                                          alt="Reply attachment"
+                                          className="mt-2 max-w-xs rounded-lg"
+                                        />
+                                      )}
                                       <div className="flex items-center mt-2 space-x-4">
-                                        <button 
-                                          className={`flex items-center text-xs space-x-1 ${likedComments[reply.id] ? 'text-blue-500' : 'text-gray-500'} hover:text-blue-500`}
-                                          onClick={() => handleLikeComment(reply.id)}
+                                        <button
+                                          className={`flex items-center text-xs space-x-1 ${
+                                            likedComments[reply._id]
+                                              ? "text-blue-500"
+                                              : "text-gray-500"
+                                          } hover:text-blue-500`}
+                                          onClick={() => handleLikeComment(reply._id)}
                                         >
-                                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill={likedComments[reply.id] ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-3 w-3"
+                                            fill={
+                                              likedComments[reply._id]
+                                                ? "currentColor"
+                                                : "none"
+                                            }
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={1.5}
+                                              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                            />
                                           </svg>
-                                          <span>{likedComments[reply.id] ? ((reply.likes || 0) + 1) : (reply.likes || 0)}</span>
+                                          <span>
+                                            {(reply.likes || 0) +
+                                              (likedComments[reply._id] ? 1 : 0)}
+                                          </span>
                                         </button>
-                                        
-                                        <button 
-                                          className={`flex items-center text-xs space-x-1 ${dislikedComments[reply.id] ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
-                                          onClick={() => handleDislikeComment(reply.id)}
+                                        <button
+                                          className={`flex items-center text-xs space-x-1 ${
+                                            dislikedComments[reply._id]
+                                              ? "text-red-500"
+                                              : "text-gray-500"
+                                          } hover:text-red-500`}
+                                          onClick={() => handleDislikeComment(reply._id)}
                                         >
-                                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill={dislikedComments[reply.id] ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-3 w-3"
+                                            fill={
+                                              dislikedComments[reply._id]
+                                                ? "currentColor"
+                                                : "none"
+                                            }
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={1.5}
+                                              d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c-.5 0-.905-.405-.905-.905 0 .714.211 1.412.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                            />
                                           </svg>
-                                          <span>{dislikedComments[reply.id] ? ((reply.dislikes || 0) + 1) : (reply.dislikes || 0)}</span>
+                                          <span>
+                                            {(reply.dislikes || 0) +
+                                              (dislikedComments[reply._id] ? 1 : 0)}
+                                          </span>
                                         </button>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              ))
-                            }
+                              ))}
                           </div>
                         ))
                     ) : (
@@ -563,7 +717,6 @@ const ShowForum = ({ posts, onAddComment, onLikeComment, onDislikeComment }) => 
                   </div>
                 </div>
               </section>
-              {/* Comments Section */}
             </div>
           </div>
         </div>

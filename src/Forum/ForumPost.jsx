@@ -1,43 +1,28 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// Reusable PostCard component
-export const ForumPosts = ({ post, onLike, onDislike }) => {
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
-  const [reactionType, setReactionType] = useState(null); // Add this missing state
 
-  const handleLike = (e) => {
+export const ForumPosts = ({ post, onReact }) => {
+  const [reacted, setReacted] = useState(post.userReacted || false);
+  const [reactionType, setReactionType] = useState(post.userReaction || null);
+
+  const handleReaction = (e, type) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const newLikedState = !liked;
-    setLiked(newLikedState);
-    
-    // If toggling on, set default reaction type
-    if (newLikedState && !reactionType) {
-      setReactionType('like');
+    if (reacted && reactionType !== type) {
+      // Prevent changing to a different reaction
+      return;
     }
-    // If toggling off, clear reaction type
-    else if (!newLikedState) {
-      setReactionType(null);
-    }
-    
-    if (onLike) {
-      onLike(post.id, newLikedState, reactionType || 'like');
-    }
-  };
-  const handleDislike = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDisliked(!disliked);
-    if (onDislike) {
-      onDislike(post.id, !disliked);
+    const newReactedState = !reacted || reactionType !== type;
+    setReacted(newReactedState);
+    setReactionType(newReactedState ? type : null);
+    if (onReact) {
+      onReact(post._id, newReactedState ? type : null);
     }
   };
 
   return (
     <div className="bg-white w-full md:w-[45rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
-      <Link to={`/forum/${post.id}`} className="block">
+      <Link to={`/forum/${post._id}`} className="block">
         <div className="p-4">
           {/* Author info */}
           <div className="flex items-center mb-2">
@@ -105,28 +90,28 @@ export const ForumPosts = ({ post, onLike, onDislike }) => {
       {/* Interaction options row */}
       <div className="px-4 py-3 flex justify-start space-x-11">
         <div className="flex items-center space-x-6">
-          {/* Like button */}
+          {/* Reaction button */}
           <div className="relative group">
             <button
               className={`flex items-center space-x-1 ${
-                liked ? "text-blue-500" : "text-gray-500"
+                reacted ? "text-blue-500" : "text-gray-500"
               } hover:text-blue-500 transition-colors`}
-              onClick={handleLike}
+              onClick={(e) => handleReaction(e, "like")}
             >
               {reactionType ? (
                 <span className="text-xl" role="img" aria-label={reactionType}>
-                  {reactionType === 'like' && '👍'}
-                  {reactionType === 'love' && '❤️'}
-                  {reactionType === 'laugh' && '😂'}
-                  {reactionType === 'wow' && '😮'}
-                  {reactionType === 'angry' && '😡'}
-                  {reactionType === 'sad' && '😢'}
+                  {reactionType === "like" && "👍"}
+                  {reactionType === "love" && "❤️"}
+                  {reactionType === "laugh" && "😂"}
+                  {reactionType === "wow" && "😮"}
+                  {reactionType === "angry" && "😡"}
+                  {reactionType === "sad" && "😢"}
                 </span>
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
-                  fill={liked ? "currentColor" : "none"}
+                  fill={reacted ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
@@ -139,130 +124,70 @@ export const ForumPosts = ({ post, onLike, onDislike }) => {
                 </svg>
               )}
               <span className="text-xs">
-                {liked ? (post.likes || 0) + 1 : post.likes || 0}
+                {post.reactions
+                  ? Object.values(post.reactions).reduce((sum, count) => sum + (count || 0), 0)
+                  : 0}
               </span>
             </button>
-            
-            {/* Emoji reaction panel - appears on hover */}
-            <div className="absolute bottom-full left-0 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100 origin-bottom-left">
+
+            {/* Reaction panel - appears on hover, disabled if reacted */}
+            <div className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left ${reacted ? 'opacity-0 invisible' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:scale-100'}`}>
               <div className="bg-white rounded-full shadow-lg p-1 flex space-x-1 border border-gray-200">
-                {/* Like */}
-                <button 
+                <button
                   className="p-1 hover:bg-blue-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setLiked(true);
-                    setReactionType('like');
-                    if (onLike) onLike(post.id, true, 'like');
-                  }}
+                  onClick={(e) => handleReaction(e, "like")}
                 >
-                  <span className="text-xl" role="img" aria-label="like">👍</span>
+                  <span className="text-xl" role="img" aria-label="like">
+                    👍
+                  </span>
                 </button>
-                
-                {/* Love */}
-                <button 
+                <button
                   className="p-1 hover:bg-red-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setLiked(true);
-                    setReactionType('love');
-                    if (onLike) onLike(post.id, true, 'love');
-                  }}
+                  onClick={(e) => handleReaction(e, "love")}
                 >
-                  <span className="text-xl" role="img" aria-label="love">❤️</span>
+                  <span className="text-xl" role="img" aria-label="love">
+                    ❤️
+                  </span>
                 </button>
-                
-                {/* Laugh */}
-                <button 
+                <button
                   className="p-1 hover:bg-yellow-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setLiked(true);
-                    setReactionType('laugh');
-                    if (onLike) onLike(post.id, true, 'laugh');
-                  }}
+                  onClick={(e) => handleReaction(e, "laugh")}
                 >
-                  <span className="text-xl" role="img" aria-label="laugh">😂</span>
+                  <span className="text-xl" role="img" aria-label="laugh">
+                    😂
+                  </span>
                 </button>
-                
-                {/* Wow */}
-                <button 
+                <button
                   className="p-1 hover:bg-yellow-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setLiked(true);
-                    setReactionType('wow');
-                    if (onLike) onLike(post.id, true, 'wow');
-                  }}
+                  onClick={(e) => handleReaction(e, "wow")}
                 >
-                  <span className="text-xl" role="img" aria-label="wow">😮</span>
+                  <span className="text-xl" role="img" aria-label="wow">
+                    😮
+                  </span>
                 </button>
-                
-                {/* Angry */}
-                <button 
+                <button
                   className="p-1 hover:bg-orange-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setDisliked(true);
-                    setReactionType('angry');
-                    if (onDislike) onDislike(post.id, true, 'angry');
-                  }}
+                  onClick={(e) => handleReaction(e, "angry")}
                 >
-                  <span className="text-xl" role="img" aria-label="angry">😡</span>
+                  <span className="text-xl" role="img" aria-label="angry">
+                    😡
+                  </span>
                 </button>
-                
-                {/* Sad */}
-                <button 
+                <button
                   className="p-1 hover:bg-blue-100 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setDisliked(true);
-                    setReactionType('sad');
-                    if (onDislike) onDislike(post.id, true, 'sad');
-                  }}
+                  onClick={(e) => handleReaction(e, "sad")}
                 >
-                  <span className="text-xl" role="img" aria-label="sad">😢</span>
+                  <span className="text-xl" role="img" aria-label="sad">
+                    😢
+                  </span>
                 </button>
               </div>
               <div className="w-3 h-3 bg-white border-l border-b border-gray-200 transform rotate-45 absolute -bottom-1.5 left-5"></div>
             </div>
           </div>
 
-          {/* Dislike button */}
-          {/* <button
-            className={`flex items-center space-x-1 ${
-              disliked ? "text-red-500" : "text-gray-500"
-            } hover:text-red-500 transition-colors`}
-            onClick={handleDislike}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill={disliked ? "currentColor" : "none"}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
-              />
-            </svg>
-            <span className="text-xs">
-              {disliked ? (post.dislikes || 0) + 1 : post.dislikes || 0}
-            </span>
-          </button> */}
-
           {/* Comment button */}
-          <Link to={`/forum/${post.id}`}>
-            {" "}
+          <Link to={`/forum/${post._id}`}>
             <button className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
