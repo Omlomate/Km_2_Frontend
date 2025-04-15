@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Home, Users, Settings, BarChart, FileText, Tag } from "lucide-react";
+import { Home, Users, BarChart, FileText, Tag, MessageSquare } from "lucide-react";
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -20,6 +20,7 @@ const AdminPanel = () => {
     { name: "Ads Control", icon: <BarChart size={20} /> },
     { name: "Blog Post", icon: <FileText size={20} /> },
     { name: "Control Meta Tags", icon: <Tag size={20} /> },
+    { name: "Forum Posts", icon: <MessageSquare size={20} /> },
   ];
 
   // Fetch user count & users
@@ -61,7 +62,7 @@ const AdminPanel = () => {
 
   useEffect(() => {
     fetchUserData();
-    fetchBlogCounts(); // Fetch blog counts on mount
+    fetchBlogCounts();
   }, []);
 
   useEffect(() => {
@@ -75,6 +76,8 @@ const AdminPanel = () => {
       navigate("/blog-post");
     } else if (name === "Control Meta Tags") {
       navigate("/control-meta-tags");
+    } else if (name === "Forum Posts") {
+      navigate("/admin/forum-posts");
     } else {
       setActiveTab(name);
     }

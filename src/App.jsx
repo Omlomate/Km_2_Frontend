@@ -31,6 +31,7 @@ import CreateForum from "./Forum/CreateForum.jsx";
 import ShowForum from "./Forum/ShowForum.jsx";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Footer from "./Components/Footer/Footer.jsx";
+import ForumPosts from "./adminPages/ForumPosts.jsx";
 
 
 
@@ -115,6 +116,15 @@ const AppContent = () => {
           </AdminRoute>
         }
       />
+      <Route
+        path="/admin/forum-posts"
+        element={
+          <AdminRoute>
+            <ForumPosts />
+          </AdminRoute>
+        }
+      />
+      {/* Public Routes */}
       {/* Forum */}
       <Route path="/forum" element={<Forum posts={posts} />} />
       <Route path="/create" element={<CreateForum onAddPost={addPost} />} />

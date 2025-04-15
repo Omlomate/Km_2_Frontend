@@ -10,10 +10,23 @@ const Forum = () => {
   const [sort, setSort] = useState("newest");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
+
+  // Check localStorage for isAdmin on component mount
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      try {
+        const parsedData = JSON.parse(userData);
+        setIsAdmin(parsedData.isAdmin === true);
+      } catch (e) {
+        console.error("Error parsing userData from localStorage:", e);
+      }
+    }
+  }, []);
 
   const handleReact = async (postId, reactionType) => {
     try {
-      // Optimistically update UI
       setPosts(posts.map(post => {
         if (post._id === postId) {
           const newReactions = { ...post.reactions };
@@ -43,7 +56,6 @@ const Forum = () => {
       );
     } catch (error) {
       console.error("Error reacting to post:", error);
-      // Revert optimistic update
       setPosts(posts.map(post => {
         if (post._id === postId) {
           return { ...post, reactions: post.reactions, userReaction: post.userReaction, userReacted: !!post.userReaction };
@@ -58,13 +70,11 @@ const Forum = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("jwt");
-        const response = await axios.get("https://www.keywordraja.com/api/forum/posts", {
+        const response = await axios.get("http://localhost:5000/api/forum/posts", {
           params: { search, time: timeFilter, sort },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           cache: "no-store",
         });
-
-        console.log("API Response:", response.data);
 
         if (Array.isArray(response.data)) {
           const userId = token ? JSON.parse(atob(token.split('.')[1])).id : null;
@@ -102,7 +112,6 @@ const Forum = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* Header section with search and create button */}
       <div className="max-w-7xl mx-auto px-4 mt-6 flex items-center gap-4">
         <div className="bg-white rounded-lg border border-gray-200 flex items-center p-2 flex-1 shadow-sm">
           <input
@@ -131,7 +140,6 @@ const Forum = () => {
 
       <div className="max-w-7xl mx-auto px-4 mt-6 flex items-center gap-2">
         <div className="flex flex-col md:flex-row gap-2">
-          {/* Left Sidebar with Options */}
           <div className="w-full md:w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
               <Link to="/profile-edit" className="flex items-center gap-3 mb-6">
@@ -166,7 +174,6 @@ const Forum = () => {
             </div>
           </div>
 
-          {/* Right Content Area with Posts */}
           <div className="flex-1">
             <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
               <div className="flex justify-between items-center">
@@ -212,7 +219,6 @@ const Forum = () => {
                     console.warn(`Post at index ${index} missing _id:`, post);
                     return null;
                   }
-                  console.log(`Rendering post ${index}:`, { id: post._id, title: post.title });
                   return (
                     <div key={post._id}>
                       <Link
@@ -224,6 +230,7 @@ const Forum = () => {
                         <ForumPosts
                           post={post}
                           onReact={handleReact}
+                          isAdmin={isAdmin} // Pass isAdmin to ForumPosts
                         />
                       </Link>
                     </div>
@@ -248,7 +255,6 @@ const Forum = () => {
             )}
           </div>
 
-          {/* Right Sidebar for Ads (visible on larger screens) */}
           <div className="hidden lg:block w-64 flex-shrink-0 space-y-4">
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <h3 className="font-medium mb-3">Popular Topics</h3>
