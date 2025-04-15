@@ -70,7 +70,7 @@ const Forum = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("jwt");
-        const response = await axios.get("http://localhost:5000/api/forum/posts", {
+        const response = await axios.get("https://www.keywordraja.com/api/forum/posts", {
           params: { search, time: timeFilter, sort },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           cache: "no-store",
