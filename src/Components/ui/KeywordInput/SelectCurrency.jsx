@@ -14,6 +14,7 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
   };
 
   const currencies = [
+    { "name": "Select Currency", "symbol": " " },
     { "name": "US Dollar", "symbol": "$" },
     { "name": "Indian Rupee", "symbol": "inr" },
     { "name": "UAE Dirham", "symbol": "aed" },

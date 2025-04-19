@@ -84,6 +84,49 @@ export const KeywordResearch = () => {
     }
   };
 
+  // Load video player script
+  useEffect(() => {
+    // Function to load the video player
+    const loadVideoPlayer = () => {
+      // Remove any existing scripts first to avoid conflicts
+      const existingScripts = document.querySelectorAll('script[src*="kolorowey.com"], script[data-playerPro]');
+      existingScripts.forEach(script => script.remove());
+      
+      // Add the main video script
+      const videoScript = document.createElement('script');
+      videoScript.src = 'https://stream.kolorowey.com/player/video.js';
+      videoScript.async = true;
+      
+      // When the first script loads, add the player initialization script
+      videoScript.onload = () => {
+        // Initialize the player
+        const playerScript = document.createElement('script');
+        playerScript.innerHTML = `
+          (function(){
+            (playerPro = window.playerPro || []).push({
+              id: "p2P21nhppseX"
+            });
+          })();
+        `;
+        document.body.appendChild(playerScript);
+      };
+      
+      document.body.appendChild(videoScript);
+    };
+    
+    // Load the video player when component mounts or after search results
+    if (keywordData) {
+      // Small timeout to ensure DOM is ready
+      setTimeout(loadVideoPlayer, 100);
+    }
+    
+    // Cleanup function
+    return () => {
+      const scripts = document.querySelectorAll('script[src*="kolorowey.com"], script[data-playerPro]');
+      scripts.forEach(script => script.remove());
+    };
+  }, [keywordData]);
+
   return (
     <>
       <Helmet>
@@ -196,17 +239,19 @@ export const KeywordResearch = () => {
                               </div>
                             )}
                           </div>
-                          <div className="bg-[#12153d] w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg shadow-md">
+                          <div className="bg-[#12153d]/0 w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg ">
                             <div className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
                               <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
                                 AD
                               </h1>
                             </div>
                           </div>
-                          <div className="w-full sm:w-[300px] h-[180px] sm:h-[250px] bg-gray-100 rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
-                            <h1 className="text-sm sm:text-lg font-bold text-gray-400">
-                              VIDEO AD
-                            </h1>
+                          <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                              <div id="p2P21nhppseX" className="absolute inset-0 w-full h-full">
+                                {/* Video will fill this container completely */}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -218,7 +263,7 @@ export const KeywordResearch = () => {
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-4 sm:p-6 rounded-xl text-center lg:text-left max-w-full mx-auto shadow-md">
+                      <div className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-4 sm:p-6 rounded-xl text-center lg:text-left   mx-auto md:w-[728px] md:w-[90px]shadow-md">
                         {/* <p className="text-xs sm:text-base lg:text-lg flex flex-col sm:flex-row items-center justify-center lg:justify-between">
                           <span>To find more information and get more insights check out </span>
                           <Link

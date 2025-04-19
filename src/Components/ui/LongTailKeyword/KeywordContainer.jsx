@@ -21,7 +21,7 @@ const KeywordContainer = ({ keywordData }) => {
                 {keywordData.keyword}
               </h1>
             </div>
-            <ol className="p-2 sm:p-4 max-h-[300px] sm:max-h-[400px] md:max-h-[500px] overflow-y-auto">
+            <ol className="p-2 sm:p-4 max-h-[300px] sm:max-h-[400px] md:max-h-[604px] overflow-y-auto">
               {keywordData.relatedKeywords?.map((item, index) => (
                 <li key={index} className="p-1 sm:p-1.5 text-xs sm:text-sm md:text-base">
                   {item}
