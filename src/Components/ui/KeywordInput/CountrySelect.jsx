@@ -35,14 +35,11 @@ const CountrySelect = ({ onCountryChange }) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <select
-        className="p-1.5 rounded-xl text-[#12153d] font-light border-2 border-gray-50 
-        outline-none flex-grow appearance-none bg-no-repeat 
-        hover:shadow-[0_0_15px_rgba(229,89,15,0.3)] 
-        hover:border-[#E5590F]
-        focus:shadow-[0_0_20px_rgba(229,89,15,0.4)]
-        focus:border-[#E5590F]"
+        className="w-full p-1.5 rounded-xl text-white font-medium border-none
+        outline-none appearance-none bg-no-repeat 
+        hover:bg-[#d14e0d] transition-all duration-300"
         id="country-select"
         value={selectedCountry}
         onChange={handleChange}
@@ -50,7 +47,6 @@ const CountrySelect = ({ onCountryChange }) => {
           backgroundColor: "#E5590F",
           textAlign: "center",
           backgroundImage: "none",
-          width: "160px",
         }}
       >
         {countries.map((country) => (

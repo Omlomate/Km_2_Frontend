@@ -93,18 +93,33 @@ export const AdCompetition = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="w-full bg-white  pr-4 pl-4  rounded-lg" style={{ fontFamily: "wantedsans" }}>
-        <div className="w-full lg:min-w-[40rem]">
-          <BannerAds />
-        </div>
-        <div className="w-full max-w-[895px] mx-auto mt-2 rounded-lg">
-          <div className="flex items-center lg:min-w-[40rem]">
-            <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+        <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
+          {/* Header */}
+          <div className="w-full py-3 sm:py-6">
+            <div className="animate-fadeIn">
+              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
+                Ad <span className="text-[#E5590F]">Competition</span> Checker
+              </h1>
+              <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
+                Instantly assess ad competition for any keyword. Use Keyword Raja’s ad competition checker to refine your advertising strategy and outperform your rivals.
+              </p>
+            </div>
           </div>
-          <div>
+          {/* Search Input */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
+              <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+            </div>
+          </div>
+          {/* Results */}
+          <div className="w-full mt-6 sm:mt-10">
             {loadingState ? (
-              <div className="flex justify-center">
+              <div className="flex flex-col justify-center items-center h-48 sm:h-80 w-full">
                 <Loader />
+                <p className="mt-3 sm:mt-4 text-xs sm:text-base text-gray-600">
+                  Checking ad competition...
+                </p>
               </div>
             ) : (
               keywordData && (
@@ -112,73 +127,67 @@ export const AdCompetition = () => {
                   <style>
                     {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                   </style>
-                  <div className="flex flex-col lg:flex-row w-full mt-4">
-                    <div className="w-full lg:w-1/2 pr-4">
-                      <div
-                        className="flex flex-col items-center justify-center rounded-lg border-1 border-gray-500 w-[435px] h-[140px]"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h1 className="text-2xl text-[#12153d] font-bold">Ad Competition</h1>
+                  <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
+                    <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
+                      Results for:{" "}
+                      <span className="text-[#E5590F]">
+                        {keywordData?.data?.[0]?.keyword || "Keyword"}
+                      </span>
+                    </h2>
+                    <p className="text-xs sm:text-base text-gray-600 mt-1">
+                      Ad competition score and insights
+                    </p>
+                  </div>
+                  <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
+                    {/* Competition Value Card */}
+                    <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
+                      <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200 flex flex-col items-center">
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Ad Competition</h3>
                         <div className="flex flex-col items-center justify-center mt-2 mb-4">
                           <p className="text-5xl text-[#12153d] font-bold font-sans">
-                            {keywordData?.data[0]?.competition}
+                            {keywordData?.data?.[0]?.competition}
                           </p>
                         </div>
                       </div>
-                      <div
-                        className="w-[435px] h-[140px] p-8 pt-4 pb-4 mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h3 className="text-white mt-3 text-justify">
-                          Scale: Measured on a scale of 0 to 1, with higher numbers
-                          indicating more competition
-                        </h3>
-                        <IndicatorScale value={keywordData?.data[0]?.competition} />
+                      <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
+                        <h3 className="text-lg font-semibold mb-2">Scale</h3>
+                        <p>
+                          Measured on a scale of 0 to 1, with higher numbers indicating more competition.
+                        </p>
+                        <div className="flex justify-center mt-4">
+                          <IndicatorScale value={keywordData?.data?.[0]?.competition} />
+                        </div>
                       </div>
-                      <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25 hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
-                        <h4 className="flex flex-col justify-center items-center text-2xl font-bold">
-                          AD
-                        </h4>
+                      <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center">
+                        <h4 className="text-2xl font-bold">AD</h4>
                       </div>
                     </div>
-                    <div className="mt-0 pl-2">
-                      <div
-                        className="rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h1
-                          className="text-3xl"
-                          style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                    {/* Info and Ads */}
+                    <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
+                      <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+                        <div
+                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
                         >
-                          What is it?
-                        </h1>
-                        <p className="text-md mt-4">
-                          <span className="text-[#E5590F]">Ad Competition</span> is a
-                          measure of how much competition there is for a product, keyword,
-                          or market. It can help businesses understand how to position
-                          themselves in a competitive market.
-                        </p>
+                          <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
+                            What is it?
+                          </h1>
+                          <p className="text-xs sm:text-base text-justify">
+                            <span className="text-[#E5590F] font-medium">
+                              Ad Competition
+                            </span>{" "}
+                            is a measure of how much competition there is for a product, keyword, or market. It can help businesses understand how to position themselves in a competitive market.
+                          </p>
+                        </div>
                       </div>
-                      <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
+                      <div className="bg-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center">
                         <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                       </div>
-                      <div className="mt-4"></div>
-                    </div>
-                    <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center hover:bg-gray-500/50 transition-all duration-300 ease-in-out">
-                      <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                     </div>
                   </div>
-                  <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
-                    <p className="text-md lg:text-lg">
+                  <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
+                    <p className="text-xs sm:text-base">
                       To find more information and get more insights check out{" "}
-                      <span className="text-[#E5590F]">SEO difficulty</span> to understand
-                      your local and global audience.
+                      <span className="text-[#E5590F]">SEO difficulty</span> to understand your local and global audience.
                     </p>
                   </div>
                 </>

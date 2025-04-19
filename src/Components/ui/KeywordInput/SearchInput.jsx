@@ -12,10 +12,30 @@ const SearchInput = ({
   onCurrencyChange = () => {},
 }) => {
   const { searchTerm, setSearchTerm } = useKeywordData();
+  const [inputValue, setInputValue] = useState(searchTerm || "");
   const [country, setCountry] = useState("");
   const [server, setServer] = useState("");
   const [currency, setCurrency] = useState("");
   const location = useLocation();
+
+  // Keep hook and local state in sync
+  React.useEffect(() => {
+    setInputValue(searchTerm || "");
+  }, [searchTerm]);
+
+  // Add global Enter key listener
+  React.useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if (e.key === "Enter") {
+        handleSearch();
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+    // eslint-disable-next-line
+  }, [inputValue, country, server, currency, location.pathname]);
 
   const handleSearch = () => {
     if (location.pathname === "/CPC") {
@@ -29,8 +49,20 @@ const SearchInput = ({
         return;
       }
     }
-    console.log("Searching for:", searchTerm);
-    onSearch(searchTerm);
+    setSearchTerm(inputValue); // Ensure hook is updated
+    console.log("Searching for:", inputValue);
+    onSearch(inputValue);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setSearchTerm(e.target.value);
   };
 
   const handleCountryChange = (selectedCountry) => {
@@ -49,17 +81,18 @@ const SearchInput = ({
   };
 
   return (
-    <div className="flex flex-col justify-around w-full space-y-3 sm:space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+    <div className="flex flex-col justify-around w-full space-y-4">
       <div
-        className="w-full lg:w-1/2 max-w-full shadow-sm p-1 rounded-xl flex items-center border border-gray-400 transition-all duration-300 hover:shadow-lg hover:border-[#E5590F] group"
+        className="w-full max-w-full shadow-sm p-1 rounded-xl flex items-center border border-gray-400 transition-all duration-300 hover:shadow-lg hover:border-[#E5590F] group"
         id="one"
       >
         <input
           className="border-none outline-none flex-grow p-[6.5px] text-sm sm:text-base"
           type="text"
           placeholder="Search keyword..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
         />
         <div className="transition-transform duration-300 hover:scale-110">
           <i
@@ -68,17 +101,18 @@ const SearchInput = ({
           ></i>
         </div>
       </div>
-      <div
-        className="w-full lg:w-1/2 flex sm:flex-row justify-center items-normal
-        0 border border-gray-400 p-2 rounded-xl space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-14 transition-all duration-300 hover:shadow-lg hover:border-[#E5590F]"
-        id="two"
-      >
-        <CountrySelect onCountryChange={handleCountryChange} />
-        {location.pathname === "/CPC" ? (
-          <SelectCurrency onCurrencyChange={handleCurrencyChange} />
-        ) : (
-          <ServerSelect onServerChange={handleServerChange} />
-        )}
+      
+      <div className="w-full flex flex-row justify-center items-center gap-4">
+        <div className="w-1/2 flex justify-center">
+          <CountrySelect onCountryChange={handleCountryChange} />
+        </div>
+        <div className="w-1/2 flex justify-center">
+          {location.pathname === "/CPC" ? (
+            <SelectCurrency onCurrencyChange={handleCurrencyChange} />
+          ) : (
+            <ServerSelect onServerChange={handleServerChange} />
+          )}
+        </div>
       </div>
     </div>
   );

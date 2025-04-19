@@ -94,22 +94,37 @@ export const CPCPage = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="w-full bg-white  pr-4 pl-4 rounded-lg" style={{ fontFamily: "wantedsans" }}>
-        <div className="w-full lg:min-w-[40rem]">
-          <BannerAds />
-        </div>
-        <div className="w-full max-w-[895px] mx-auto mt-2 rounded-lg">
-          <div className="flex items-center lg:min-w-[40rem]">
-            <SearchInput
-              onSearch={handleSearch}
-              onCountryChange={handleCountryChange}
-              onCurrencyChange={handleCurrencyChange}
-            />
+      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+        <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
+          {/* Header */}
+          <div className="w-full py-3 sm:py-6">
+            <div className="animate-fadeIn">
+              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
+                Cost <span className="text-[#E5590F]">Per Click</span> Calculator
+              </h1>
+              <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
+                Instantly calculate CPC for any keyword. Use Keyword Raja’s CPC calculator to optimize your ad spend and maximize ROI.
+              </p>
+            </div>
           </div>
-          <div>
+          {/* Search Input */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
+              <SearchInput
+                onSearch={handleSearch}
+                onCountryChange={handleCountryChange}
+                onCurrencyChange={handleCurrencyChange}
+              />
+            </div>
+          </div>
+          {/* Results */}
+          <div className="w-full mt-6 sm:mt-10">
             {loadingState ? (
-              <div className="flex justify-center">
+              <div className="flex flex-col justify-center items-center h-48 sm:h-80 w-full">
                 <Loader />
+                <p className="mt-3 sm:mt-4 text-xs sm:text-base text-gray-600">
+                  Calculating CPC...
+                </p>
               </div>
             ) : (
               keywordData && (
@@ -117,69 +132,61 @@ export const CPCPage = () => {
                   <style>
                     {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                   </style>
-                  <div className="flex flex-col lg:flex-row w-full mt-4">
-                    <div className="w-full lg:w-1/2 pr-4">
-                      <div
-                        className="flex flex-col items-center justify-center rounded-lg border-1 border-gray-500 w-[435px] h-[140px]"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h1 className="text-2xl text-[#12153d] font-bold">Cost Per Click</h1>
-                        <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1">
-                          <p className="p-2">{keywordData?.data[0]?.cpc?.currency}</p>
-                          <h1 className="p-2">{keywordData?.data[0]?.cpc?.value}</h1>
+                  <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
+                    <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
+                      Results for:{" "}
+                      <span className="text-[#E5590F]">
+                        {keywordData?.data?.[0]?.keyword || "Keyword"}
+                      </span>
+                    </h2>
+                    <p className="text-xs sm:text-base text-gray-600 mt-1">
+                      CPC and keyword value insights
+                    </p>
+                  </div>
+                  <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
+                    {/* CPC Value Card */}
+                    <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
+                      <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200 flex flex-col items-center">
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Cost Per Click</h3>
+                        <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1 items-center">
+                          <span className="p-2">{keywordData?.data?.[0]?.cpc?.currency}</span>
+                          <span className="p-2">{keywordData?.data?.[0]?.cpc?.value}</span>
                         </div>
                       </div>
-                      <div
-                        className="w-[435px] h-[140px] mt-4 rounded-lg bg-[#12153d] flex flex-col items-center justify-center"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h3 className="text-white p-8 text-justify">
-                          CPC for SEO depends entirely on your industry and desired ROI, a
-                          good CPC allows you to achieve your marketing goals while
-                          maintaining a positive ROI
-                        </h3>
-                      </div>
-                      <div className="w-[336px] h-[280px] bg-gray-400 mt-4 rounded-lg flex flex-col items-center justify-center ml-25">
-                        <h4 className="flex flex-col justify-center items-center text-2xl font-bold">
-                          AD
-                        </h4>
-                      </div>
-                    </div>
-                    <div className="mt-0 pl-2">
-                      <div
-                        className="rounded-lg bg-[#12153d] w-[300px] h-[330px] p-8 text-white"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h1
-                          className="text-3xl"
-                          style={{ fontFamily: "Space Grotesk, sans-serif" }}
-                        >
-                          What is it?
-                        </h1>
-                        <p className="text-md mt-4">
-                          <span className="text-[#E5590F]">CPC</span> is that’s the highest
-                          amount that you're willing to pay for a click on your ad. Your
-                          max. CPC is the most you'll be charged for a click, but you'll
-                          often be charged less - sometimes much less.
+                      <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
+                        <h3 className="text-lg font-semibold mb-2">CPC for SEO</h3>
+                        <p>
+                          CPC for SEO depends entirely on your industry and desired ROI. A good CPC allows you to achieve your marketing goals while maintaining a positive ROI.
                         </p>
                       </div>
-                      <div className="bg-gray-300 h-[250px] w-full sm:w-[300px] mt-4 rounded-md flex justify-center items-center">
+                      <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center">
+                        <h4 className="text-2xl font-bold">AD</h4>
+                      </div>
+                    </div>
+                    {/* Info and Ads */}
+                    <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
+                      <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+                        <div
+                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
+                        >
+                          <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
+                            What is it?
+                          </h1>
+                          <p className="text-xs sm:text-base text-justify">
+                            <span className="text-[#E5590F] font-medium">
+                              CPC
+                            </span>{" "}
+                            is the highest amount that you're willing to pay for a click on your ad. Your max. CPC is the most you'll be charged for a click, but you'll often be charged less—sometimes much less.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="bg-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center">
                         <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                       </div>
-                      <div className="mt-4"></div>
-                    </div>
-                    <div className="bg-gray-300 h-[600px] w-full sm:w-[120px] ml-0 sm:ml-4 rounded-md flex justify-center items-center">
-                      <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                     </div>
                   </div>
-                  <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
-                    <p className="text-md lg:text-lg">
+                  <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
+                    <p className="text-xs sm:text-base">
                       To find more information and get more insights check out{" "}
                       <a href="#" className="text-[#E5590F]">
                         SEO difficulty

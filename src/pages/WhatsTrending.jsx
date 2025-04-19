@@ -128,18 +128,33 @@ const WhatsTrending = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="w-full bg-white p-5 rounded-lg" style={{ fontFamily: "wantedsans" }}>
-        <div className="w-full lg:min-w-[40rem]">
-          <BannerAds />
-        </div>
-        <div className="w-full max-w-[895px] mx-auto mt-2 rounded-lg">
-          <div className="w-full lg:min-w-[40rem]">
-            <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+        <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
+          {/* Header */}
+          <div className="w-full py-3 sm:py-6">
+            <div className="animate-fadeIn">
+              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
+                What's <span className="text-[#E5590F]">Trending</span> Now?
+              </h1>
+              <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
+                Discover trending keywords and analyze their popularity over time. Stay ahead of the curve with Keyword Raja’s trend insights and make smarter SEO decisions.
+              </p>
+            </div>
           </div>
-          <div>
+          {/* Search Input */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
+              <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+            </div>
+          </div>
+          {/* Results */}
+          <div className="w-full mt-6 sm:mt-10">
             {loadingState ? (
-              <div className="flex justify-center">
+              <div className="flex flex-col justify-center items-center h-48 sm:h-80 w-full">
                 <Loader />
+                <p className="mt-3 sm:mt-4 text-xs sm:text-base text-gray-600">
+                  Fetching keyword trends...
+                </p>
               </div>
             ) : (
               keywordData && (
@@ -147,79 +162,79 @@ const WhatsTrending = () => {
                   <style>
                     {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                   </style>
-                  <div className="flex flex-col lg:flex-row w-full mt-4">
-                    <div className="w-full lg:w-1/2 border-1 border-gray-500 rounded-lg">
-                      <div className="flex flex-col justify-center items-center mt-6">
-                        <h1
-                          className="text-2xl font-bold text-[#12153D] flex flex-col justify-center items-center"
-                          style={{ fontFamily: "Space Grotesk, sans-serif" }}
-                        >
-                          What's Trending
-                        </h1>
-                        <Bargraph data={graphData} />
-                        <div className="flex items-center justify-center mt-2">
-                          <div className="w-4 h-4 bg-[#12153D] mr-2 flex items-center justify-center">
-                            <div className="w-2 h-2 bg-[#12153d] rounded-full"></div>
+                  <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
+                    <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
+                      Results for:{" "}
+                      <span className="text-[#E5590F]">
+                        {keywordData.keyword || "Keyword"}
+                      </span>
+                    </h2>
+                    <p className="text-xs sm:text-base text-gray-600 mt-1">
+                      Keyword trend analysis and volume insights
+                    </p>
+                  </div>
+                  <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
+                    {/* Trend Graph and Controls */}
+                    <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
+                      <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">What's Trending</h3>
+                        <div className="flex flex-col items-center space-y-4">
+                          <Bargraph data={graphData} />
+                          <div className="flex items-center justify-center mt-2">
+                            <div className="w-4 h-4 bg-[#12153D] mr-2 flex items-center justify-center">
+                              <div className="w-2 h-2 bg-[#12153d] rounded-full"></div>
+                            </div>
+                            <span className="text-[#12153D] font-medium">Monthly Trend</span>
                           </div>
-                          <h1 className="text-[#12153D] font-medium">Monthly Trend</h1>
                         </div>
                       </div>
-                      <div
-                        className="bg-[#12153d] rounded-lg p-8 flex flex-col justify-center items-center space-y-2 mt-13.5"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <button
-                          onClick={() => handleTimeRangeChange(8)}
-                          className="p-2 font-bold text-md bg-white rounded-full pr-15 pl-15 hover:bg-[#E5590F] hover:text-white"
-                        >
-                          Last 8 Months
-                        </button>
-                        <button
-                          onClick={() => handleTimeRangeChange(10)}
-                          className="p-2 font-bold text-md bg-white rounded-full pr-15 pl-15 hover:bg-[#E5590F] hover:text-white"
-                        >
-                          Last 10 Months
-                        </button>
-                        <button
-                          onClick={() => handleTimeRangeChange(12)}
-                          className="p-2 font-bold text-md bg-white rounded-full pr-15 pl-15 hover:bg-[#E5590F] hover:text-white"
-                        >
-                          Last 12 Months
-                        </button>
+                      <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center">
+                          <button
+                            onClick={() => handleTimeRangeChange(8)}
+                            className="p-2 font-bold text-md bg-white text-[#12153D] rounded-full px-6 hover:bg-[#E5590F] hover:text-white transition"
+                          >
+                            Last 8 Months
+                          </button>
+                          <button
+                            onClick={() => handleTimeRangeChange(10)}
+                            className="p-2 font-bold text-md bg-white text-[#12153D] rounded-full px-6 hover:bg-[#E5590F] hover:text-white transition"
+                          >
+                            Last 10 Months
+                          </button>
+                          <button
+                            onClick={() => handleTimeRangeChange(12)}
+                            className="p-2 font-bold text-md bg-white text-[#12153D] rounded-full px-6 hover:bg-[#E5590F] hover:text-white transition"
+                          >
+                            Last 12 Months
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="pl-4 pr-4 mt-4 lg:mt-0">
-                      <div
-                        className="p-8 bg-[#12153D] rounded-lg text-white h-[330px] w-full lg:w-[300px] text-center lg:text-left"
-                        style={{ transition: "box-shadow 0.3s ease-in-out" }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <h1
-                          className="text-md lg:text-3xl font-bold mb-2"
-                          style={{ fontFamily: "Space Grotesk, sans-serif" }}
+                    {/* Info and Ads */}
+                    <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
+                      <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+                        <div
+                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
                         >
-                          What is it?
-                        </h1>
-                        <p className="text-justify text-semibold">
-                          <span className="text-[#E5590F]">What’s Trending</span> shows you
-                          popularity of specific keywords over time. These trends show you
-                          what topics are gaining interest and which are fading.
-                        </p>
+                          <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
+                            What is it?
+                          </h1>
+                          <p className="text-xs sm:text-base text-justify">
+                            <span className="text-[#E5590F] font-medium">
+                              What’s Trending
+                            </span>{" "}
+                            shows you popularity of specific keywords over time. These trends show you what topics are gaining interest and which are fading.
+                          </p>
+                        </div>
                       </div>
-                      <div className="bg-gray-300 h-[250px] w-full lg:w-[300px] mt-4 rounded-md flex justify-center items-center">
+                      <div className="bg-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center">
                         <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                       </div>
-                      <div className="mt-4"></div>
-                    </div>
-                    <div className="bg-gray-300 h-[600px] w-full lg:w-[120px] mt-4 lg:mt-0 rounded-md flex justify-center items-center">
-                      <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                     </div>
                   </div>
-                  <div className="bg-[#12153d] text-white mt-4 p-4 rounded-md text-center lg:text-left">
-                    <p className="text-md lg:text-lg">
+                  <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
+                    <p className="text-xs sm:text-base">
                       To find more information and get more insights check out{" "}
                       <a href="" className="text-[#E5590F]">
                         SEO difficulty

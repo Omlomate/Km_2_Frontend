@@ -230,7 +230,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a href="#" className="nav-link">
-                  Course
+                  Courses
                 </a>
               </li>
               {userData?.isAdmin && (
@@ -330,7 +330,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a href="#" className="nav-link text-sm">
-                  Course
+                  Courses
                 </a>
               </li>
               {userData?.isAdmin && (

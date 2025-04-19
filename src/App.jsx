@@ -231,7 +231,8 @@ function App() {
         <div className="pt-28 md:pt-16">
           <AppContent />
         </div>
-        <Footer/>
+        <div className="md:px-6">  <Footer/></div>
+      
       </Router>
     </GoogleOAuthProvider>
   );
