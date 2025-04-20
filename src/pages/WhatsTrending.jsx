@@ -134,7 +134,7 @@ const WhatsTrending = () => {
           <div className="w-full py-3 sm:py-6">
             <div className="animate-fadeIn">
               <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
-                What's <span className="text-[#E5590F]">Trending</span> Now?
+                Keyword <span className="text-[#E5590F]">Trends</span>
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
                 Discover trending keywords and analyze their popularity over time. Stay ahead of the curve with Keyword Raja’s trend insights and make smarter SEO decisions.
