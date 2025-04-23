@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+ 
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer  className="bg-[#121639] text-white py-8 sm:py-12 px-4 sm:px-6 w-full border-t-4 border-gray-800 mt-1 rounded-t-md">
+    <footer className="bg-[#121639] text-white py-8 sm:py-12 px-4 sm:px-6 w-full border-t-4 border-gray-800 mt-1 rounded-t-md">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-start gap-10">
           {/* Logo and Brand */}
@@ -96,7 +97,8 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Get in Touch</h3>
             <div className="flex flex-col gap-3">
               <Link
-                to="/"
+                to="https://www.instagram.com/keyword_raja/?fbclid=IwZXh0bgNhZW0CMTEAAR4WwigfW-Y8Md-zt7S-rTB8o7cpzBQmL5KUuVI7Tx09PDajxHgbeJu-Xff3Tg_aem_Sog7ojKARi1cPcxDoVTo9w"
+                target="_blank"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -118,7 +120,8 @@ const Footer = () => {
                 Instagram
               </Link>
               <Link
-                to="/"
+                to="https://www.linkedin.com/showcase/keywordraja/"
+                target="_blank"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -135,8 +138,28 @@ const Footer = () => {
                 </svg>
                 LinkedIn
               </Link>
+              <Link
+                to="https://www.facebook.com/people/Keyword-Raja/61574543301396/"
+                target="_blank"
+                className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.9 2H3.1C2.5 2 2 2.5 2 3.1v17.8c0 .6.5 1.1 1.1 1.1h9.6v-7.8h-2.6v-3h2.6V9.2c0-2.6 1.6-4 3.9-4 1.1 0 2.1.1 2.3.1v2.7h-1.6c-1.3 0-1.5.6-1.5 1.5v1.9h3l-.4 3h-2.6V22h5.1c.6 0 1.1-.5 1.1-1.1V3.1c0-.6-.5-1.1-1.1-1.1z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Facebook
+              </Link>
               <a
-                href="mailto:info@gmail.com"
+                href="support@keywordraja.com"
+                target="_blank"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -161,7 +184,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Community</h3>
             <div className="flex flex-col gap-3">
               <Link
-                to="/"
+                to="/forum"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -179,7 +202,7 @@ const Footer = () => {
                 Forum
               </Link>
               <Link
-                to="/"
+                to="/blog"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -204,7 +227,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Company</h3>
             <div className="flex flex-col gap-3">
               <Link
-                to="/about"
+                to="/contactForm"
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -219,28 +242,11 @@ const Footer = () => {
                     fill="currentColor"
                   />
                 </svg>
-                About Us
+                Contact Us
               </Link>
+              
               <Link
-                to="/news"
-                className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"
-                    fill="currentColor"
-                  />
-                </svg>
-                News
-              </Link>
-              <Link
-                to="/careers"
+                to=""
                 className="text-sm hover:text-[#E5590F] transition-colors flex items-center gap-2"
               >
                 <svg
@@ -263,7 +269,7 @@ const Footer = () => {
 
         {/* Copyright section */}
         <div className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-400 text-sm">
-          <p>© {currentYear} KeywordRaja. All rights reserved.</p>
+          <p>© {currentYear} Kolorowey Media Private Limited. All rights reserved.</p>
         </div>
       </div>
     </footer>

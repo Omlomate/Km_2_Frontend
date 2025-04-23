@@ -29,11 +29,10 @@ import Forum from "./Forum/Forum.jsx";
 import { forumPosts } from "./Forum/ForumData.js";
 import CreateForum from "./Forum/CreateForum.jsx";
 import ShowForum from "./Forum/ShowForum.jsx";
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Footer from "./Components/Footer/Footer.jsx";
 import ForumPosts from "./adminPages/ForumPosts.jsx";
-
-
+import ContactForm from "./Components/ContactForm/ContactForm.jsx";
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -83,6 +82,7 @@ const AppContent = () => {
 
   return (
     <Routes>
+        <Route path="/contactForm" element={<ContactForm/>}/>
       {/* Admin Routes */}
       <Route
         path="/admin-dashboard"
@@ -231,8 +231,10 @@ function App() {
         <div className="pt-28 md:pt-16">
           <AppContent />
         </div>
-        <div className="md:px-6">  <Footer/></div>
-      
+        <div className="md:px-6">
+          {" "}
+          <Footer />
+        </div>
       </Router>
     </GoogleOAuthProvider>
   );
