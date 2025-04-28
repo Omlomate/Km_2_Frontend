@@ -112,8 +112,8 @@ const Forum = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 mt-6 flex items-center gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 flex items-center p-2 flex-1 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 mt-6 flex flex-col sm:flex-row items-center gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 flex items-center p-2 w-full shadow-sm">
           <input
             type="text"
             placeholder="Search Topic"
@@ -131,16 +131,16 @@ const Forum = () => {
         </div>
         <Link
           to="/create"
-          className="bg-[#12153D] text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap"
+          className="bg-[#12153D] text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto"
         >
           <i className="fa-solid fa-plus"></i>
           <span>Create Post</span>
         </Link>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 mt-6 flex items-center gap-2">
-        <div className="flex flex-col md:flex-row gap-2">
-          <div className="w-full md:w-64 flex-shrink-0">
+      <div className="max-w-7xl mx-auto px-4 mt-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-64 flex-shrink-0 order-2 lg:order-1">
             <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
               <Link to="/profile-edit" className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 bg-[#12153D] rounded-full flex items-center justify-center text-white">
@@ -174,9 +174,9 @@ const Forum = () => {
             </div>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 order-1 lg:order-2 min-w-0">
             <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <h2 className="text-xl font-bold">Latest Posts</h2>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">Sort by:</span>
@@ -197,11 +197,43 @@ const Forum = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-10 bg-white rounded-lg shadow-sm">
-                <p className="text-gray-500">Loading posts...</p>
+              <div className="space-y-4">
+                {[1, 2, 3].map((index) => (
+                  <div key={index} className="bg-white p-4 rounded-lg shadow-sm animate-pulse w-full">
+                    <div className="flex items-start gap-4">
+                      {/* Avatar skeleton */}
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
+                      
+                      <div className="flex-1 space-y-3 w-full">
+                        {/* Title skeleton */}
+                        <div className="h-5 sm:h-6 bg-gray-200 rounded w-4/5"></div>
+                        
+                        {/* Content skeleton */}
+                        <div className="space-y-2">
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                        
+                        {/* Tags skeleton */}
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 rounded"></div>
+                          <div className="h-5 sm:h-6 w-20 sm:w-24 bg-gray-200 rounded"></div>
+                        </div>
+                        
+                        {/* Reactions skeleton */}
+                        <div className="flex flex-wrap gap-3 sm:gap-4 mt-4">
+                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
+                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
+                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : error ? (
-              <div className="text-center py-10 bg-white rounded-lg shadow-sm">
+              <div className="text-center py-10 bg-white rounded-lg shadow-sm w-full">
                 <p className="text-red-500">{error}</p>
                 {error.includes("log in") && (
                   <Link
@@ -238,7 +270,7 @@ const Forum = () => {
                 })}
               </div>
             ) : (
-              <div className="text-center py-10 bg-white rounded-lg shadow-sm">
+              <div className="text-center py-10 bg-white rounded-lg shadow-sm w-full">
                 <div className="mb-4 text-gray-400">
                   <i className="fa-solid fa-comments text-5xl"></i>
                 </div>
@@ -255,7 +287,7 @@ const Forum = () => {
             )}
           </div>
 
-          <div className="hidden lg:block w-64 flex-shrink-0 space-y-4">
+          <div className="hidden lg:block w-64 flex-shrink-0 order-3">
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <h3 className="font-medium mb-3">Popular Topics</h3>
               <div className="space-y-2">
@@ -264,7 +296,7 @@ const Forum = () => {
                 <div className="bg-gray-100 p-2 rounded text-sm">#KeywordResearch</div>
               </div>
             </div>
-            <div className="bg-[#12153D] h-80 rounded-lg flex items-center justify-center text-white font-medium">
+            <div className="bg-[#12153D] h-80 rounded-lg flex items-center justify-center text-white font-medium mt-4">
               ADVERTISEMENT
             </div>
           </div>
