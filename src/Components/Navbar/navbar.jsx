@@ -216,8 +216,13 @@ const Navbar = () => {
           </div>
 
           {/* Desktop menu - hidden on mobile */}
-          <div className="hidden md:block text-gray-500">
+          <div className="hidden md:block text-gray-900">
             <ul className="flex font-semibold items-center space-x-6">
+              <li>
+                <Link to="/" className="nav-link">
+                  Research
+                </Link>
+              </li>
               <li>
                 <Link to="/blog" className="nav-link">
                   Blog
@@ -244,7 +249,9 @@ const Navbar = () => {
           </div>
 
           {/* Login/Register/Logout buttons */}
-          <div className="flex items-center gap-3"> {/* Added gap-3 here */}
+          <div className="flex items-center gap-3">
+            {" "}
+            {/* Added gap-3 here */}
             {loggedIn ? (
               <div className="flex items-center gap-2">
                 {userData && (
@@ -274,8 +281,13 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-3"> {/* Added gap-3 here */}
-                <button onClick={showLogin} className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
+              <div className="flex items-center gap-3">
+                {" "}
+                {/* Added gap-3 here */}
+                <button
+                  onClick={showLogin}
+                  className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -292,7 +304,10 @@ const Navbar = () => {
                   </svg>
                   <span>Login</span>
                 </button>
-                <button onClick={showRegister} className="flex items-center gap-1.5 px-4 py-1.5 bg-[#12153D] hover:bg-[#12153D]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
+                <button
+                  onClick={showRegister}
+                  className="flex items-center gap-1.5 px-4 py-1.5 bg-[#12153D] hover:bg-[#12153D]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -318,6 +333,11 @@ const Navbar = () => {
         <div className="md:hidden w-full border-t border-gray-100">
           <div className="overflow-x-auto">
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
+              <Link to="/">
+                {" "}
+                <li>Research</li>
+              </Link>
+
               <li>
                 <Link to="/blog" className="nav-link text-sm">
                   Blog

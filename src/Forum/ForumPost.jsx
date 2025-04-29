@@ -21,7 +21,7 @@ export const ForumPosts = ({ post, onReact }) => {
   };
 
   return (
-    <div className="bg-white w-full md:w-[45rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
+    <div className="bg-white w-full md:w-[44rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
       <Link to={`/forum/${post._id}`} className="block">
         <div className="p-4">
           {/* Author info */}
