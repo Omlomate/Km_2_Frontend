@@ -17,7 +17,9 @@ export const CPCPage = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await fetch("https://www.keywordraja.com/api/meta/cpc");
+        const response = await fetch(
+          "https://www.keywordraja.com/api/meta/cpc"
+        );
         const data = await response.json();
         setMetaTags({
           title: data.title,
@@ -28,7 +30,8 @@ export const CPCPage = () => {
         // Fallback meta tags in case of error
         setMetaTags({
           title: "CPC - Keyword Raja",
-          description: "Calculate Cost Per Click (CPC) with Keyword Raja to optimize your ad spend.",
+          description:
+            "Calculate Cost Per Click (CPC) with Keyword Raja to optimize your ad spend.",
         });
       }
     };
@@ -94,22 +97,27 @@ export const CPCPage = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+      <div
+        className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4"
+        style={{ fontFamily: "wantedsans" }}
+      >
         <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
           {/* Header */}
           <div className="w-full py-3 sm:py-6">
             <div className="animate-fadeIn">
               <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
-                Cost <span className="text-[#E5590F]">Per Click</span> Calculator
+                Cost <span className="text-[#E5590F]">Per Click</span>{" "}
+                Calculator
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Instantly calculate CPC for any keyword. Use Keyword Raja’s CPC calculator to optimize your ad spend and maximize ROI.
+                Find out how much advertisers pay per click for a keyword,
+                helping you spot keywords with strong earning potential.{" "}
               </p>
             </div>
           </div>
           {/* Search Input */}
           <div className="w-full max-w-3xl mx-auto">
-            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white   border border-gray-100">
               <SearchInput
                 onSearch={handleSearch}
                 onCountryChange={handleCountryChange}
@@ -147,16 +155,26 @@ export const CPCPage = () => {
                     {/* CPC Value Card */}
                     <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                       <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200 flex flex-col items-center">
-                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Cost Per Click</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                          Cost Per Click
+                        </h3>
                         <div className="text-5xl flex text-[#12153d] font-bold font-sans space-x-1 items-center">
-                          <span className="p-2">{keywordData?.data?.[0]?.cpc?.currency}</span>
-                          <span className="p-2">{keywordData?.data?.[0]?.cpc?.value}</span>
+                          <span className="p-2">
+                            {keywordData?.data?.[0]?.cpc?.currency}
+                          </span>
+                          <span className="p-2">
+                            {keywordData?.data?.[0]?.cpc?.value}
+                          </span>
                         </div>
                       </div>
                       <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
-                        <h3 className="text-lg font-semibold mb-2">CPC for SEO</h3>
+                        <h3 className="text-lg font-semibold mb-2">
+                          CPC for SEO
+                        </h3>
                         <p>
-                          CPC for SEO depends entirely on your industry and desired ROI. A good CPC allows you to achieve your marketing goals while maintaining a positive ROI.
+                          CPC for SEO depends entirely on your industry and
+                          desired ROI. A good CPC allows you to achieve your
+                          marketing goals while maintaining a positive ROI.
                         </p>
                       </div>
                       <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center">
@@ -166,9 +184,7 @@ export const CPCPage = () => {
                     {/* Info and Ads */}
                     <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                       <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                        <div
-                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
-                        >
+                        <div className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center">
                           <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
                             What is it?
                           </h1>
@@ -176,7 +192,10 @@ export const CPCPage = () => {
                             <span className="text-[#E5590F] font-medium">
                               CPC
                             </span>{" "}
-                            is the highest amount that you're willing to pay for a click on your ad. Your max. CPC is the most you'll be charged for a click, but you'll often be charged less—sometimes much less.
+                            is the highest amount that you're willing to pay for
+                            a click on your ad. Your max. CPC is the most you'll
+                            be charged for a click, but you'll often be charged
+                            less—sometimes much less.
                           </p>
                         </div>
                       </div>

@@ -21,7 +21,9 @@ export const AdCompetition = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await fetch("https://www.keywordraja.com/api/meta/ad-competition");
+        const response = await fetch(
+          "https://www.keywordraja.com/api/meta/ad-competition"
+        );
         const data = await response.json();
         setMetaTags({
           title: data.title,
@@ -32,7 +34,8 @@ export const AdCompetition = () => {
         // Fallback meta tags in case of error
         setMetaTags({
           title: "Ad Competition - Keyword Raja",
-          description: "Assess ad competition levels with Keyword Raja to refine your advertising strategy.",
+          description:
+            "Assess ad competition levels with Keyword Raja to refine your advertising strategy.",
         });
       }
     };
@@ -93,7 +96,10 @@ export const AdCompetition = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+      <div
+        className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4"
+        style={{ fontFamily: "wantedsans" }}
+      >
         <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
           {/* Header */}
           <div className="w-full py-3 sm:py-6">
@@ -102,14 +108,18 @@ export const AdCompetition = () => {
                 Ad <span className="text-[#E5590F]">Competition</span> Checker
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Instantly assess ad competition for any keyword. Use Keyword Raja’s ad competition checker to refine your advertising strategy and outperform your rivals.
+                Check how many advertisers are bidding on a keyword to
+                understand its commercial value and competition level.{" "}
               </p>
             </div>
           </div>
           {/* Search Input */}
           <div className="w-full max-w-3xl mx-auto">
-            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
-              <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white   border border-gray-100">
+              <SearchInput
+                onSearch={handleSearch}
+                onCountryChange={handleCountryChange}
+              />
             </div>
           </div>
           {/* Results */}
@@ -142,7 +152,9 @@ export const AdCompetition = () => {
                     {/* Competition Value Card */}
                     <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                       <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200 flex flex-col items-center">
-                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Ad Competition</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                          Ad Competition
+                        </h3>
                         <div className="flex flex-col items-center justify-center mt-2 mb-4">
                           <p className="text-5xl text-[#12153d] font-bold font-sans">
                             {keywordData?.data?.[0]?.competition}
@@ -152,10 +164,13 @@ export const AdCompetition = () => {
                       <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
                         <h3 className="text-lg font-semibold mb-2">Scale</h3>
                         <p>
-                          Measured on a scale of 0 to 1, with higher numbers indicating more competition.
+                          Measured on a scale of 0 to 1, with higher numbers
+                          indicating more competition.
                         </p>
                         <div className="flex justify-center mt-4">
-                          <IndicatorScale value={keywordData?.data?.[0]?.competition} />
+                          <IndicatorScale
+                            value={keywordData?.data?.[0]?.competition}
+                          />
                         </div>
                       </div>
                       <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center">
@@ -165,9 +180,7 @@ export const AdCompetition = () => {
                     {/* Info and Ads */}
                     <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                       <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                        <div
-                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
-                        >
+                        <div className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center">
                           <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
                             What is it?
                           </h1>
@@ -175,7 +188,10 @@ export const AdCompetition = () => {
                             <span className="text-[#E5590F] font-medium">
                               Ad Competition
                             </span>{" "}
-                            is a measure of how much competition there is for a product, keyword, or market. It can help businesses understand how to position themselves in a competitive market.
+                            is a measure of how much competition there is for a
+                            product, keyword, or market. It can help businesses
+                            understand how to position themselves in a
+                            competitive market.
                           </p>
                         </div>
                       </div>
@@ -187,7 +203,8 @@ export const AdCompetition = () => {
                   <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
                     <p className="text-xs sm:text-base">
                       To find more information and get more insights check out{" "}
-                      <span className="text-[#E5590F]">SEO difficulty</span> to understand your local and global audience.
+                      <span className="text-[#E5590F]">SEO difficulty</span> to
+                      understand your local and global audience.
                     </p>
                   </div>
                 </>

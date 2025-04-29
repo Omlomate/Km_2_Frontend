@@ -16,7 +16,9 @@ const SpamScore = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await fetch("https://www.keywordraja.com/api/meta/keyword-spam-score");
+        const response = await fetch(
+          "https://www.keywordraja.com/api/meta/keyword-spam-score"
+        );
         const data = await response.json();
         setMetaTags({
           title: data.title,
@@ -27,7 +29,8 @@ const SpamScore = () => {
         // Fallback meta tags in case of error
         setMetaTags({
           title: "Keyword Spam Score - Keyword Raja",
-          description: "Evaluate keyword spam scores with Keyword Raja for cleaner, effective SEO.",
+          description:
+            "Evaluate keyword spam scores with Keyword Raja for cleaner, effective SEO.",
         });
       }
     };
@@ -99,16 +102,18 @@ const SpamScore = () => {
           <div className="w-full py-3 sm:py-6">
             <div className="animate-fadeIn">
               <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
-                Keyword <span className="text-[#E5590F]">Spam Score</span> Checker
+                Keyword <span className="text-[#E5590F]">Spam Score</span>{" "}
+                Checker
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Instantly evaluate the spam risk of any keyword. Use Keyword Raja’s spam score checker to avoid risky keywords and keep your SEO strategy clean and effective.
+                Avoid risky keywords by checking their spam score and stay safe
+                from Google penalties or low-quality traffic issues.{" "}
               </p>
             </div>
           </div>
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50 shadow-sm border border-gray-100">
+              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50   border border-gray-100">
                 <SearchInput onSearch={handleSearch} />
               </div>
             </div>
@@ -140,7 +145,9 @@ const SpamScore = () => {
                     <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
                       <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                         <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                          <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Spam Score</h3>
+                          <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                            Spam Score
+                          </h3>
                           <div className="flex flex-col items-center space-y-4">
                             <p className="text-3xl sm:text-5xl font-bold text-orange-500">
                               {keywordData.spamRiskScore}
@@ -155,14 +162,14 @@ const SpamScore = () => {
                           <h1 className="text-lg sm:text-xl font-semibold mb-2">
                             Spam Risk Description
                           </h1>
-                          <p className="text-xs sm:text-base">{keywordData.spam_description}</p>
+                          <p className="text-xs sm:text-base">
+                            {keywordData.spam_description}
+                          </p>
                         </div>
                       </div>
                       <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                         <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                          <div
-                            className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
-                          >
+                          <div className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center">
                             <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
                               What is it?
                             </h1>
@@ -170,7 +177,9 @@ const SpamScore = () => {
                               <span className="text-orange-500 font-medium">
                                 Spam score
                               </span>{" "}
-                              is used to measure a website's likelihood of getting cancelled by search engines for being spam.
+                              is used to measure a website's likelihood of
+                              getting cancelled by search engines for being
+                              spam.
                             </p>
                           </div>
                         </div>

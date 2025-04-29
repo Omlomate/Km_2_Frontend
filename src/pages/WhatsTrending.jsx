@@ -18,7 +18,9 @@ const WhatsTrending = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await fetch("https://www.keywordraja.com/api/meta/keyword-trends");
+        const response = await fetch(
+          "https://www.keywordraja.com/api/meta/keyword-trends"
+        );
         const data = await response.json();
         setMetaTags({
           title: data.title,
@@ -29,7 +31,8 @@ const WhatsTrending = () => {
         // Fallback meta tags in case of error
         setMetaTags({
           title: "Keyword Trends - Keyword Raja",
-          description: "Stay ahead with keyword trends analysis from Keyword Raja’s SEO toolkit.",
+          description:
+            "Stay ahead with keyword trends analysis from Keyword Raja’s SEO toolkit.",
         });
       }
     };
@@ -128,7 +131,10 @@ const WhatsTrending = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4" style={{ fontFamily: "wantedsans" }}>
+      <div
+        className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4"
+        style={{ fontFamily: "wantedsans" }}
+      >
         <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
           {/* Header */}
           <div className="w-full py-3 sm:py-6">
@@ -137,14 +143,18 @@ const WhatsTrending = () => {
                 Keyword <span className="text-[#E5590F]">Trends</span>
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Discover trending keywords and analyze their popularity over time. Stay ahead of the curve with Keyword Raja’s trend insights and make smarter SEO decisions.
+                Track keyword trends over time to see what’s rising or fading in
+                popularity and plan your content accordingly.{" "}
               </p>
             </div>
           </div>
           {/* Search Input */}
           <div className="w-full max-w-3xl mx-auto">
-            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white shadow-sm border border-gray-100">
-              <SearchInput onSearch={handleSearch} onCountryChange={handleCountryChange} />
+            <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-white   border border-gray-100">
+              <SearchInput
+                onSearch={handleSearch}
+                onCountryChange={handleCountryChange}
+              />
             </div>
           </div>
           {/* Results */}
@@ -177,14 +187,18 @@ const WhatsTrending = () => {
                     {/* Trend Graph and Controls */}
                     <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                       <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">What's Trending</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                          What's Trending
+                        </h3>
                         <div className="flex flex-col items-center space-y-4">
                           <Bargraph data={graphData} />
                           <div className="flex items-center justify-center mt-2">
                             <div className="w-4 h-4 bg-[#12153D] mr-2 flex items-center justify-center">
                               <div className="w-2 h-2 bg-[#12153d] rounded-full"></div>
                             </div>
-                            <span className="text-[#12153D] font-medium">Monthly Trend</span>
+                            <span className="text-[#12153D] font-medium">
+                              Monthly Trend
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -214,9 +228,7 @@ const WhatsTrending = () => {
                     {/* Info and Ads */}
                     <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                       <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                        <div
-                          className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
-                        >
+                        <div className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center">
                           <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
                             What is it?
                           </h1>
@@ -224,7 +236,9 @@ const WhatsTrending = () => {
                             <span className="text-[#E5590F] font-medium">
                               What’s Trending
                             </span>{" "}
-                            shows you popularity of specific keywords over time. These trends show you what topics are gaining interest and which are fading.
+                            shows you popularity of specific keywords over time.
+                            These trends show you what topics are gaining
+                            interest and which are fading.
                           </p>
                         </div>
                       </div>

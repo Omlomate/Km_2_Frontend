@@ -145,15 +145,15 @@ export const AudienceVolume = () => {
                 Search <span className="text-[#E5590F]">Volume</span> Analyzer
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Discover how many people are searching for your keywords across different regions.
-                Understanding search volume helps you prioritize keywords with the highest potential traffic.
+              Check how many people search for a keyword each month to know if it’s 
+              worth targeting in your content or SEO strategy.
               </p>
             </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50 shadow-sm border border-gray-100">
+              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50   border border-gray-100">
                 <SearchInput
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}

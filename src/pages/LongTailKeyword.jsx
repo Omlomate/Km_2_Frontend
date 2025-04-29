@@ -79,15 +79,15 @@ const LongTailKeywordPage = () => {
                 Long-Tail <span className="text-[#E5590F]">Keywords</span> Finder
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Discover specific, longer search phrases that can drive targeted traffic to your website. 
-                Long-tail keywords typically have lower competition and higher conversion rates.
+              Discover easy-to-rank long-tail keywords with lower competition and better 
+              chances to bring targeted traffic to your site.
               </p>
             </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50 shadow-sm border border-gray-100">
+              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50   border border-gray-100">
                 <SearchInput onSearch={handleSearch} />
               </div>
             </div>

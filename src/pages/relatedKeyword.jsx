@@ -145,16 +145,15 @@ export const KeywordResearch = () => {
                 Related Keywords <span className="text-[#E5590F]">Finder</span>
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Discover the most relevant keywords for your content and boost
-                your SEO strategy. Our tool helps you find what your audience is
-                searching for.
+                Find keyword ideas closely connected to your topic to help expand your 
+                content and reach more relevant search traffic.
               </p>
             </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50 shadow-sm border border-gray-100">
+              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50  border border-gray-100">
                 <SearchInput onSearch={handleSearch} />
               </div>
 
