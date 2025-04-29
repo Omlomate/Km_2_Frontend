@@ -260,12 +260,14 @@ const Footer = () => {
                 Privacy Policy
               </Link>
               <div className="h-4 w-0.5    bg-gray-900 mx-1"></div>
-              <Link
-                to="/terms"
-                className="text-gray-500 hover:text-[#E5590F] text-xs md:text-sm transition-colors"
-              >
-                Terms & Conditions
-              </Link>
+              <a
+              href="https://kolorowey.com/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-[#E5590F] text-xs md:text-sm transition-colors"
+            >
+              Terms & Conditions
+            </a>
             </div>
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center">
