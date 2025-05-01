@@ -18,7 +18,7 @@ const Sidebar = () => {
   useEffect(() => {
     // Check authentication status
     const authStatus = isAuthenticated();
-    
+
     // If authentication status changed from not logged in to logged in
     if (authStatus && !isLoggedIn) {
       setIsLoggedIn(authStatus);
@@ -27,7 +27,7 @@ const Sidebar = () => {
       navigate("/");
       return; // Exit early after redirecting
     }
-    
+
     setIsLoggedIn(authStatus);
 
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -64,16 +64,16 @@ const Sidebar = () => {
       navigate("/", { replace: true });
     };
 
-    window.addEventListener('login-success', handleLoginSuccess);
-    
+    window.addEventListener("login-success", handleLoginSuccess);
+
     return () => {
-      window.removeEventListener('login-success', handleLoginSuccess);
+      window.removeEventListener("login-success", handleLoginSuccess);
     };
   }, [navigate]);
 
   // const hideLogin = () => {
   //   setIsLoginVisible(false);
-    
+
   //   // Check if user just logged in and force redirect to home
   //   if (isAuthenticated() && !isLoggedIn) {
   //     setIsLoggedIn(true);
@@ -88,9 +88,9 @@ const Sidebar = () => {
     // Save the selected option to localStorage
     localStorage.setItem("selectedOption", option);
     setIsSidebarOpen(false);
-    
+
     // Make sure we're not triggering unnecessary navigation if we're already on the page
-    const currentPath = menuItems.find(item => item.name === option)?.path;
+    const currentPath = menuItems.find((item) => item.name === option)?.path;
     if (currentPath && location.pathname !== currentPath) {
       navigate(currentPath);
     }
@@ -108,7 +108,7 @@ const Sidebar = () => {
 
   const hideLogin = () => {
     setIsLoginVisible(false);
-    
+
     // Check if user just logged in
     if (isAuthenticated() && !isLoggedIn) {
       setIsLoggedIn(true);
@@ -140,74 +140,127 @@ const Sidebar = () => {
 
   return (
     <>
+      {/* Backdrop with blur effect when sidebar is open on mobile */}
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
       {!isSidebarOpen && (
         <div className="md:hidden fixed top-4 left-4 z-50">
-          <button onClick={toggleSidebar} className="border-none">
-            <i className="fas fa-arrow-right text-2xl text-black/50"></i>
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-full bg-white shadow-md border-none"
+          >
+            <i className="fas fa-arrow-right text-2xl text-[#E5590F]"></i>
           </button>
         </div>
       )}
 
       {isSidebarOpen && (
         <div className="md:hidden fixed top-4 left-4 z-50">
-          <button onClick={toggleSidebar} className="border-none">
-            <i className="fas fa-times text-2xl text-black/50"></i>
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-full bg-white shadow-md border-none"
+          >
+            <i className="fas fa-times text-2xl text-[#E5590F]"></i>
           </button>
         </div>
       )}
 
       <div
-        className={`bg-[#12153D] text-white p-6 w-72 lg:min-h-screen fixed md:relative transition-all duration-300 ease-in-out z-10 top-25 md:top-0 ${
+        className={`bg-white text-black p-6 fixed md:relative transition-all duration-300 ease-in-out z-45 top-0 md:top-0 overflow-y-auto ${
           isSidebarOpen
-            ? "translate-x-0 rounded-none"
-            : "-translate-x-full rounded-t-md"
-        } md:translate-x-0 md:ml-6 md:mr-4 ${
-          isSidebarOpen ? "w-full h-full" : "w-72"
-        }`}
+            ? "translate-x-0 rounded-none w-1/2"
+            : "-translate-x-full rounded-r-xl w-96"
+        } md:translate-x-0 md:ml-0 md:w-96`}
         style={{
-          height: isSidebarOpen ? "100vh" : "auto",
+          width: "19rem",
+          height: "101vh",
           fontFamily: "wantedsans",
+          maxHeight: "100vh",
+          marginTop: "20px",
+          scrollbarWidth: "none" /* Firefox */,
+          msOverflowStyle: "none" /* IE and Edge */,
         }}
       >
-        <div className="flex items-center justify-between mb-4">
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+        <div className="pt-12 md:pt-0">
+          {/* Profile Section */}
           <Link to="/profile-edit">
-            <div
-              className={`flex justify-center items-center space-x-5.5 transition-all duration-300 ease-in-out transform hover:scale-105 ${
-                selectedOption === "Profile"
-                  ? "bg-[#E5590F] rounded-lg p-1.5"
-                  : "b"
-              }`}
-              id="profile"
-              onClick={handleProfileClick}
-            >
-              <img
-                src={profileImage}
-                alt="Profile"
-                className="w-20 h-20 object-cover rounded-full transition-transform duration-300 hover:rotate-12"
-              />
-              <span className="mr-3">{username}</span>
+            <div className="flex flex-col items-center justify-center mb-10 mt-2">
+              <div className="w-24 h-24 rounded-full overflow-hidden mb-3 border-2 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300">
+                <img
+                  src={profileImage}
+                  alt={username}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-black font-semibold text-lg">{username}</h3>
             </div>
           </Link>
-        </div>
 
-        {menuItems.map((option) => (
-          <Link to={option.path} key={option.name}>
-            <div
-              className={`mb-4 p-3 cursor-pointer rounded flex items-center transition-all duration-300 ease-in-out transform ${
-                selectedOption === option.name
-                  ? "bg-[#E5590F] text-[#12153d] rounded-lg translate-x-2"
-                  : "hover:translate-x-2"
-              } hover:bg-[#E5590F] hover:text-[#12153d] hover:rounded-lg hover:scale-105`}
-              onClick={() => handleOptionClick(option.name)}
-            >
-              <i
-                className={`fas ${option.icon} mr-3 w-5 transition-transform duration-300 group-hover:rotate-12`}
-              ></i>
-              {option.name}
+          {/* Menu Section */}
+          <div className="mb-8">
+            <h3 className="text-sm uppercase text-gray-700 font-bold mb-4 tracking-wider pl-2">
+              Tools
+            </h3>
+
+            <div className="space-y-2">
+              {menuItems.map((option) => (
+                <Link
+                  to={option.path}
+                  key={option.name}
+                  className="block no-underline"
+                >
+                  <div
+                    className={`p-3 cursor-pointer rounded-lg flex items-center transition-all duration-200 ${
+                      selectedOption === option.name
+                        ? "bg-[#E5590f]/10 text-black shadow-sm"
+                        : "hover:bg-gray-100 text-black"
+                    }`}
+                    onClick={() => handleOptionClick(option.name)}
+                  >
+                    <div
+                      className={`mr-4 w-8 h-8 flex items-center justify-center rounded-md ${
+                        selectedOption === option.name
+                          ? "bg-[#E5590F]/20"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <i
+                        className={`fas ${option.icon} text-lg ${
+                          selectedOption === option.name
+                            ? "text-[#E5590F]"
+                            : "text-gray-500"
+                        }`}
+                      ></i>
+                    </div>
+                    <span
+                      className={`text-base font-medium ${
+                        selectedOption === option.name ? "font-semibold" : ""
+                      }`}
+                    >
+                      {option.name}
+                    </span>
+
+                    {selectedOption === option.name && (
+                      <div className="ml-auto w-1.5 h-6 bg-[#E5590F] rounded-full"></div>
+                    )}
+                  </div>
+                </Link>
+              ))}
             </div>
-          </Link>
-        ))}
+          </div>
+        </div>
       </div>
+
       {isLoginVisible && (
         <LoginPage isVisible={isLoginVisible} onClose={hideLogin} />
       )}
