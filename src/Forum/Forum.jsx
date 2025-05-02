@@ -63,7 +63,7 @@ const Forum = () => {
 
       const token = localStorage.getItem("jwt");
       await axios.post(
-        `https://www.keywordraja.com/api/forum/posts/${postId}/react`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${postId}/react`,
         { reactionType },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -93,7 +93,7 @@ const Forum = () => {
       try {
         const token = localStorage.getItem("jwt");
         const response = await axios.get(
-          "https://www.keywordraja.com/api/forum/posts",
+          `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts`,
           {
             params: { search, time: timeFilter, sort },
             headers: token ? { Authorization: `Bearer ${token}` } : {},

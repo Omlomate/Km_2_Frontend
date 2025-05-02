@@ -66,11 +66,12 @@ function LoginPage({ isVisible, onClose }) {
   };
 
   const handleLoginSubmit = async (e) => {
+    // console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
     e.preventDefault();
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://keywordraja.com/api/auth/login",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
         {
           email: email,
           password: password,
@@ -98,7 +99,7 @@ function LoginPage({ isVisible, onClose }) {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://keywordraja.com/api/auth/forgot-password",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/forgot-password`,
         {
           email: forgotEmail,
         }
@@ -116,7 +117,7 @@ function LoginPage({ isVisible, onClose }) {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://keywordraja.com/api/auth/reset-password",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password`,
         {
           email: forgotEmail,
           otp,
@@ -139,14 +140,14 @@ function LoginPage({ isVisible, onClose }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/auth/google",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: credentialResponse.credential }), // Send ID token
         }
       );
-
+  
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("jwt", data.token);

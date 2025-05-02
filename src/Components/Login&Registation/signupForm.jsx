@@ -43,7 +43,7 @@ function SignupPage({ onClose, isVisible }) {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/auth/register",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ function SignupPage({ onClose, isVisible }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/auth/google",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

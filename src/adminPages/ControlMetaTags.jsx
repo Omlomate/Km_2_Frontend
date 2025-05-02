@@ -11,7 +11,7 @@ const ControlMetaTags = () => {
   const fetchMetaTags = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      const { data } = await axios.get("https://keywordraja.com/api/meta", {
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/meta`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     //   console.log("API Response:", data); // Debug: Check what the API returns
@@ -45,7 +45,7 @@ const ControlMetaTags = () => {
     try {
       const token = localStorage.getItem("jwt");
       await axios.put(
-        `https://keywordraja.com/api/meta/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/meta/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -17,7 +17,7 @@ const KeywordDifficulty = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/keyword-difficulty"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/keyword-difficulty`
         );
         const data = await response.json();
         setMetaTags({
@@ -52,7 +52,7 @@ const KeywordDifficulty = () => {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/gemini/get-keyword-difficulty",
+        `${import.meta.env.VITE_BACKEND_URL}/api/gemini/get-keyword-difficulty`,
         {
           method: "POST",
           headers: {

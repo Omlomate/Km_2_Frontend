@@ -15,7 +15,7 @@ const LongTailKeywordPage = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await fetch("https://www.keywordraja.com/api/meta/long-tail-keywords");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/meta/long-tail-keywords`);
         const data = await response.json();
         setMetaTags({
           title: data.title,
@@ -39,7 +39,7 @@ const LongTailKeywordPage = () => {
 
     try {
       const response = await fetch(
-        `https://www.keywordraja.com/api/scraper/scrape?query=${searchTerm}&engine=${searchEngine}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/scraper/scrape?query=${searchTerm}&engine=${searchEngine}`
       );
       const data = await response.json();
 

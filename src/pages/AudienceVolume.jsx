@@ -40,7 +40,7 @@ export const AudienceVolume = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/search-volume"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/search-volume`
         );
         const data = await response.json();
         setMetaTags({
@@ -81,7 +81,7 @@ export const AudienceVolume = () => {
       }
 
       const response = await fetch(
-        "https://www.keywordraja.com/api/keywords/keyword-Everywhere-Volume",
+        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

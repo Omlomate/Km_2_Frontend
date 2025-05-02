@@ -15,7 +15,7 @@ const KeywordData = () => {
   useEffect(() => {
     const fetchMetaTags = async () => {
       try {
-        const response = await axios.get("https://www.keywordraja.com/api/meta/home");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/meta/home`);
         setMetaTags({
           title: response.data.title,
           description: response.data.description,
@@ -40,7 +40,7 @@ const KeywordData = () => {
 
     try {
       const scrapeResponse = await axios.get(
-        `https://www.keywordraja.com/api/scraper/scrape`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/scraper/scrape`,
         {
           params: {
             query: searchTerm,
@@ -52,7 +52,7 @@ const KeywordData = () => {
       );
 
       const volumeDifficultyResponse = await axios.post(
-        `https://www.keywordraja.com/api/gemini/get-keyword-volume-difficulty`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/gemini/get-keyword-volume-difficulty`,
         { keyword: searchTerm }
       );
 

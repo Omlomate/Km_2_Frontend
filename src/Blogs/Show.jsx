@@ -11,7 +11,7 @@ const Show = () => {
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
 
-  const baseUrl = "https://www.keywordraja.com"; // Replace with env variable in production
+  const baseUrl = `${import.meta.env.VITE_BACKEND_URL}`; // Replace with env variable in production
 
   // Check if user is admin on mount
   useEffect(() => {
@@ -67,7 +67,7 @@ const Show = () => {
       ? blog.images.hero
       : `${baseUrl}${blog.images.hero}`
     : "https://via.placeholder.com/1600x900?text=No+Image";
-  const blogUrl = `https://www.keywordraja.com/blog/${slug}`;
+  const blogUrl = `${import.meta.env.VITE_BACKEND_URL}/blog/${slug}`;
 
   // Format the publish date
   const formattedDate = new Date(blog.createdAt).toLocaleDateString("en-US", {

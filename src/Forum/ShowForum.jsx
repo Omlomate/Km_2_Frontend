@@ -20,7 +20,7 @@ const ShowForum = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`https://www.keywordraja.com/api/forum/posts/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (error) {
@@ -49,7 +49,7 @@ const ShowForum = () => {
         formData.append("image", commentImage);
       }
 
-      const response = await axios.post(`https://www.keywordraja.com/api/forum/posts/${id}/comments`, formData, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const ShowForum = () => {
       const token = localStorage.getItem("jwt");
 
       const response = await axios.post(
-        `https://www.keywordraja.com/api/forum/posts/${id}/comments`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments`,
         {
           content: replyText,
           author,
@@ -114,7 +114,7 @@ const ShowForum = () => {
       const token = localStorage.getItem("jwt");
       const isLiked = likedComments[commentId];
       await axios.post(
-        `https://www.keywordraja.com/api/forum/posts/${id}/comments/${commentId}/${isLiked ? "unlike" : "like"}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments/${commentId}/${isLiked ? "unlike" : "like"}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -150,7 +150,7 @@ const ShowForum = () => {
       const token = localStorage.getItem("jwt");
       const isDisliked = dislikedComments[commentId];
       await axios.post(
-        `https://www.keywordraja.com/api/forum/posts/${id}/comments/${commentId}/${isDisliked ? "undislike" : "dislike"}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments/${commentId}/${isDisliked ? "undislike" : "dislike"}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

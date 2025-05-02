@@ -21,7 +21,7 @@ export const KeywordResearch = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/related-keywords"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/related-keywords`
         );
         const data = await response.json();
         setMetaTags({
@@ -60,7 +60,7 @@ export const KeywordResearch = () => {
 
     try {
       const response = await fetch(
-        `https://www.keywordraja.com/api/scraper/scrape?query=${encodeURIComponent(
+        `${import.meta.env.VITE_BACKEND_URL}/api/scraper/scrape?query=${encodeURIComponent(
           searchTerm
         )}&engine=${searchEngine}&country=${country}`
       );

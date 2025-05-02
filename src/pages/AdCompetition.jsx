@@ -22,7 +22,7 @@ export const AdCompetition = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/ad-competition"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/ad-competition`
         );
         const data = await response.json();
         setMetaTags({
@@ -61,7 +61,7 @@ export const AdCompetition = () => {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/keywords/keyword-Everywhere-Volume",
+        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

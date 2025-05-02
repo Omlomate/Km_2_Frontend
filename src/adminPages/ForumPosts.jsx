@@ -8,7 +8,7 @@ const ForumPosts = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      const { data } = await axios.get("https://www.keywordraja.com/api/forum/admin/posts", {
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/forum/admin/posts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(Array.isArray(data) ? data : []);
@@ -28,7 +28,7 @@ const ForumPosts = () => {
     try {
       const token = localStorage.getItem("jwt");
       await axios.put(
-        `https://www.keywordraja.com/api/forum/admin/posts/${id}/check`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/admin/posts/${id}/check`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

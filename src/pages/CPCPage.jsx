@@ -18,7 +18,7 @@ export const CPCPage = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/cpc"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/cpc`
         );
         const data = await response.json();
         setMetaTags({
@@ -61,7 +61,7 @@ export const CPCPage = () => {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/keywords/keyword-Everywhere-Volume",
+        `${import.meta.env.VITE_BACKEND_URL}api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

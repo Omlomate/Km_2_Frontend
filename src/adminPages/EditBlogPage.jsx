@@ -52,7 +52,7 @@ const EditBlogPage = () => {
     const fetchBlog = async () => {
       try {
         const response = await fetch(
-          `https://www.keywordraja.com/api/blogs/${slug}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${slug}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -151,7 +151,7 @@ const EditBlogPage = () => {
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const response = await fetch(
-        `https://www.keywordraja.com/api/admin/blogs/${slug}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/blogs/${slug}`,
         {
           method: "PUT", // Use PUT for updates
           body: formData,

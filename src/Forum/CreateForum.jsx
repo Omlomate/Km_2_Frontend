@@ -40,7 +40,7 @@ const CreateForum = () => {
       }
 
       const token = localStorage.getItem("jwt");
-      await axios.post("https://www.keywordraja.com/api/forum/posts", formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -207,7 +207,7 @@ const CreateForum = () => {
                     formData.append("image", file);
                   }
                   const token = localStorage.getItem("jwt");
-                  await axios.post("https://www.keywordraja.com/api/forum/posts/draft", formData, {
+                  await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/draft`, formData, {
                     headers: {
                       "Content-Type": "multipart/form-data",
                       Authorization: `Bearer ${token}`,

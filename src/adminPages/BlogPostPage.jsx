@@ -114,7 +114,7 @@ const BlogPost = () => {
         throw new Error("No authentication token found. Please log in.");
 
       const response = await fetch(
-        "https://www.keywordraja.com/api/blogs",
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs`,
         {
           method: "POST",
           body: formData,

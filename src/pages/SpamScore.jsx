@@ -17,7 +17,7 @@ const SpamScore = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/keyword-spam-score"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/keyword-spam-score`
         );
         const data = await response.json();
         setMetaTags({
@@ -53,7 +53,7 @@ const SpamScore = () => {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/gemini/get-keyword-spam-score",
+        `${import.meta.env.VITE_BACKEND_URL}/api/gemini/get-keyword-spam-score`,
         {
           method: "POST",
           headers: {

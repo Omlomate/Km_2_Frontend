@@ -28,7 +28,7 @@ const AdminPanel = () => {
     try {
       const token = localStorage.getItem("jwt");
       const { data } = await axios.get(
-        "https://www.keywordraja.com/api/admin/users",
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -45,7 +45,7 @@ const AdminPanel = () => {
     try {
       const token = localStorage.getItem("jwt");
       const { data } = await axios.get(
-        "https://www.keywordraja.com/api/admin/blogs/count",
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/blogs/count`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

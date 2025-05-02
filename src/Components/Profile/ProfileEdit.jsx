@@ -109,7 +109,7 @@ const ProfileEdit = () => {
   
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/update-profile/profile",
+        `${import.meta.env.VITE_BACKEND_URL}/api/update-profile/profile`,
         {
           method: "PUT",
           headers: {

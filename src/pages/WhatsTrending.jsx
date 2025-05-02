@@ -19,7 +19,7 @@ const WhatsTrending = () => {
     const fetchMetaTags = async () => {
       try {
         const response = await fetch(
-          "https://www.keywordraja.com/api/meta/keyword-trends"
+          `${import.meta.env.VITE_BACKEND_URL}/api/meta/keyword-trends`
         );
         const data = await response.json();
         setMetaTags({
@@ -52,7 +52,7 @@ const WhatsTrending = () => {
 
     try {
       const response = await fetch(
-        "https://www.keywordraja.com/api/keywords/keyword-Everywhere-Volume",
+        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: {
