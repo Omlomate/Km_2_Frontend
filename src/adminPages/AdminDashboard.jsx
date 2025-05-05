@@ -12,6 +12,8 @@ const AdminPanel = () => {
     draftCount: 0,
     totalCount: 0,
   });
+  const [file, setFile] = useState(null);
+  const [uploadMessage, setUploadMessage] = useState("");
   const navigate = useNavigate();
 
   const menuItems = [
@@ -57,6 +59,45 @@ const AdminPanel = () => {
       });
     } catch (error) {
       console.error("Error fetching blog counts:", error);
+    }
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setUploadMessage(""); // Clear previous messages
+  };
+
+  // Handle ads.txt upload
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      setUploadMessage("Please select a .txt file to upload");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("adsTxt", file);
+
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/upload-ads-txt`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUploadMessage(response.data.message);
+      setFile(null); // Clear file input
+      document.getElementById("adsTxtInput").value = ""; // Reset file input
+    } catch (error) {
+      setUploadMessage(
+        error.response?.data?.message || "Error uploading ads.txt"
+      );
     }
   };
 
@@ -167,6 +208,43 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {activeTab === "Ads Control" && (
+          <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-4">Upload ads.txt</h3>
+            <form onSubmit={handleUpload} className="space-y-4">
+              <div>
+                <label htmlFor="adsTxtInput" className="block text-gray-700 font-medium mb-2">
+                  Select ads.txt file
+                </label>
+                <input
+                  id="adsTxtInput"
+                  type="file"
+                  accept=".txt"
+                  onChange={handleFileChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              >
+                Upload
+              </button>
+            </form>
+            {uploadMessage && (
+              <p
+                className={`mt-4 ${
+                  uploadMessage.includes("successfully")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {uploadMessage}
+              </p>
+            )}
           </div>
         )}
       </main>
