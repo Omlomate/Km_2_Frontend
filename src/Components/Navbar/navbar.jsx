@@ -114,7 +114,7 @@ const Navbar = () => {
       }
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications`;
-      console.log("Fetching notifications from:", url);
+      
 
       const response = await fetch(url, {
         headers: {
@@ -122,7 +122,7 @@ const Navbar = () => {
         },
       });
 
-      console.log("Response status:", response.status, response.statusText);
+     
 
       if (!response.ok) {
         const text = await response.text();
@@ -138,7 +138,7 @@ const Navbar = () => {
       }
 
       const data = await response.json();
-      console.log("Notifications fetched:", data);
+     
       setNotifications(data);
       setShowNotifications(true);
       setUnreadCount(0); // Reset unread count after viewing notifications

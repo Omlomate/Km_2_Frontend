@@ -30,8 +30,7 @@ const CreateForum = () => {
       formData.append("contentType", activeTab === "text" ? "html" : "image");
 
       // Get userData from localStorage and set author as user._id and username
-      const userData = JSON.parse(localStorage.getItem("userData")) || {};
-      console.log("userData", userData);
+      const userData = JSON.parse(localStorage.getItem("userData")) || {};     
       if (!userData._id) {
         throw new Error("User ID not found in localStorage");
       }
@@ -39,8 +38,7 @@ const CreateForum = () => {
         throw new Error("Username not found in localStorage");
       }
       formData.append("author", userData._id);
-      formData.append("username", userData.username);
-      console.log("formData", formData.get("author"), formData.get("username"));
+      formData.append("username", userData.username);      
 
       if (image) {
         const file = dataURLtoFile(image, "upload.jpg");

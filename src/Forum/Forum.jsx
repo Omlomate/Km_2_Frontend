@@ -340,8 +340,7 @@ const Forum = () => {
                       <Link
                         to={`/forum/${post._id}`}
                         className="block"
-                        aria-label={`View post: ${post.title || "Untitled"}`}
-                        onClick={() => console.log(`Clicked post: ${post._id}`)}
+                        aria-label={`View post: ${post.title || "Untitled"}`}                    
                       >
                         <ForumPosts
                           post={post}
