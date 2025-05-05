@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from "react";
 import LoginPage from "../Login&Registation/loginForm";
 import SignupPage from "../Login&Registation/signupForm";
-import { isAuthenticated } from "../../utils/auth"; // Import isAuthenticated
+import { isAuthenticated } from "../../utils/auth";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false); // State to track authentication
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Add this state
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
-  // Check authentication status whenever component mounts or when localStorage changes
   useEffect(() => {
     const checkAuth = () => {
-      setLoggedIn(isAuthenticated());
+      const isLoggedIn = isAuthenticated();
+      setLoggedIn(isLoggedIn);
+      if (isLoggedIn) {
+        fetchUnreadCount(); // Fetch unread count when user is logged in
+      } else {
+        setUnreadCount(0); // Reset count when logged out
+        setNotifications([]); // Clear notifications
+        setShowNotifications(false); // Hide notifications
+      }
     };
 
-    // Check auth on mount
     checkAuth();
-
-    // Add event listener for storage changes (in case user logs in from another tab)
     window.addEventListener("storage", checkAuth);
-
-    // Custom event for login success
     window.addEventListener("login-success", checkAuth);
 
     return () => {
@@ -33,8 +38,122 @@ const Navbar = () => {
     };
   }, []);
 
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
+  // Poll for unread count every 30 seconds when logged in
+  useEffect(() => {
+    let interval;
+    if (loggedIn) {
+      fetchUnreadCount(); // Initial fetch
+      interval = setInterval(fetchUnreadCount, 30000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [loggedIn]);
+
+  // Fetch unread notification count
+  const fetchUnreadCount = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        setUnreadCount(0);
+        console.warn("No JWT token found in localStorage for fetching unread notifications");
+        return;
+      }
+
+      const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications/unread-count`;
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch unread count for userId with isRead=false: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setUnreadCount(data.unreadCount || 0);
+    } catch (error) {
+      console.error("Error fetching unread notification count:", error.message);
+      setUnreadCount(0); // Reset count on error to avoid stale data
+    }
+  };
+
+  const markNotificationsRead = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications/mark-read`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.error("Error marking notifications as read:", error.message);
+    }
+  };
+
+  // Fetch full notifications when bell is clicked
+  const handleBellClick = async () => {
+    if (!loggedIn) {
+      alert("Please log in to view notifications");
+      navigate("/login");
+      return;
+    }
+
+    if (showNotifications) {
+      setShowNotifications(false);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        console.error("No JWT token found in localStorage for fetching notifications");
+        alert("Please log in to view notifications");
+        navigate("/login");
+        return;
+      }
+
+      const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications`;
+      console.log("Fetching notifications from:", url);
+
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Response status:", response.status, response.statusText);
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("Response body:", text.slice(0, 100));
+        throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text.slice(0, 100));
+        throw new Error("Received non-JSON response from server");
+      }
+
+      const data = await response.json();
+      console.log("Notifications fetched:", data);
+      setNotifications(data);
+      setShowNotifications(true);
+      setUnreadCount(0); // Reset unread count after viewing notifications
+      await markNotificationsRead();
+    } catch (error) {
+      console.error("Error fetching notifications:", error.message);
+      alert(`Failed to load notifications: ${error.message}`);
+    }
+  };
+
+  const handleNotificationClick = (postId) => {
+    setShowNotifications(false);
+    if (postId) {
+      navigate(`/forum/${postId}`);
+    }
   };
 
   const showLogin = () => {
@@ -49,22 +168,15 @@ const Navbar = () => {
 
   const hideLogin = () => {
     setIsLoginVisible(false);
-    // Check authentication status after login modal is closed
     const isUserAuthenticated = isAuthenticated();
     setLoggedIn(isUserAuthenticated);
 
-    // If user just logged in, redirect to home page
     if (isUserAuthenticated && !loggedIn) {
-      // Set Home as default in localStorage for sidebar consistency
       localStorage.setItem("selectedOption", "Home");
-
-      // Force a refresh of the sidebar state by dispatching a custom event
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/" },
       });
       window.dispatchEvent(loginEvent);
-
-      // Redirect to home page with replace to avoid back navigation issues
       setTimeout(() => {
         window.location.href = "/";
       }, 100);
@@ -73,55 +185,34 @@ const Navbar = () => {
 
   const hideRegister = () => {
     setIsRegisterVisible(false);
-    // Check authentication status after register modal is closed
     const isUserAuthenticated = isAuthenticated();
     setLoggedIn(isUserAuthenticated);
 
-    // If user just registered and logged in, redirect to home page
     if (isUserAuthenticated && !loggedIn) {
-      // Set Home as default in localStorage for sidebar consistency
       localStorage.setItem("selectedOption", "Home");
-
-      // Force a refresh of the sidebar state by dispatching a custom event
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/" },
       });
       window.dispatchEvent(loginEvent);
-
-      // Redirect to home page with replace to avoid back navigation issues
       setTimeout(() => {
         window.location.href = "/";
       }, 100);
     }
   };
 
-  // Get user data from localStorage
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem("userData")) || {};
 
   const handleLogout = () => {
-    // ✅ Remove all relevant data from localStorage
-    localStorage.clear(); // Clears all stored keys
-
-    // ✅ Clear sessionStorage if any session data exists
+    localStorage.clear();
     sessionStorage.clear();
-
-    // ✅ Reset authentication state
-    setLoggedIn(false);
-
-    // ✅ Optionally, clear cookies if authentication relies on them
     document.cookie.split(";").forEach((cookie) => {
       document.cookie = cookie
         .replace(/^ +/, "")
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
-
-    // ✅ Redirect user to login or home page
-    window.location.href = "/"; // Changed to redirect to home page
+    setLoggedIn(false);
+    window.location.href = "/";
   };
-
-  // useEffect(() => {
-  //   console.log("isLoginVisible:", isLoginVisible);
-  // }, [isLoginVisible]);
 
   return (
     <>
@@ -129,16 +220,11 @@ const Navbar = () => {
         className="bg-white w-full px-4 md:px-8 shadow-sm transition-all duration-300 fixed top-0 z-50 animate-navbar"
         style={{ fontFamily: "wantedsans" }}
       >
-        {/* Main navbar row */}
         <div className="h-16 mx-auto md:px-4 container flex items-center justify-between">
           <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
-              <a href="/" className="flex items-center gap-2 logo-hover ">
-                {/* Logo mark SVG - smaller on mobile */}
-                <svg
-                  className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8"
-                  viewBox="0 0 360 398"
-                >
+              <a href="/" className="flex items-center gap-2 logo-hover">
+                <svg className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8" viewBox="0 0 360 398">
                   <path
                     d="M54.9577 182.394L2.36267 391.782C1.56966 394.939 3.95687 398 7.21202 398H352.001C355.867 398 359.001 394.866 359.001 391V0L234.236 195.991L183.814 100.814L109.115 240.666L54.9577 182.394Z"
                     fill="#12153D"
@@ -148,7 +234,6 @@ const Navbar = () => {
                     fill="#E5590F"
                   />
                 </svg>
-                {/* Text logo SVG - responsive width */}
                 <svg
                   className="w-28 h-auto sm:w-24 md:w-32 lg:w-52"
                   viewBox="0 0 208 34"
@@ -215,7 +300,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop menu - hidden on mobile */}
           <div className="hidden md:block text-gray-900">
             <ul className="flex font-semibold items-center space-x-6">
               <li>
@@ -248,12 +332,54 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Login/Register/Logout buttons */}
           <div className="flex items-center gap-3">
-            {" "}
-            {/* Added gap-3 here */}
             {loggedIn ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 relative">
+                <button
+                  onClick={handleBellClick}
+                  className="relative hidden md:block text-[#12153D] hover:text-[#E5590F] transition-colors duration-200"
+                  aria-label="Notifications"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+                {showNotifications && (
+                  <div className="absolute top-10 right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-50">
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification._id}
+                          className="py-2 border-b last:border-b-0 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNotificationClick(notification.postId)}
+                        >
+                          <p className="text-sm">{notification.message}</p>
+                          <span className="text-xs text-gray-500">
+                            {new Date(notification.createdAt).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500">No notifications</p>
+                    )}
+                  </div>
+                )}
                 {userData && (
                   <span className="hidden md:block text-[#12153D] font-medium">
                     Hi, {userData.firstName || "User"}
@@ -282,8 +408,6 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                {" "}
-                {/* Added gap-3 here */}
                 <button
                   onClick={showLogin}
                   className="flex items-center gap-1.5 px-4 py-1.5 bg-[#E5590F] hover:bg-[#E5590F]/90 text-white rounded-full transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md"
@@ -329,15 +453,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile menu - Second row for small screens */}
         <div className="md:hidden w-full border-t border-gray-100">
           <div className="overflow-x-auto">
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
               <Link to="/">
-                {" "}
                 <li>Research</li>
               </Link>
-
               <li>
                 <Link to="/blog" className="nav-link text-sm">
                   Blog
@@ -365,7 +486,6 @@ const Navbar = () => {
         </div>
       </nav>
       <div className="space-x-1">
-        {/* Login dialog */}
         {isLoginVisible && (
           <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4 modal-overlay">
             <div className="modal-content">
@@ -377,8 +497,6 @@ const Navbar = () => {
             </div>
           </div>
         )}
-
-        {/* Register dialog */}
         {isRegisterVisible && (
           <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-[1000] p-4 modal-overlay">
             <div className="modal-content">

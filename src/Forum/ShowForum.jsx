@@ -280,7 +280,7 @@ const ShowForum = () => {
                     )}
                   </div>
                   <div>
-                    <span className="font-medium text-lg block">{post.author}</span>
+                    <span className="font-medium text-lg block">{post.username}</span>
                     <p className="text-sm text-gray-500">
                       {new Date(post.createdAt).toLocaleDateString()}
                     </p>

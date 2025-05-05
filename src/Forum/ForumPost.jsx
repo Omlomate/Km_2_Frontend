@@ -51,7 +51,7 @@ export const ForumPosts = ({ post, onReact }) => {
               )}
             </div>
             <span className="text-sm text-gray-500">
-              {post.author || "Anonymous"}
+              {post.username || "Anonymous"}
             </span>
             <div className="ml-auto flex items-center">
               {/* Comment count icons removed for brevity */}

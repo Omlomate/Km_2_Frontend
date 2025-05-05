@@ -29,10 +29,18 @@ const CreateForum = () => {
       formData.append("content", content);
       formData.append("contentType", activeTab === "text" ? "html" : "image");
 
-      // Get userData from localStorage and set author as firstName + lastName
+      // Get userData from localStorage and set author as user._id and username
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
-      const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
-      formData.append("author", author);
+      console.log("userData", userData);
+      if (!userData._id) {
+        throw new Error("User ID not found in localStorage");
+      }
+      if (!userData.username) {
+        throw new Error("Username not found in localStorage");
+      }
+      formData.append("author", userData._id);
+      formData.append("username", userData.username);
+      console.log("formData", formData.get("author"), formData.get("username"));
 
       if (image) {
         const file = dataURLtoFile(image, "upload.jpg");
@@ -53,7 +61,7 @@ const CreateForum = () => {
       navigate("/forum");
     } catch (error) {
       console.error("Error creating post:", error);
-      alert("Failed to create post");
+      alert(`Failed to create post: ${error.message || "Unknown error"}`);
     }
   };
 
@@ -200,8 +208,14 @@ const CreateForum = () => {
                   formData.append("content", content);
                   formData.append("contentType", activeTab === "text" ? "html" : "image");
                   const userData = JSON.parse(localStorage.getItem("userData")) || {};
-                  const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
-                  formData.append("author", author);
+                  if (!userData._id) {
+                    throw new Error("User ID not found in localStorage");
+                  }
+                  if (!userData.username) {
+                    throw new Error("Username not found in localStorage");
+                  }
+                  formData.append("author", userData._id);
+                  formData.append("username", userData.username);
                   if (image) {
                     const file = dataURLtoFile(image, "upload.jpg");
                     formData.append("image", file);
@@ -216,7 +230,7 @@ const CreateForum = () => {
                   alert("Draft saved");
                 } catch (error) {
                   console.error("Error saving draft:", error);
-                  alert("Failed to save draft");
+                  alert(`Failed to save draft: ${error.message || "Unknown error"}`);
                 }
               }}
             >
