@@ -31,14 +31,15 @@ const CreateForum = () => {
 
       // Get userData from localStorage and set author as user._id and username
       const userData = JSON.parse(localStorage.getItem("userData")) || {};     
+      console.log(userData);
       if (!userData._id) {
         throw new Error("User ID not found in localStorage");
       }
-      if (!userData.username) {
+      if (!userData.firstName) {
         throw new Error("Username not found in localStorage");
       }
       formData.append("author", userData._id);
-      formData.append("username", userData.username);      
+      formData.append("username", `${userData.firstName} ${userData.lastName}`);
 
       if (image) {
         const file = dataURLtoFile(image, "upload.jpg");
