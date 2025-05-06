@@ -226,7 +226,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 pb-16"> {/* Changed h-screen to min-h-screen and added pb-16 */}
       <aside className="w-64 bg-white shadow-md p-4">
         <h1 className="text-2xl font-bold text-center text-blue-600">
           Admin Panel
@@ -249,7 +249,7 @@ const AdminPanel = () => {
         </nav>
       </aside>
 
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 mb-8"> {/* Added mb-8 for additional bottom margin */}
         <h2 className="text-3xl font-semibold text-gray-800">{activeTab}</h2>
 
         {activeTab === "Dashboard" && (

@@ -4,6 +4,8 @@ import useKeywordData from "../../../hooks/useKeywordData";
 import CountrySelect from "./CountrySelect";
 import ServerSelect from "./ServerSelect";
 import SelectCurrency from "./SelectCurrency";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SearchInput = ({
   onSearch,
@@ -40,12 +42,12 @@ const SearchInput = ({
   const handleSearch = () => {
     if (location.pathname === "/CPC") {
       if (!country || !currency) {
-        alert("Country and Currency are required");
+        toast.error('Country and Currency are required');
         return;
       }
     } else {
       if (!country || !server) {
-        alert("Country and Server are required");
+        toast.error('Country and Server are required');
         return;
       }
     }

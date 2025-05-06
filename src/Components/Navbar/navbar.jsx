@@ -318,9 +318,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="nav-link">
+                <Link to="/courses"   className="nav-link">
                   Courses
-                </a>
+                </Link>
               </li>
               {userData?.isAdmin && (
                 <li>
@@ -456,7 +456,7 @@ const Navbar = () => {
         <div className="md:hidden w-full border-t border-gray-100">
           <div className="overflow-x-auto">
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
-              <Link to="/">
+              <Link to="/related-keywords">
                 <li>Research</li>
               </Link>
               <li>
@@ -470,9 +470,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="nav-link text-sm">
+                <Link to="/courses"  className="nav-link text-sm">
                   Courses
-                </a>
+                </Link>
               </li>
               {userData?.isAdmin && (
                 <li>

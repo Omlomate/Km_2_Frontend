@@ -16,9 +16,12 @@ const ShowForum = () => {
   const [likedComments, setLikedComments] = useState({});
   const [dislikedComments, setDislikedComments] = useState({});
 
+  const [loading, setLoading] = useState(true); // Add loading state
+
   // Fetch post on mount
   useEffect(() => {
     const fetchPost = async () => {
+      setLoading(true); // Set loading to true when fetching starts
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}`);
         setPost(response.data);
@@ -27,6 +30,8 @@ const ShowForum = () => {
         console.error("Error fetching post:", error);
         setError("Failed to load post. Please try again.");
         setPost(null);
+      } finally {
+        setLoading(false); // Set loading to false when fetching ends
       }
     };
     fetchPost();
@@ -202,16 +207,11 @@ const ShowForum = () => {
   if (!post) {
     return (
       <div className="p-6 max-w-4xl mx-auto text-center">
-        <h2 className="text-2xl font-bold mb-4">Post Not Found</h2>
-        <p className="mb-6">
-          The post you're looking for doesn't exist or has been removed.
-        </p>
-        <button
-          onClick={() => navigate("/forum")}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Back to Forum
-        </button>
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto mb-6"></div>
+          <div className="h-10 bg-gray-200 rounded-full w-40 mx-auto"></div>
+        </div>
       </div>
     );
   }
@@ -231,12 +231,12 @@ const ShowForum = () => {
               </div>
               <span className="font-medium">Edit Profile</span>
             </Link>
-            <div className="mt-8 text-center hidden lg:block">
-              <div className="bg-gray-100 h-40 rounded-lg flex items-center justify-center text-gray-500 font-medium shadow-inner">
+            
+          </div><div className="mt-8 text-center  ">
+              <div className="bg-gray-200   w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
                 AD
               </div>
             </div>
-          </div>
         </div>
 
         {/* Main Content */}
@@ -487,7 +487,7 @@ const ShowForum = () => {
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
                                           strokeWidth={1.5}
-                                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h-.095c-.5 0-.905.405-.905.905 0 .714.211 1.412.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                                         />
                                       </svg>
                                       <span>
@@ -663,7 +663,7 @@ const ShowForum = () => {
                                               strokeLinecap="round"
                                               strokeLinejoin="round"
                                               strokeWidth={1.5}
-                                              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714.211 1.412.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                                             />
                                           </svg>
                                           <span>
@@ -724,7 +724,7 @@ const ShowForum = () => {
         {/* Right Advertisement */}
         <div className="hidden xl:block w-64 order-3">
           <div className="sticky top-4">
-            <div className="bg-[#12153D] h-80 rounded-lg flex items-center justify-center text-white font-medium shadow-lg">
+            <div className="bg-[#12153D] w-[300px] h-[250px] rounded-lg flex items-center justify-center text-white font-medium shadow-lg">
               ADVERTISEMENT
             </div>
           </div>

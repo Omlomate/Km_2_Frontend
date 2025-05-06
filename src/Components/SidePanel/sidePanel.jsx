@@ -10,17 +10,12 @@ const Sidebar = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User");
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
-  const [sidePanelSettings, setSidePanelSettings] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const profileImage = userData?.profileImage || Profile;
 
   useEffect(() => {
-    // Load side panel settings from localStorage
-    const adminSettings = JSON.parse(localStorage.getItem("adminToggleSettings")) || {};
-    setSidePanelSettings(adminSettings.sidePanel || {});
-
     // Check authentication status
     const authStatus = isAuthenticated();
 
@@ -28,8 +23,8 @@ const Sidebar = () => {
     if (authStatus && !isLoggedIn) {
       setIsLoggedIn(authStatus);
       setSelectedOption("Home");
-      localStorage.setItem("selectedOption", "Home");
-      navigate("/");
+      localStorage.setItem("selectedOption", "Related Keywords");
+      navigate("/related-keywords");
       return; // Exit early after redirecting
     }
 
@@ -47,8 +42,8 @@ const Sidebar = () => {
       setSelectedOption(storedOption);
     } else if (authStatus) {
       // If no option is stored but user is logged in, default to Home
-      setSelectedOption("Home");
-      localStorage.setItem("selectedOption", "Home");
+      setSelectedOption("Related Keywords");
+      localStorage.setItem("selectedOption", "Related Keywords");
     }
 
     if (!authStatus && location.pathname !== "/") {
@@ -63,10 +58,10 @@ const Sidebar = () => {
   useEffect(() => {
     const handleLoginSuccess = () => {
       setIsLoggedIn(true);
-      setSelectedOption("Home");
-      localStorage.setItem("selectedOption", "Home");
+      setSelectedOption("Related Keywords");
+      localStorage.setItem("selectedOption", "Related Keywords");
       // Force navigation to home route
-      navigate("/", { replace: true });
+      navigate("/related-keywords", { replace: true });
     };
 
     window.addEventListener("login-success", handleLoginSuccess);
@@ -75,6 +70,18 @@ const Sidebar = () => {
       window.removeEventListener("login-success", handleLoginSuccess);
     };
   }, [navigate]);
+
+  // const hideLogin = () => {
+  //   setIsLoginVisible(false);
+
+  //   // Check if user just logged in and force redirect to home
+  //   if (isAuthenticated() && !isLoggedIn) {
+  //     setIsLoggedIn(true);
+  //     setSelectedOption("Home");
+  //     localStorage.setItem("selectedOption", "Home");
+  //     navigate("/", { replace: true });
+  //   }
+  // };
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -105,22 +112,31 @@ const Sidebar = () => {
     // Check if user just logged in
     if (isAuthenticated() && !isLoggedIn) {
       setIsLoggedIn(true);
-      setSelectedOption("Home");
-      localStorage.setItem("selectedOption", "Home");
-      navigate("/");
+      setSelectedOption("Related Keywords");
+      localStorage.setItem("selectedOption", "Related Keywords");
+      navigate("/related-keywords");
     }
   };
 
   const menuItems = [
-    { name: "Related Keywords", path: "/related-keywords", icon: "fa-link", key: "relatedKeywords" },
-    { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key", key: "longTailKeywords" },
-    { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line", key: "searchVolume" },
-    { name: "Keyword Difficulty", path: "/keyword-difficulty", icon: "fa-chart-bar", key: "keywordDifficulty" },
-    { name: "Keyword Spam Score", path: "/Keyword-spam-score", icon: "fa-shield-alt", key: "keywordSpamScore" },
-    { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area", key: "keywordTrend" },
-    { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign", key: "cpc" },
-    { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad", key: "adCompetitions" },
-  ].filter((item) => sidePanelSettings[item.key] !== false);
+    // { name: "Home", path: "/", icon: "fa-home" },
+    { name: "Related Keywords", path: "/related-keywords", icon: "fa-link" },
+    { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key" },
+    { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line" },
+    {
+      name: "Keyword Difficulty",
+      path: "/keyword-difficulty",
+      icon: "fa-chart-bar",
+    },
+    {
+      name: "Keyword Spam Score",
+      path: "/Keyword-spam-score",
+      icon: "fa-shield-alt",
+    },
+    { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area" },
+    { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign" },
+    { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad" },
+  ];
 
   return (
     <>     

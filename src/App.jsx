@@ -33,6 +33,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Footer from "./Components/Footer/Footer.jsx";
 import ForumPosts from "./adminPages/ForumPosts.jsx";
 import ContactForm from "./Components/ContactForm/ContactForm.jsx";
+import Courses from "./Components/Courses/Courses.jsx";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -167,6 +170,7 @@ const AppContent = () => {
 
   return (
     <Routes>
+      <Route path="/courses" element={<Courses/>} />
       <Route path="/contactForm" element={<ContactForm />} />
       {/* Admin Routes */}
       <Route
@@ -267,6 +271,7 @@ function App() {
         <div className="md:px-6">
           <Footer />
         </div>
+        <ToastContainer position="top-right" autoClose={3000} />
       </Router>
     </GoogleOAuthProvider>
   );

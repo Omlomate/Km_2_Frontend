@@ -156,7 +156,8 @@ const Forum = () => {
           </h1>
           <div className="mx-auto mt-2 w-16 h-1 bg-[#E5590F] rounded"></div>
           <p className="text-center mt-3 text-gray-200 max-w-2xl mx-auto">
-            Join the conversation, share your insights, and connect with our community
+            Join the conversation, share your insights, and connect with our
+            community
           </p>
         </div>
       </div>
@@ -202,19 +203,30 @@ const Forum = () => {
         </div>
 
         {/* Mobile filter toggle button */}
-        <button 
+        <button
           className="lg:hidden w-full bg-white rounded-lg shadow-sm p-3 mb-4 flex items-center justify-between font-medium text-gray-700"
           onClick={toggleMobileFilter}
         >
           <span>Filters & Options</span>
-          <i className={`fa-solid fa-chevron-${mobileFilterVisible ? 'up' : 'down'} text-gray-500`}></i>
+          <i
+            className={`fa-solid fa-chevron-${
+              mobileFilterVisible ? "up" : "down"
+            } text-gray-500`}
+          ></i>
         </button>
 
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Sidebar - hidden on mobile by default unless toggled */}
-          <div className={`${mobileFilterVisible ? 'block' : 'hidden'} lg:block w-full lg:w-64 flex-shrink-0 order-2 lg:order-1 transition-all duration-300`}>
+          <div
+            className={`${
+              mobileFilterVisible ? "block" : "hidden"
+            } lg:block w-full lg:w-64 flex-shrink-0 order-2 lg:order-1 transition-all duration-300`}
+          >
             <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
-              <Link to="/profile-edit" className="flex items-center gap-3 mb-6 hover:text-[#E5590F] transition-colors">
+              <Link
+                to="/profile-edit"
+                className="flex items-center gap-3 mb-6 hover:text-[#E5590F] transition-colors"
+              >
                 <div className="w-10 h-10 bg-[#12153D] rounded-full flex items-center justify-center text-white">
                   <i className="fa-solid fa-user"></i>
                 </div>
@@ -242,20 +254,20 @@ const Forum = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-8 text-center">
-                <div className="bg-gray-200 h-40 rounded-lg flex items-center justify-center text-gray-500 font-medium">
-                  AD
-                </div>
+            </div>{" "}
+            <div className="mt-8 text-center  ">
+              <div className="bg-gray-200   w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+                AD
               </div>
             </div>
-
-             
           </div>
 
-          <div className="flex-1 order-1 lg:order-2 min-w-0">
+          <div className="container mx-auto flex-1 order-1 lg:order-2 min-w-0">
             <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <h2 className="text-xl font-bold text-[#12153D]">Latest Posts</h2>
+                <h2 className="text-xl font-bold text-[#12153D]">
+                  Latest Posts
+                </h2>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <span className="text-sm text-gray-500">Sort by:</span>
                   <div className="relative flex-grow sm:flex-grow-0">
@@ -336,11 +348,14 @@ const Forum = () => {
                     return null;
                   }
                   return (
-                    <div key={post._id} className="transform hover:scale-[1.01] transition-transform">
+                    <div
+                      key={post._id}
+                      className="transform hover:scale-[1.01] transition-transform"
+                    >
                       <Link
                         to={`/forum/${post._id}`}
                         className="block"
-                        aria-label={`View post: ${post.title || "Untitled"}`}                    
+                        aria-label={`View post: ${post.title || "Untitled"}`}
                       >
                         <ForumPosts
                           post={post}
@@ -370,9 +385,18 @@ const Forum = () => {
             )}
           </div>
 
+          {/* Mobile advertisement - visible only on small screens (bottom) */}
+          <div className="lg:hidden w-full order-4 mt-6">
+            <div className="bg-gray-200 w-full h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+              ADVERTISEMENT
+            </div>
+          </div>
+
           <div className="hidden lg:block w-64 flex-shrink-0 order-3">
             <div className="bg-white p-4 rounded-lg shadow-sm   top-4">
-              <h3 className="font-medium mb-3 text-[#12153D]">Popular Topics</h3>
+              <h3 className="font-medium mb-3 text-[#12153D]">
+                Popular Topics
+              </h3>
               <div className="space-y-2">
                 <Link
                   to="/"
@@ -397,8 +421,8 @@ const Forum = () => {
                 </Link>
               </div>
             </div>
-            <div className="bg-[#12153D] h-80 rounded-lg flex items-center justify-center text-white font-medium mt-4 sticky top-64">
-              ADVERTISEMENT
+            <div className="bg-gray-200 w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium mt-4">
+              AD
             </div>
           </div>
         </div>
