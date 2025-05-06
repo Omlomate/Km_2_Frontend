@@ -10,12 +10,17 @@ const Sidebar = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User");
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
+  const [sidePanelSettings, setSidePanelSettings] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const profileImage = userData?.profileImage || Profile;
 
   useEffect(() => {
+    // Load side panel settings from localStorage
+    const adminSettings = JSON.parse(localStorage.getItem("adminToggleSettings")) || {};
+    setSidePanelSettings(adminSettings.sidePanel || {});
+
     // Check authentication status
     const authStatus = isAuthenticated();
 
@@ -71,18 +76,6 @@ const Sidebar = () => {
     };
   }, [navigate]);
 
-  // const hideLogin = () => {
-  //   setIsLoginVisible(false);
-
-  //   // Check if user just logged in and force redirect to home
-  //   if (isAuthenticated() && !isLoggedIn) {
-  //     setIsLoggedIn(true);
-  //     setSelectedOption("Home");
-  //     localStorage.setItem("selectedOption", "Home");
-  //     navigate("/", { replace: true });
-  //   }
-  // };
-
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     // Save the selected option to localStorage
@@ -119,24 +112,15 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    // { name: "Home", path: "/", icon: "fa-home" },
-    { name: "Related Keywords", path: "/related-keywords", icon: "fa-link" },
-    { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key" },
-    { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line" },
-    {
-      name: "Keyword Difficulty",
-      path: "/keyword-difficulty",
-      icon: "fa-chart-bar",
-    },
-    {
-      name: "Keyword Spam Score",
-      path: "/Keyword-spam-score",
-      icon: "fa-shield-alt",
-    },
-    { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area" },
-    { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign" },
-    { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad" },
-  ];
+    { name: "Related Keywords", path: "/related-keywords", icon: "fa-link", key: "relatedKeywords" },
+    { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key", key: "longTailKeywords" },
+    { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line", key: "searchVolume" },
+    { name: "Keyword Difficulty", path: "/keyword-difficulty", icon: "fa-chart-bar", key: "keywordDifficulty" },
+    { name: "Keyword Spam Score", path: "/Keyword-spam-score", icon: "fa-shield-alt", key: "keywordSpamScore" },
+    { name: "Keyword Trend", path: "/keyword-trend", icon: "fa-chart-area", key: "keywordTrend" },
+    { name: "CPC (Cost Per Click)", path: "/CPC", icon: "fa-dollar-sign", key: "cpc" },
+    { name: "Ad Competitions", path: "/ad-Competition", icon: "fa-ad", key: "adCompetitions" },
+  ].filter((item) => sidePanelSettings[item.key] !== false);
 
   return (
     <>     

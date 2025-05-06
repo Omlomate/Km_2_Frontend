@@ -14,6 +14,32 @@ const AdminPanel = () => {
   });
   const [file, setFile] = useState(null);
   const [uploadMessage, setUploadMessage] = useState("");
+  const [settings, setSettings] = useState({
+    sidePanel: {
+      relatedKeywords: true,
+      longTailKeywords: true,
+      searchVolume: true,
+      keywordDifficulty: true,
+      keywordSpamScore: true,
+      keywordTrend: true,
+      cpc: true,
+      adCompetitions: true,
+    },
+    navigation: {
+      Research: true,
+      Blog: true,
+      Forum: true,
+      Courses: true,
+      Admin: true,
+    },
+    socialLinks: {
+      linkedin: "",
+      instagram: "",
+      youtube: "",
+      facebook: "",
+    },
+  });
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const menuItems = [
@@ -62,6 +88,80 @@ const AdminPanel = () => {
     }
   };
 
+  // Fetch admin toggle control settings
+  const fetchAdminToggleSettings = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) throw new Error("No JWT token found");
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error(`Failed to fetch settings: ${response.statusText}`);
+      const data = await response.json();
+      setSettings(data);
+    } catch (err) {
+      console.error("Error fetching settings:", err.message);
+      setError("Failed to load settings");
+    }
+  };
+
+  // Handle toggle for side panel and navigation
+  const handleToggle = (section, key) => {
+    setSettings((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [key]: !prev[section][key] },
+    }));
+  };
+
+  // Handle social links input changes
+  const handleSocialLinkChange = (field, value) => {
+    setSettings((prev) => ({
+      ...prev,
+      socialLinks: { ...prev.socialLinks, [field]: value },
+    }));
+  };
+
+  // Save settings to backend
+  const saveSettings = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        setError("No JWT token found. Please log in again.");
+        navigate("/login");
+        return;
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save settings: ${response.statusText} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      setSettings(data);
+      setError(null);
+      window.dispatchEvent(new Event("adminSettingsChange"));
+    } catch (err) {
+      console.error("Error saving settings:", err.message);
+      setError(err.message.includes("Unauthorized") ? "Unauthorized: Invalid or expired token. Please log in again." : `Failed to save settings: ${err.message}`);
+      if (err.message.includes("Unauthorized")) {
+        navigate("/login");
+      }
+    }
+  };
+
   // Handle file selection
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -104,6 +204,7 @@ const AdminPanel = () => {
   useEffect(() => {
     fetchUserData();
     fetchBlogCounts();
+    fetchAdminToggleSettings();
   }, []);
 
   useEffect(() => {
@@ -152,7 +253,7 @@ const AdminPanel = () => {
         <h2 className="text-3xl font-semibold text-gray-800">{activeTab}</h2>
 
         {activeTab === "Dashboard" && (
-          <div className="grid grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             {/* User Count Card */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="text-xl font-bold">Users</p>
@@ -245,6 +346,86 @@ const AdminPanel = () => {
                 {uploadMessage}
               </p>
             )}
+          </div>
+        )}
+
+        {activeTab === "Dashboard" && (
+          <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-4">Toggle Control Settings</h3>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+
+            {/* Side Panel Toggles */}
+            <div className="mb-6">
+              <h4 className="text-lg font-medium mb-2 text-gray-700">Side Panel Visibility</h4>
+              <div className="space-y-4">
+                {Object.keys(settings.sidePanel).map((key) => (
+                  <div key={key} className="flex items-center justify-between">
+                    <span className="text-gray-700 font-medium">
+                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                    </span>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={settings.sidePanel[key]}
+                        onChange={() => handleToggle("sidePanel", key)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-300"></div>
+                      <div className="absolute w-4 h-4 bg-white rounded-full top-1 left-1 peer-checked:translate-x-5 transition-transform duration-300"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Toggles */}
+            <div className="mb-6">
+              <h4 className="text-lg font-medium mb-2 text-gray-700">Navigation Visibility</h4>
+              <div className="space-y-4">
+                {Object.keys(settings.navigation).map((key) => (
+                  <div key={key} className="flex items-center justify-between">
+                    <span className="text-gray-700 font-medium">{key}</span>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={settings.navigation[key]}
+                        onChange={() => handleToggle("navigation", key)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-300"></div>
+                      <div className="absolute w-4 h-4 bg-white rounded-full top-1 left-1 peer-checked:translate-x-5 transition-transform duration-300"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="mb-6">
+              <h4 className="text-lg font-medium mb-2 text-gray-700">Social Media Links</h4>
+              <div className="space-y-4">
+                {["linkedin", "instagram", "youtube", "facebook"].map((platform) => (
+                  <div key={platform}>
+                    <label className="block text-gray-700 font-medium capitalize">{platform}</label>
+                    <input
+                      type="url"
+                      value={settings.socialLinks[platform]}
+                      onChange={(e) => handleSocialLinkChange(platform, e.target.value)}
+                      placeholder={`https://www.${platform}.com/...`}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <button
+              onClick={saveSettings}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+            >
+              Save Settings
+            </button>
           </div>
         )}
       </main>

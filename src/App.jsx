@@ -22,7 +22,7 @@ import BlogPost from "./adminPages/BlogPostPage.jsx";
 import EditBlogPage from "./adminPages/EditBlogPage.jsx";
 import Home from "./Blogs/Home.jsx";
 import Show from "./Blogs/Show.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { initialBlogs } from "./assets/blogData.js";
 import ControlMetaTags from "./adminPages/ControlMetaTags.jsx";
 import Forum from "./Forum/Forum.jsx";
@@ -80,9 +80,94 @@ const AppContent = () => {
     setBlogs([...blogs, blog]);
   };
 
+  // Load admin toggle settings from localStorage
+  const [toggleSettings, setToggleSettings] = useState({
+    navOptions: {},
+    sidePanelOptions: {},
+  });
+
+  useEffect(() => {
+    try {
+      const adminSettings = JSON.parse(localStorage.getItem("adminToggleSettings")) || {};
+      setToggleSettings({
+        navOptions: adminSettings.navOptions || {},
+        sidePanelOptions: adminSettings.sidePanelOptions || {},
+      });
+    } catch (error) {
+      console.error("Error parsing adminToggleSettings from localStorage:", error);
+      setToggleSettings({ navOptions: {}, sidePanelOptions: {} });
+    }
+  }, []);
+
+  // Define routes with their toggle keys
+  const privateRoutes = [
+    {
+      path: "/related-keywords",
+      element: <KeywordResearch />,
+      toggleKey: "relatedKeywords",
+      toggleType: "navOptions",
+    },
+    {
+      path: "/long-tail-keywords",
+      element: <LongTailKeyword />,
+      toggleKey: "longTailKeywords",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/keyword-difficulty",
+      element: <KeywordDifficulty />,
+      toggleKey: "keywordDifficulty",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/Keyword-spam-score",
+      element: <SpamScore />,
+      toggleKey: "spamScore",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/keyword-trend",
+      element: <WhatsTrending />,
+      toggleKey: "whatsTrending",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/search-volume",
+      element: <AudienceVolume />,
+      toggleKey: "audienceVolume",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/CPC",
+      element: <CPCPage />,
+      toggleKey: "cpc",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/ad-competition",
+      element: <AdCompetition />,
+      toggleKey: "adCompetition",
+      toggleType: "navOptions",
+      requiresAuth: true,
+    },
+    {
+      path: "/profile-edit",
+      element: <ProfileEdit />,
+      toggleKey: "profileEdit",
+      toggleType: "sidePanelOptions",
+      requiresAuth: true,
+    },
+  ];
+
   return (
     <Routes>
-        <Route path="/contactForm" element={<ContactForm/>}/>
+      <Route path="/contactForm" element={<ContactForm />} />
       {/* Admin Routes */}
       <Route
         path="/admin-dashboard"
@@ -135,80 +220,34 @@ const AppContent = () => {
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
-     
 
-      {/* Public Routes */}
+      {/* Public and Private Routes */}
       <Route
         path="*"
         element={
           <Layout className="w-full">
             <Routes>
               <Route path="/" element={<KeywordResearch />} />
-              <Route path="/related-keywords" element={<KeywordResearch />} />              
-              <Route
-                path="/long-tail-keywords"
-                element={
-                  <PrivateRoute>
-                    <LongTailKeyword />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/keyword-difficulty"
-                element={
-                  <PrivateRoute>
-                    <KeywordDifficulty />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/Keyword-spam-score"
-                element={
-                  <PrivateRoute>
-                    <SpamScore />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/keyword-trend"
-                element={
-                  <PrivateRoute>
-                    <WhatsTrending />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/search-volume"
-                element={
-                  <PrivateRoute>
-                    <AudienceVolume />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/CPC"
-                element={
-                  <PrivateRoute>
-                    <CPCPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/ad-competition"
-                element={
-                  <PrivateRoute>
-                    <AdCompetition />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/profile-edit"
-                element={
-                  <PrivateRoute>
-                    <ProfileEdit />
-                  </PrivateRoute>
-                }
-              />
+              {privateRoutes.map(({ path, element, toggleKey, toggleType, requiresAuth }) => {
+                const isEnabled = toggleSettings[toggleType][toggleKey] !== false; // Enabled unless explicitly false
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      isEnabled ? (
+                        requiresAuth ? (
+                          <PrivateRoute>{element}</PrivateRoute>
+                        ) : (
+                          element
+                        )
+                      ) : (
+                        <Navigate to="/" replace />
+                      )
+                    }
+                  />
+                );
+              })}
             </Routes>
           </Layout>
         }
@@ -226,7 +265,6 @@ function App() {
           <AppContent />
         </div>
         <div className="md:px-6">
-          {" "}
           <Footer />
         </div>
       </Router>
