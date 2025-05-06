@@ -119,7 +119,7 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    { name: "Home", path: "/", icon: "fa-home" },
+    // { name: "Home", path: "/", icon: "fa-home" },
     { name: "Related Keywords", path: "/related-keywords", icon: "fa-link" },
     { name: "Long-Tail Keywords", path: "/long-tail-keywords", icon: "fa-key" },
     { name: "Search Volume", path: "/search-volume", icon: "fa-chart-line" },
@@ -139,8 +139,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <>
-      {/* Backdrop with blur effect when sidebar is open on mobile */}
+    <>     
       {isSidebarOpen && (
         <div
           className="md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"

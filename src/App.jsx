@@ -135,6 +135,7 @@ const AppContent = () => {
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />
       <Route path="/blog/:slug" element={<Show />} />
+     
 
       {/* Public Routes */}
       <Route
@@ -142,15 +143,8 @@ const AppContent = () => {
         element={
           <Layout className="w-full">
             <Routes>
-              <Route path="/" element={<KeywordData />} />
-              <Route
-                path="/related-keywords"
-                element={
-                  <PrivateRoute>
-                    <KeywordResearch />
-                  </PrivateRoute>
-                }
-              />
+              <Route path="/" element={<KeywordResearch />} />
+              <Route path="/related-keywords" element={<KeywordResearch />} />              
               <Route
                 path="/long-tail-keywords"
                 element={
