@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -170,14 +171,15 @@ const EditPost = () => {
         {post.contentType === 'html' && (
           <div className="mb-4">
             <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-            <textarea
+            {/* <textarea
               id="content"
               name="content"
               value={post.content}
               onChange={handleInputChange}
               rows="6"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            ></textarea>
+            ></textarea> */}
+            <TextEditor id="content" value={post.content} onChange={handleInputChange} placeholder="Add Body" />
           </div>
         )}
 

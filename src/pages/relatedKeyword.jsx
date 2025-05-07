@@ -40,8 +40,13 @@ export const KeywordResearch = () => {
 
     const fetchAdminToggleSettings = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`);
-        if (!response.ok) throw new Error(`Failed to fetch admin toggle settings: ${response.statusText}`);
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`
+        );
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch admin toggle settings: ${response.statusText}`
+          );
         const data = await response.json();
         localStorage.setItem("adminToggleSettings", JSON.stringify(data));
       } catch (error) {
@@ -73,7 +78,9 @@ export const KeywordResearch = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/scraper/scrape?query=${encodeURIComponent(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/scraper/scrape?query=${encodeURIComponent(
           searchTerm
         )}&engine=${searchEngine}&country=${country}`
       );
@@ -100,15 +107,17 @@ export const KeywordResearch = () => {
   // Load video player script
   useEffect(() => {
     const loadVideoPlayer = () => {
-      const existingScripts = document.querySelectorAll('script[src*="kolorowey.com"], script[data-playerPro]');
-      existingScripts.forEach(script => script.remove());
-      
-      const videoScript = document.createElement('script');
-      videoScript.src = 'https://stream.kolorowey.com/player/video.js';
+      const existingScripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      existingScripts.forEach((script) => script.remove());
+
+      const videoScript = document.createElement("script");
+      videoScript.src = "https://stream.kolorowey.com/player/video.js";
       videoScript.async = true;
-      
+
       videoScript.onload = () => {
-        const playerScript = document.createElement('script');
+        const playerScript = document.createElement("script");
         playerScript.innerHTML = `
           (function(){
             (playerPro = window.playerPro || []).push({
@@ -118,17 +127,19 @@ export const KeywordResearch = () => {
         `;
         document.body.appendChild(playerScript);
       };
-      
+
       document.body.appendChild(videoScript);
     };
-    
+
     if (keywordData) {
       setTimeout(loadVideoPlayer, 100);
     }
-    
+
     return () => {
-      const scripts = document.querySelectorAll('script[src*="kolorowey.com"], script[data-playerPro]');
-      scripts.forEach(script => script.remove());
+      const scripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      scripts.forEach((script) => script.remove());
     };
   }, [keywordData]);
 
@@ -150,8 +161,8 @@ export const KeywordResearch = () => {
                 Related Keywords <span className="text-[#E5590F]">Finder</span>
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Find keyword ideas closely connected to your topic to help expand your 
-                content and reach more relevant search traffic.
+                Find keyword ideas closely connected to your topic to help
+                expand your content and reach more relevant search traffic.
               </p>
             </div>
           </div>
@@ -165,8 +176,16 @@ export const KeywordResearch = () => {
               {error && (
                 <div className="mt-3 p-2 sm:p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs sm:text-base">
                   <p className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1- Dot-1"></path>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1- Dot-1"
+                      ></path>
                     </svg>
                     {error}
                   </p>
@@ -186,7 +205,7 @@ export const KeywordResearch = () => {
                 <div className="w-full">
                   {keywordData && (
                     <>
-                      <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
+                      <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-[#E5590f]/5 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F] ">
                         <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
                           Results for:{" "}
                           <span className="text-[#E5590F]">
@@ -202,8 +221,13 @@ export const KeywordResearch = () => {
                       <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
                         <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                           <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                            <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Related Keywords</h3>
-                            <KeywordContainer className="min-h-[250px] sm:min-h-[350px]" keywordData={keywordData} />
+                            <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                              Related Keywords
+                            </h3>
+                            <KeywordContainer
+                              className="min-h-[250px] sm:min-h-[350px]"
+                              keywordData={keywordData}
+                            />
                           </div>
                         </div>
 
@@ -244,28 +268,34 @@ export const KeywordResearch = () => {
                             )}
                           </div>
                           <div className="bg-[#12153d]/0 w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg">
-                            <div className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
-                              <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
-                                AD
-                              </h1>
+                            <div
+                              id="rk-ad-1"
+                              className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200"
+                            >
+                              AD
                             </div>
                           </div>
                           <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                              <div id="p2P21nhppseX" className="absolute inset-0 w-full h-full">
-                              </div>
+                            <div
+                              className="relative w-full"
+                              style={{ paddingBottom: "56.25%" }}
+                            >
+                              <div
+                                id="p2P21nhppseX"
+                                className="absolute inset-0 w-full h-full"
+                              ></div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex lg:hidden bg-gray-100 w-full h-[90px] sm:h-[120px] mt-4 rounded-xl shadow-sm justify-center items-center border border-gray-200">
-                          <h1 className="text-sm sm:text-lg font-bold text-[#12153d]">
+                        {/* <div id="rk-ad-2" className="flex lg:hidden bg-gray-100 w-full h-[90px] sm:h-[120px] mt-4 rounded-xl shadow-sm justify-center items-center border border-gray-200">
+                        
                             ADVERTISEMENT
-                          </h1>
-                        </div>
+                          
+                        </div> */}
                       </div>
 
-                      <div className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-4 sm:p-6 rounded-xl text-center lg:text-left mx-auto md:w-[728px] md:w-[90px] shadow-md">
+                      <div id="rk-ad-3" className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md">
                         ads
                       </div>
                     </>
