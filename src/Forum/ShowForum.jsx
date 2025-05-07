@@ -23,9 +23,7 @@ const ShowForum = () => {
     const fetchPost = async () => {
       setLoading(true); // Set loading to true when fetching starts
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}`
-        );
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (error) {
@@ -46,9 +44,7 @@ const ShowForum = () => {
 
     try {
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
-      const author =
-        `${userData.firstName || ""} ${userData.lastName || ""}`.trim() ||
-        "Anonymous";
+      const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
       const token = localStorage.getItem("jwt");
 
       const formData = new FormData();
@@ -58,16 +54,12 @@ const ShowForum = () => {
         formData.append("image", commentImage);
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // Update post with new comment
       setPost((prev) => ({
@@ -89,9 +81,7 @@ const ShowForum = () => {
 
     try {
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
-      const author =
-        `${userData.firstName || ""} ${userData.lastName || ""}`.trim() ||
-        "Anonymous";
+      const author = `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous";
       const token = localStorage.getItem("jwt");
 
       const response = await axios.post(
@@ -129,11 +119,7 @@ const ShowForum = () => {
       const token = localStorage.getItem("jwt");
       const isLiked = likedComments[commentId];
       await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/api/forum/posts/${id}/comments/${commentId}/${
-          isLiked ? "unlike" : "like"
-        }`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments/${commentId}/${isLiked ? "unlike" : "like"}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -169,11 +155,7 @@ const ShowForum = () => {
       const token = localStorage.getItem("jwt");
       const isDisliked = dislikedComments[commentId];
       await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/api/forum/posts/${id}/comments/${commentId}/${
-          isDisliked ? "undislike" : "dislike"
-        }`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments/${commentId}/${isDisliked ? "undislike" : "dislike"}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -196,9 +178,7 @@ const ShowForum = () => {
           c._id === commentId
             ? {
                 ...c,
-                dislikes: isDisliked
-                  ? (c.dislikes || 0) - 1
-                  : (c.dislikes || 0) + 1,
+                dislikes: isDisliked ? (c.dislikes || 0) - 1 : (c.dislikes || 0) + 1,
               }
             : c
         ),
@@ -226,46 +206,92 @@ const ShowForum = () => {
 
   if (!post) {
     return (
-      <div className="p-6 max-w-4xl mx-auto text-center">
-     
-     <div className="space-y-4">
-                {[1, 2].map((index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-4 rounded-lg shadow-sm animate-pulse w-full"
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Avatar skeleton */}
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
-
-                      <div className="flex-1 space-y-3 w-full">
-                        {/* Title skeleton */}
-                        <div className="h-5 sm:h-6 bg-gray-200 rounded w-4/5"></div>
-
-                        {/* Content skeleton */}
-                        <div className="space-y-2">
-                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
-                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
-                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
-                        </div>
-
-                        {/* Tags skeleton */}
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 rounded"></div>
-                          <div className="h-5 sm:h-6 w-20 sm:w-24 bg-gray-200 rounded"></div>
-                        </div>
-
-                        {/* Reactions skeleton */}
-                        <div className="flex flex-wrap gap-3 sm:gap-4 mt-4">
-                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
-                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
-                          <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
-                        </div>
-                      </div>
+      <div className="max-w-7xl mx-auto p-4 lg:p-6">
+        {/* Back button skeleton */}
+        <div className="animate-pulse mb-6">
+          <div className="h-10 w-32 bg-gray-200 rounded-full"></div>
+        </div>
+        
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar skeleton - only visible on large screens */}
+          <div className="hidden lg:block w-full lg:w-64 lg:flex-shrink-0 order-2 lg:order-1">
+            <div className="bg-gray-100 rounded-lg p-4 mb-4 h-40">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+              </div>
+            </div>
+            <div className="mt-8 text-center">
+              <div className="bg-gray-100 w-full h-[250px] rounded-lg"></div>
+            </div>
+          </div>
+          
+          {/* Main content skeleton */}
+          <div className="flex-1 order-1 lg:order-2">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="p-6">
+                {/* Author info skeleton */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-full bg-gray-200"></div>
+                    <div>
+                      <div className="h-5 bg-gray-200 rounded w-32 mb-2"></div>
+                      <div className="h-4 bg-gray-200 rounded w-24"></div>
                     </div>
                   </div>
-                ))}
+                  <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+                </div>
+                
+                {/* Post title skeleton */}
+                <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div>
+                
+                {/* Post content skeleton */}
+                <div className="space-y-3 mb-6">
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+                
+                {/* Post image skeleton */}
+                <div className="h-64 bg-gray-200 rounded-lg w-full mb-8"></div>
+                
+                {/* Comments section skeleton */}
+                <div className="mt-8 border-t pt-6">
+                  {/* Comment input skeleton */}
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="h-12 bg-gray-200 rounded-full flex-1"></div>
+                    <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                    <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                  </div>
+                  
+                  {/* Comments list skeleton */}
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((item) => (
+                      <div key={item} className="bg-gray-100 p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="h-10 w-10 rounded-full bg-gray-200 flex-shrink-0"></div>
+                          <div className="w-full">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="h-4 bg-gray-200 rounded w-24"></div>
+                              <div className="h-3 bg-gray-200 rounded w-16"></div>
+                            </div>
+                            <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
+                            <div className="flex gap-4 mt-2">
+                              <div className="h-4 bg-gray-200 rounded w-16"></div>
+                              <div className="h-4 bg-gray-200 rounded w-16"></div>
+                              <div className="h-4 bg-gray-200 rounded w-16"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -285,12 +311,12 @@ const ShowForum = () => {
               </div>
               <span className="font-medium">Edit Profile</span>
             </Link>
-          </div>
-          <div className="mt-8 text-center  ">
-            <div className="bg-gray-200   w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
-              AD
+            
+          </div><div className="mt-8 text-center  ">
+              <div className="bg-gray-200   w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+                AD
+              </div>
             </div>
-          </div>
         </div>
 
         {/* Main Content */}
@@ -334,9 +360,7 @@ const ShowForum = () => {
                     )}
                   </div>
                   <div>
-                    <span className="font-medium text-lg block">
-                      {post.username}
-                    </span>
+                    <span className="font-medium text-lg block">{post.username}</span>
                     <p className="text-sm text-gray-500">
                       {new Date(post.createdAt).toLocaleDateString()}
                     </p>
@@ -433,8 +457,7 @@ const ShowForum = () => {
                                 const previewDiv = document.getElementById(
                                   "comment-image-preview"
                                 );
-                                const previewImg =
-                                  previewDiv.querySelector("img");
+                                const previewImg = previewDiv.querySelector("img");
                                 previewImg.src = e.target.result;
                                 previewDiv.classList.remove("hidden");
                               };
@@ -468,25 +491,14 @@ const ShowForum = () => {
                     </div>
 
                     {/* Preview area for selected image */}
-                    <div
-                      id="comment-image-preview"
-                      className="hidden mt-2 relative"
-                    >
-                      <img
-                        src=""
-                        alt="Preview"
-                        className="max-h-40 rounded-lg"
-                      />
+                    <div id="comment-image-preview" className="hidden mt-2 relative">
+                      <img src="" alt="Preview" className="max-h-40 rounded-lg" />
                       <button
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
                         onClick={() => {
                           setCommentImage(null);
-                          document.getElementById(
-                            "comment-image-upload"
-                          ).value = "";
-                          document
-                            .getElementById("comment-image-preview")
-                            .classList.add("hidden");
+                          document.getElementById("comment-image-upload").value = "";
+                          document.getElementById("comment-image-preview").classList.add("hidden");
                         }}
                       >
                         <svg
@@ -512,10 +524,7 @@ const ShowForum = () => {
                       post.comments
                         .filter((comment) => !comment.parentId)
                         .map((comment) => (
-                          <div
-                            key={comment._id}
-                            className="bg-gray-50 p-4 rounded-lg relative"
-                          >
+                          <div key={comment._id} className="bg-gray-50 p-4 rounded-lg relative">
                             <div className="flex items-start justify-between">
                               <div className="flex items-start gap-3">
                                 <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -525,18 +534,12 @@ const ShowForum = () => {
                                 </div>
                                 <div>
                                   <div className="flex items-center gap-2">
-                                    <span className="font-medium">
-                                      {comment.author}
-                                    </span>
+                                    <span className="font-medium">{comment.author}</span>
                                     <span className="text-xs text-gray-500">
-                                      {new Date(
-                                        comment.createdAt
-                                      ).toLocaleDateString()}
+                                      {new Date(comment.createdAt).toLocaleDateString()}
                                     </span>
                                   </div>
-                                  <p className="mt-1 text-gray-700">
-                                    {comment.content}
-                                  </p>
+                                  <p className="mt-1 text-gray-700">{comment.content}</p>
                                   {comment.image && (
                                     <img
                                       src={comment.image}
@@ -551,18 +554,12 @@ const ShowForum = () => {
                                           ? "text-blue-500"
                                           : "text-gray-500"
                                       } hover:text-blue-500`}
-                                      onClick={() =>
-                                        handleLikeComment(comment._id)
-                                      }
+                                      onClick={() => handleLikeComment(comment._id)}
                                     >
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-4 w-4"
-                                        fill={
-                                          likedComments[comment._id]
-                                            ? "currentColor"
-                                            : "none"
-                                        }
+                                        fill={likedComments[comment._id] ? "currentColor" : "none"}
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
                                       >
@@ -584,9 +581,7 @@ const ShowForum = () => {
                                           ? "text-red-500"
                                           : "text-gray-500"
                                       } hover:text-red-500`}
-                                      onClick={() =>
-                                        handleDislikeComment(comment._id)
-                                      }
+                                      onClick={() => handleDislikeComment(comment._id)}
                                     >
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -608,18 +603,14 @@ const ShowForum = () => {
                                       </svg>
                                       <span>
                                         {(comment.dislikes || 0) +
-                                          (dislikedComments[comment._id]
-                                            ? 1
-                                            : 0)}
+                                          (dislikedComments[comment._id] ? 1 : 0)}
                                       </span>
                                     </button>
                                     <button
                                       className="flex items-center text-xs space-x-1 text-gray-500 hover:text-green-500"
                                       onClick={() =>
                                         setReplyingTo(
-                                          replyingTo === comment._id
-                                            ? null
-                                            : comment._id
+                                          replyingTo === comment._id ? null : comment._id
                                         )
                                       }
                                     >
@@ -673,15 +664,11 @@ const ShowForum = () => {
                                     type="text"
                                     placeholder="Write a reply..."
                                     value={replyText}
-                                    onChange={(e) =>
-                                      setReplyText(e.target.value)
-                                    }
+                                    onChange={(e) => setReplyText(e.target.value)}
                                     className="w-full mt-4 py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
                                   />
                                   <button
-                                    onClick={() =>
-                                      handleReplySubmit(comment._id)
-                                    }
+                                    onClick={() => handleReplySubmit(comment._id)}
                                     className="bg-[#12153d] text-white p-2 rounded-full hover:bg-[#12153d]/90 cursor-pointer transition-colors flex-shrink-0"
                                   >
                                     <svg
@@ -721,14 +708,10 @@ const ShowForum = () => {
                                           {reply.author}
                                         </span>
                                         <span className="text-xs text-gray-500">
-                                          {new Date(
-                                            reply.createdAt
-                                          ).toLocaleDateString()}
+                                          {new Date(reply.createdAt).toLocaleDateString()}
                                         </span>
                                       </div>
-                                      <p className="text-sm text-gray-700">
-                                        {reply.content}
-                                      </p>
+                                      <p className="text-sm text-gray-700">{reply.content}</p>
                                       {reply.image && (
                                         <img
                                           src={reply.image}
@@ -743,9 +726,7 @@ const ShowForum = () => {
                                               ? "text-blue-500"
                                               : "text-gray-500"
                                           } hover:text-blue-500`}
-                                          onClick={() =>
-                                            handleLikeComment(reply._id)
-                                          }
+                                          onClick={() => handleLikeComment(reply._id)}
                                         >
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -767,9 +748,7 @@ const ShowForum = () => {
                                           </svg>
                                           <span>
                                             {(reply.likes || 0) +
-                                              (likedComments[reply._id]
-                                                ? 1
-                                                : 0)}
+                                              (likedComments[reply._id] ? 1 : 0)}
                                           </span>
                                         </button>
                                         <button
@@ -778,9 +757,7 @@ const ShowForum = () => {
                                               ? "text-red-500"
                                               : "text-gray-500"
                                           } hover:text-red-500`}
-                                          onClick={() =>
-                                            handleDislikeComment(reply._id)
-                                          }
+                                          onClick={() => handleDislikeComment(reply._id)}
                                         >
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -802,9 +779,7 @@ const ShowForum = () => {
                                           </svg>
                                           <span>
                                             {(reply.dislikes || 0) +
-                                              (dislikedComments[reply._id]
-                                                ? 1
-                                                : 0)}
+                                              (dislikedComments[reply._id] ? 1 : 0)}
                                           </span>
                                         </button>
                                       </div>

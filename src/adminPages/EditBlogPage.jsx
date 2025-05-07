@@ -108,7 +108,14 @@ const EditBlogPage = () => {
     event.preventDefault();
     setIsSubmitting(true);
 
-    if (!title || !newSlug || !topic || !shortDescription || !content || !publishedBy) {
+    if (
+      !title ||
+      !newSlug ||
+      !topic ||
+      !shortDescription ||
+      !content ||
+      !publishedBy
+    ) {
       setError("All required fields must be filled.");
       setSuccess(null);
       setIsSubmitting(false);
@@ -148,7 +155,8 @@ const EditBlogPage = () => {
 
     try {
       const token = localStorage.getItem("jwt");
-      if (!token) throw new Error("No authentication token found. Please log in.");
+      if (!token)
+        throw new Error("No authentication token found. Please log in.");
 
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/blogs/${slug}`,
@@ -162,7 +170,8 @@ const EditBlogPage = () => {
       );
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Failed to update blog");
+      if (!response.ok)
+        throw new Error(result.message || "Failed to update blog");
 
       setSuccess("Blog updated successfully!");
       setError(null);
@@ -175,8 +184,92 @@ const EditBlogPage = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (error && !success) return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (loading)
+    return (
+      <div className="text-center py-10">
+        {" "}
+        if (loading) return (
+        <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-sm mt-10 border border-gray-200 animate-pulse">
+          {/* Header */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-64 h-8 bg-slate-300 rounded-md mb-2" />
+          </div>
+
+          {/* Form fields */}
+          <div className="space-y-5">
+            {/* Title input */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg" />
+            </div>
+
+            {/* Meta title with character counter */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg mb-1" />
+              <div className="w-20 h-4 bg-slate-200 rounded-md ml-auto" />
+            </div>
+
+            {/* Slug with URL preview */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg mb-1" />
+              <div className="w-36 h-4 bg-slate-200 rounded-md" />
+            </div>
+
+            {/* Topic */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Short description with character counter */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg mb-1" />
+              <div className="w-24 h-4 bg-slate-200 rounded-md ml-auto" />
+            </div>
+
+            {/* Meta description with character counter */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg mb-1" />
+              <div className="w-24 h-4 bg-slate-200 rounded-md ml-auto" />
+            </div>
+
+            {/* Content editor */}
+            <div className="w-full h-40 bg-slate-200 rounded-lg" />
+
+            {/* Image upload area */}
+            <div className="pt-6">
+              <div className="w-full h-16 border-2 border-dashed border-slate-300 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-slate-300 rounded-full mr-2" />
+                <div className="w-40 h-5 bg-slate-300 rounded-md" />
+              </div>
+            </div>
+
+            {/* Image URL input */}
+            <div>
+              <div className="w-full h-12 bg-slate-200 rounded-lg mb-1" />
+              <div className="w-64 h-4 bg-slate-200 rounded-md" />
+            </div>
+
+            {/* Image alt text */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Tags */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Meta keywords */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Published by */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Publisher LinkedIn */}
+            <div className="w-full h-12 bg-slate-200 rounded-lg" />
+
+            {/* Submit button */}
+            <div className="w-full h-12 bg-slate-300 rounded-lg mt-6" />
+          </div>
+        </div>
+        );
+      </div>
+    );
+  if (error && !success)
+    return <div className="text-center py-10 text-red-500">{error}</div>;
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10 border border-gray-200">
@@ -298,7 +391,8 @@ const EditBlogPage = () => {
             onChange={handleImageUrlChange}
           />
           <p className="text-sm text-gray-500 mt-1">
-            Upload a file or paste a URL. If both are provided, the uploaded file takes priority.
+            Upload a file or paste a URL. If both are provided, the uploaded
+            file takes priority.
           </p>
         </div>
         <div>

@@ -15,14 +15,17 @@ const CreateForum = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (activeTab === "text" && !content) {
       toast.error("Please add content to your post");
+      setIsLoading(false);
       return;
     }
 
     if (activeTab === "images/video" && !image) {
       toast.error("Please upload an image or video");
+      setIsLoading(false);
       return;
     }
 
@@ -60,12 +63,16 @@ const CreateForum = () => {
       setTitle("");
       setContent("");
       setImage(null);
-      navigate("/forum");
+      toast.success("Post created successfully!");
+      
+      // Add a small delay to allow the toast to be visible before navigation
+      setTimeout(() => {
+        navigate("/forum");
+      }, 1500);
     } catch (error) {
       console.error("Error creating post:", error);
       toast.error(`Failed to create post: ${error.message || "Unknown error"}`);
-    }finally {
-      setIsLoading(false); // End loading regardless of outcome
+      setIsLoading(false);
     }
   };
 
@@ -205,7 +212,7 @@ const CreateForum = () => {
           <div className="flex justify-end space-x-4">
             <button
               type="button"
-              className="px-5 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+              className="px-5 py-2 bg-gray-200 text-gray-800 cursor-pointer rounded-md hover:bg-gray-300 transition-colors"
               onClick={async () => {
                 try {
                   const formData = new FormData();
@@ -244,7 +251,7 @@ const CreateForum = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`px-5 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`px-5 py-2 bg-gray-800 cursor-pointer text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
               {isLoading ? (
                 <>

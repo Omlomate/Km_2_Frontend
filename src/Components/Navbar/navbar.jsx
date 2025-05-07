@@ -13,6 +13,7 @@ const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -105,6 +106,9 @@ const Navbar = () => {
     }
 
     try {
+      setIsLoadingNotifications(true); // Set loading to true when starting fetch
+      setShowNotifications(true); // Show the panel immediately with loading state
+      
       const token = localStorage.getItem("jwt");
       if (!token) {
         console.error("No JWT token found in localStorage for fetching notifications");
@@ -115,14 +119,11 @@ const Navbar = () => {
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications`;
       
-
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-     
 
       if (!response.ok) {
         const text = await response.text();
@@ -140,12 +141,14 @@ const Navbar = () => {
       const data = await response.json();
      
       setNotifications(data);
-      setShowNotifications(true);
       setUnreadCount(0); // Reset unread count after viewing notifications
       await markNotificationsRead();
     } catch (error) {
       console.error("Error fetching notifications:", error.message);
       alert(`Failed to load notifications: ${error.message}`);
+      setShowNotifications(false); // Hide panel on error
+    } finally {
+      setIsLoadingNotifications(false); // Set loading to false when fetch completes
     }
   };
 
@@ -221,10 +224,14 @@ const Navbar = () => {
         style={{ fontFamily: "wantedsans" }}
       >
         <div className="h-16 mx-auto md:px-4 container flex items-center justify-between">
-          <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
+        <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
-              <a href="/" className="flex items-center gap-2 logo-hover">
-                <svg className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8" viewBox="0 0 360 398">
+              <a href="/" className="flex items-center gap-2 logo-hover ">
+                {/* Logo mark SVG - smaller on mobile */}
+                <svg
+                  className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8"
+                  viewBox="0 0 360 398"
+                >
                   <path
                     d="M54.9577 182.394L2.36267 391.782C1.56966 394.939 3.95687 398 7.21202 398H352.001C355.867 398 359.001 394.866 359.001 391V0L234.236 195.991L183.814 100.814L109.115 240.666L54.9577 182.394Z"
                     fill="#12153D"
@@ -234,6 +241,7 @@ const Navbar = () => {
                     fill="#E5590F"
                   />
                 </svg>
+                {/* Text logo SVG - responsive width */}
                 <svg
                   className="w-28 h-auto sm:w-24 md:w-32 lg:w-52"
                   viewBox="0 0 208 34"
@@ -362,7 +370,13 @@ const Navbar = () => {
                 </button>
                 {showNotifications && (
                   <div className="absolute top-10 right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-50">
-                    {notifications.length > 0 ? (
+                    {/* Add loading state */}
+                    {isLoadingNotifications ? (
+                      <div className="py-4 flex flex-col items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#E5590F]"></div>
+                        <p className="text-sm text-gray-500 mt-2">Loading notifications...</p>
+                      </div>
+                    ) : notifications.length > 0 ? (
                       notifications.map((notification) => (
                         <div
                           key={notification._id}
