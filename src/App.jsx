@@ -29,6 +29,7 @@ import Forum from "./Forum/Forum.jsx";
 import { forumPosts } from "./Forum/ForumData.js";
 import CreateForum from "./Forum/CreateForum.jsx";
 import ShowForum from "./Forum/ShowForum.jsx";
+import EditPost from "./Forum/EditPost.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Footer from "./Components/Footer/Footer.jsx";
 import ForumPosts from "./adminPages/ForumPosts.jsx";
@@ -213,13 +214,20 @@ const AppContent = () => {
           </AdminRoute>
         }
       />
-      {/* Public Routes */}
-      {/* Forum */}
+      {/* Forum Routes */}
       <Route path="/forum" element={<Forum posts={posts} />} />
       <Route path="/create" element={<CreateForum onAddPost={addPost} />} />
       <Route
         path="/forum/:id"
         element={<ShowForum posts={posts} onAddComment={addComment} />}
+      />
+      <Route
+        path="/forum/edit/:id"
+        element={
+          <AdminRoute>
+            <EditPost />
+          </AdminRoute>
+        }
       />
       {/* Blogs */}
       <Route path="/blog" element={<Home blogs={blogs} />} />

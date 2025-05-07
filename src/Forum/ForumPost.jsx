@@ -1,21 +1,34 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Configure base URL for API requests
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export const ForumPosts = ({ post, onReact }) => {
   const [reacted, setReacted] = useState(post.userReacted || false);
   const [reactionType, setReactionType] = useState(post.userReaction || null);
+  const navigate = useNavigate();
+  
+  // Check if user is admin
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const isAdmin = userData.isAdmin || false;
+
+  // Format creation date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   const handleReaction = (e, type) => {
     e.preventDefault();
     e.stopPropagation();
-    // Remove the condition that prevents changing reactions
-    // if (reacted && reactionType !== type) {
-    //   // Prevent changing to a different reaction
-    //   return;
-    // }
     const newReactedState = !reacted || reactionType !== type;
     setReacted(newReactedState);
     setReactionType(newReactedState ? type : null);
@@ -23,7 +36,6 @@ export const ForumPosts = ({ post, onReact }) => {
       onReact(post._id, newReactedState ? type : null);
     }
     
-    // For mobile: hide the reaction panel after selecting a reaction
     if (window.innerWidth < 768) {
       const reactionMenu = e.currentTarget.parentNode.parentNode;
       reactionMenu.classList.add('opacity-0', 'invisible');
@@ -42,7 +54,6 @@ export const ForumPosts = ({ post, onReact }) => {
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' - ' + url)}`);
         break;
       case 'discord':
-        // Discord doesn't have a direct share URL, but you could copy to clipboard
         navigator.clipboard.writeText(`${post.title} - ${url}`);
         toast.success('Link copied to clipboard for sharing on Discord!');
         break;
@@ -57,12 +68,58 @@ export const ForumPosts = ({ post, onReact }) => {
         toast.success('Link copied to clipboard!');
     }
   };
-  
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/forum/edit/${post._id}`);
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      try {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/api/forum/${post._id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (response.status === 401) {
+            throw new Error('Unauthorized: Invalid or expired token');
+          }
+          if (response.status === 403) {
+            throw new Error('Forbidden: Admin access required');
+          }
+          if (response.status === 404) {
+            throw new Error(errorData.error || 'Post not found');
+          }
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        toast.success('Post deleted successfully!');
+        navigate('/forum');
+      } catch (error) {
+        console.error('Error deleting post:', error.message);
+        toast.error(error.message || 'Failed to delete post');
+      }
+    }
+  };
+
   return (
     <div className="bg-white w-full md:w-[44rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
       <Link to={`/forum/${post._id}`} className="block">
         <div className="p-4">
-          {/* Author info */}
           <div className="flex items-center mb-2">
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
               {post.authorImage ? (
@@ -91,15 +148,57 @@ export const ForumPosts = ({ post, onReact }) => {
             <span className="text-sm text-gray-500">
               {post.username || "Anonymous"}
             </span>
-            <div className="ml-auto flex items-center">
-              {/* Comment count icons removed for brevity */}
-            </div>
+            <span className="text-sm text-gray-400 ml-2">
+              • {formatDate(post.createdAt)}
+            </span>
+            {isAdmin && (
+              <div className="ml-auto flex items-center space-x-2">
+                <button
+                  onClick={handleEdit}
+                  className="text-blue-500 hover:text-blue-700"
+                  title="Edit post"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="text-red-500 hover:text-red-700"
+                  title="Delete post"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0V3h4v2m-7 2h10"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Title */}
           <h3 className="text-lg font-medium mb-2">{post.title}</h3>
 
-          {/* Content - always display regardless of image */}
           {post.contentType === "html" ? (
             <div
               className="text-sm text-gray-700 mb-4 forum-content"
@@ -110,7 +209,6 @@ export const ForumPosts = ({ post, onReact }) => {
           )}
         </div>
 
-        {/* Image - only show if exists */}
         {post.image && (
           <div className="w-full overflow-hidden max-h-[300px]">
             <img
@@ -122,13 +220,10 @@ export const ForumPosts = ({ post, onReact }) => {
         )}
       </Link>
 
-      {/* Horizontal line for separation */}
       <div className="border-t border-gray-200 mt-2"></div>
 
-      {/* Interaction options row */}
       <div className="px-4 py-3 flex justify-start space-x-11">
         <div className="flex items-center space-x-6">
-          {/* Reaction button */}
           <div className="relative group">
             <button
               className={`flex items-center space-x-1 ${
@@ -138,7 +233,6 @@ export const ForumPosts = ({ post, onReact }) => {
                 if (window.innerWidth < 768) {
                   e.preventDefault();
                   e.stopPropagation();
-                  // Toggle reaction menu on mobile
                   const reactionMenu = e.currentTarget.nextElementSibling;
                   if (reactionMenu.classList.contains('opacity-0')) {
                     reactionMenu.classList.remove('opacity-0', 'invisible');
@@ -148,26 +242,21 @@ export const ForumPosts = ({ post, onReact }) => {
                     reactionMenu.classList.remove('opacity-100', 'visible', 'scale-100');
                   }
                 } else {
-                  // On desktop, use the original like functionality
                   handleReaction(e, "like");
                 }
               }}
               onTouchStart={(e) => {
-                // For touch devices - start timer for long press
                 if (window.innerWidth < 768) {
                   e.preventDefault();
                   const timer = setTimeout(() => {
                     const reactionMenu = e.currentTarget.nextElementSibling;
                     reactionMenu.classList.remove('opacity-0', 'invisible');
                     reactionMenu.classList.add('opacity-100', 'visible', 'scale-100');
-                  }, 500); // 500ms hold time
-                  
-                  // Store the timer ID so we can clear it if needed
+                  }, 500);
                   e.currentTarget.dataset.longPressTimer = timer;
                 }
               }}
               onTouchEnd={(e) => {
-                // Clear the timer if touch ends before long press threshold
                 if (window.innerWidth < 768) {
                   const timer = e.currentTarget.dataset.longPressTimer;
                   if (timer) {
@@ -177,7 +266,6 @@ export const ForumPosts = ({ post, onReact }) => {
                 }
               }}
               onTouchMove={(e) => {
-                // Clear the timer if user moves finger during press
                 if (window.innerWidth < 768) {
                   const timer = e.currentTarget.dataset.longPressTimer;
                   if (timer) {
@@ -222,10 +310,8 @@ export const ForumPosts = ({ post, onReact }) => {
               </span>
             </button>
 
-            {/* Reaction panel - appears on hover on desktop, tap and hold on mobile */}
             <div
               className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left ${
-                // Remove the reacted condition to always allow the panel to show
                 "opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100"
               } z-10`}
             >
@@ -283,7 +369,6 @@ export const ForumPosts = ({ post, onReact }) => {
             </div>
           </div>
 
-          {/* Comment button */}
           <Link to={`/forum/${post._id}`}>
             <button className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors">
               <svg
@@ -307,14 +392,12 @@ export const ForumPosts = ({ post, onReact }) => {
           </Link>
         </div>
 
-        {/* Share button */}
         <div className="relative group">
           <button
-            className={`flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors`}
+            className="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              // Toggle share menu on mobile
               if (window.innerWidth < 768) {
                 const shareMenu = e.currentTarget.nextElementSibling;
                 if (shareMenu.classList.contains('opacity-0')) {
@@ -327,21 +410,17 @@ export const ForumPosts = ({ post, onReact }) => {
               }
             }}
             onTouchStart={(e) => {
-              // For touch devices - start timer for long press
               if (window.innerWidth < 768) {
                 e.preventDefault();
                 const timer = setTimeout(() => {
                   const shareMenu = e.currentTarget.nextElementSibling;
                   shareMenu.classList.remove('opacity-0', 'invisible');
                   shareMenu.classList.add('opacity-100', 'visible', 'scale-100');
-                }, 500); // 500ms hold time
-                
-                // Store the timer ID so we can clear it if needed
+                }, 500);
                 e.currentTarget.dataset.longPressTimer = timer;
               }
             }}
             onTouchEnd={(e) => {
-              // Clear the timer if touch ends before long press threshold
               if (window.innerWidth < 768) {
                 const timer = e.currentTarget.dataset.longPressTimer;
                 if (timer) {
@@ -351,7 +430,6 @@ export const ForumPosts = ({ post, onReact }) => {
               }
             }}
             onTouchMove={(e) => {
-              // Clear the timer if user moves finger during press
               if (window.innerWidth < 768) {
                 const timer = e.currentTarget.dataset.longPressTimer;
                 if (timer) {
@@ -378,12 +456,10 @@ export const ForumPosts = ({ post, onReact }) => {
             <span className="text-xs">Share</span>
           </button>
 
-          {/* Share options panel - appears on hover on desktop, tap on mobile */}
           <div
             className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100 z-10`}
           >
             <div className="bg-white rounded-full shadow-lg p-1 flex space-x-1 border border-gray-200">
-              {/* Share buttons remain the same */}
               <button
                 className="p-1 hover:bg-blue-100 rounded-full transition-colors"
                 onClick={(e) => handleShare(e, "whatsapp")}
@@ -437,7 +513,7 @@ export const ForumPosts = ({ post, onReact }) => {
                   >
                     <path
                       fill="#8c9eff"
-                      d="M40,12c0,0-4.585-3.588-10-4l-0.488,0.976C34.408,10.174,36.654,11.891,39,14c-4.045-2.065-8.039-4-15-4s-10.955,1.935-15,4c2.346-2.109,5.018-4.015,9.488-5.024L18,8c-5.681,0.537-10,4-10,4s-5.121,7.425-6,22c5.162,5.953,13,6,13,6l1.639-2.185C13.857,36.848,10.715,35.121,8,32c3.238,2.45,8.125,5,16,5s12.762-2.55,16-5c-2.715,3.121-5.857,4.848-8.639,5.815L33,40c0,0,7.838-0.047,13-6C45.121,19.425,40,12,40,12z M17.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C21,28.209,19.433,30,17.5,30z M30.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C34,28.209,32.433,30,30.5,30z"
+                      d="M40,12c0,0-4.585-3.588-10-4l-0.488,0.976C34.408,10.174,36.654,11.891,39,14c-4.045-2.065-8.039-4-15-4s-10.955,1.935-15-4c2.346-2.109,5.018-4.015,9.488-5.024L18,8c-5.681,0.537-10,4-10,4s-5.121,7.425-6,22c5.162,5.953,13,6,13,6l1.639-2.185C13.857,36.848,10.715,35.121,8,32c3.238,2.45,8.125,5,16,5s12.762-2.55,16-5c-2.715,3.121-5.857,4.848-8.639,5.815L33,40c0,0,7.838-0.047,13-6C45.121,19.425,40,12,40,12z M17.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C21,28.209,19.433,30,17.5,30z M30.5,30c-1.933,0-3.5-1.791-3.5-4c0-2.209,1.567-4,3.5-4s3.5,1.791,3.5,4C34,28.209,32.433,30,30.5,30z"
                     ></path>
                   </svg>
                 </span>
@@ -486,10 +562,6 @@ export const ForumPosts = ({ post, onReact }) => {
                     <path
                       fill="#fff"
                       d="M34,15l-3.7,19.1c0,0-0.2,0.9-1.2,0.9c-0.6,0-0.9-0.3-0.9-0.3L20,28l-4-2l-5.1-1.4c0,0-0.9-0.3-0.9-1 c0-0.6,0.9-0.9,0.9-0.9l21.3-8.5c0,0,0.7-0.2,1.1-0.2c0.3,0,0.6,0.1,0.6,0.5C34,14.8,34,15,34,15z"
-                    ></path>
-                    <path
-                      fill="#b0bec5"
-                      d="M23,30.5l-3.4,3.4c0,0-0.1,0.1-0.3,0.1c-0.1,0-0.1,0-0.2,0l1-6L23,30.5z"
                     ></path>
                     <path
                       fill="#cfd8dc"
