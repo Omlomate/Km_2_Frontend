@@ -60,14 +60,44 @@ export const AudienceVolume = () => {
     fetchMetaTags();
   }, []);
 
-  const handleMouseEnter = (e) => {
-    e.currentTarget.style.boxShadow =
-      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
-  };
+// Load video player script
+  useEffect(() => {
+    const loadVideoPlayer = () => {
+      const existingScripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      existingScripts.forEach((script) => script.remove());
 
-  const handleMouseLeave = (e) => {
-    e.currentTarget.style.boxShadow = "none";
-  };
+      const videoScript = document.createElement("script");
+      videoScript.src = "https://stream.kolorowey.com/player/video.js";
+      videoScript.async = true;
+
+      videoScript.onload = () => {
+        const playerScript = document.createElement("script");
+        playerScript.innerHTML = `
+          (function(){
+            (playerPro = window.playerPro || []).push({
+              id: "p2P21nhppseX"
+            });
+          })();
+        `;
+        document.body.appendChild(playerScript);
+      };
+
+      document.body.appendChild(videoScript);
+    };
+
+    if (keywordData) {
+      setTimeout(loadVideoPlayer, 100);
+    }
+
+    return () => {
+      const scripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      scripts.forEach((script) => script.remove());
+    };
+  }, [keywordData]);
 
   const handleSearch = async (searchTerm) => {
     console.log("Searching for:", searchTerm);
@@ -81,7 +111,9 @@ export const AudienceVolume = () => {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,8 +177,8 @@ export const AudienceVolume = () => {
                 Search <span className="text-[#E5590F]">Volume</span> Analyzer
               </h1>
               <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-              Check how many people search for a keyword each month to know if it’s 
-              worth targeting in your content or SEO strategy.
+                Check how many people search for a keyword each month to know if
+                it’s worth targeting in your content or SEO strategy.
               </p>
             </div>
           </div>
@@ -177,7 +209,7 @@ export const AudienceVolume = () => {
                     <style>
                       {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                     </style>
-                    
+
                     <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
                       <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
                         Results for:{" "}
@@ -186,15 +218,18 @@ export const AudienceVolume = () => {
                         </span>
                       </h2>
                       <p className="text-xs sm:text-base text-gray-600 mt-1">
-                        Search volume analysis for {displayedCountry.name || "selected region"}
+                        Search volume analysis for{" "}
+                        {displayedCountry.name || "selected region"}
                       </p>
                     </div>
-                    
+
                     <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
                       <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
                         <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                          <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">Audience Volume</h3>
-                          
+                          <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
+                            Audience Volume
+                          </h3>
+
                           <div className="flex flex-col items-center justify-center space-y-5 rounded-lg w-full h-auto min-h-[250px] p-4">
                             <p className="text-3xl sm:text-6xl text-[#12153D] font-bold">
                               {formatNumber(keywordData?.data[0]?.vol)}
@@ -225,7 +260,7 @@ export const AudienceVolume = () => {
                             </div>
                           </div>
                         </div>
-                        
+
                         {displayedCountry.map && (
                           <div className="w-full bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-200">
                             <div className="bg-[#12153D] p-3 sm:p-4">
@@ -246,7 +281,7 @@ export const AudienceVolume = () => {
 
                       <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                         <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                          <div 
+                          <div
                             className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center"
                             onMouseEnter={() => setHover(true)}
                             onMouseLeave={() => setHover(false)}
@@ -258,35 +293,37 @@ export const AudienceVolume = () => {
                               <span className="text-orange-500 font-medium">
                                 Audience Volume
                               </span>{" "}
-                              represents the number of monthly searches for your keyword in the selected region. 
-                              Higher volumes indicate greater search interest, helping you identify popular 
-                              keywords for your SEO and content strategy.
+                              represents the number of monthly searches for your
+                              keyword in the selected region. Higher volumes
+                              indicate greater search interest, helping you
+                              identify popular keywords for your SEO and content
+                              strategy.
                             </p>
                           </div>
                         </div>
-                        
-                        <div className="bg-[#12153d] w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg shadow-md">
-                          <div className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
-                            <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
-                              AD
-                            </h1>
-                          </div>
+
+                        <div id="sv-ad-1" className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
+                          <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
+                            AD
+                          </h1>
                         </div>
+                        <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                            <div
+                              className="relative w-full"
+                              style={{ paddingBottom: "56.25%" }}
+                            >
+                              <div
+                                id="p2P21nhppseX"
+                                className="absolute inset-0 w-full h-full"
+                              ></div>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                    
-                    <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
-                      {/* <p className="text-md lg:text-lg">
-                        To find more information and get more insights check out{" "}
-                        <a href="#" className="text-[#E5590F]">
-                          content ideas
-                        </a>{" "}
-                        to understand your local and global audience.
-                      </p> */}
-                      <p className="text-xs sm:text-base">
-                        Ads
-                      </p>
-                    </div>
+
+                    <div id="sv-ad-3" className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md">
+                        ads
+                      </div>
                   </>
                 )
               )}

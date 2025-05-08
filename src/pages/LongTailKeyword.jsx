@@ -137,13 +137,11 @@ const LongTailKeywordPage = () => {
                             </p>
                           </div>
                         </div>
-                        <div className="bg-[#12153d] w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg shadow-md">
-                          <div className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
+                           <div className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
                             <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
                               AD
                             </h1>
-                          </div>
-                        </div>
+                         </div>
                         <div className="w-full sm:w-[300px] h-[180px] sm:h-[250px] bg-gray-100 rounded-xl shadow-sm flex justify-center items-center border border-gray-200">
                           <h1 className="text-sm sm:text-lg font-bold text-gray-400">
                             VIDEO AD
@@ -152,15 +150,10 @@ const LongTailKeywordPage = () => {
                       </div>
                     </div>
                     
-                    <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
-                      <p className="text-xs sm:text-base">
-                        To find more information and get more insights, check out{" "}
-                        <a href="#" className="text-orange-500">
-                          audience volume
-                        </a>{" "}
-                        to understand your local and global audience.
-                      </p>
-                    </div>
+                   
+                    <div id="ltk-ad-3" className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md">
+                        ads
+                      </div>
                   </>
                 )
               )}

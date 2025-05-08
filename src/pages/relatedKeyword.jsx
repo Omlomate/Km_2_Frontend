@@ -267,13 +267,11 @@ export const KeywordResearch = () => {
                               </div>
                             )}
                           </div>
-                          <div className="bg-[#12153d]/0 w-full sm:w-[336px] h-[200px] sm:h-[280px] flex justify-center items-center rounded-lg">
-                            <div
-                              id="rk-ad-1"
-                              className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200"
-                            >
-                              AD
-                            </div>
+                          <div
+                            id="rk-ad-1"
+                            className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200"
+                          >
+                            AD
                           </div>
                           <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl shadow-sm overflow-hidden border border-gray-200">
                             <div
@@ -295,7 +293,10 @@ export const KeywordResearch = () => {
                         </div> */}
                       </div>
 
-                      <div id="rk-ad-3" className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md">
+                      <div
+                        id="rk-ad-3"
+                        className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md"
+                      >
                         ads
                       </div>
                     </>

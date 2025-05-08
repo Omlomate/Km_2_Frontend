@@ -52,7 +52,9 @@ const WhatsTrending = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: {
@@ -110,14 +112,44 @@ const WhatsTrending = () => {
     }
   };
 
-  const handleMouseEnter = (e) => {
-    e.currentTarget.style.boxShadow =
-      "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
-  };
+  // Load video player script
+  useEffect(() => {
+    const loadVideoPlayer = () => {
+      const existingScripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      existingScripts.forEach((script) => script.remove());
 
-  const handleMouseLeave = (e) => {
-    e.currentTarget.style.boxShadow = "none";
-  };
+      const videoScript = document.createElement("script");
+      videoScript.src = "https://stream.kolorowey.com/player/video.js";
+      videoScript.async = true;
+
+      videoScript.onload = () => {
+        const playerScript = document.createElement("script");
+        playerScript.innerHTML = `
+        (function(){
+          (playerPro = window.playerPro || []).push({
+            id: "p2P21nhppseX"
+          });
+        })();
+      `;
+        document.body.appendChild(playerScript);
+      };
+
+      document.body.appendChild(videoScript);
+    };
+
+    if (keywordData) {
+      setTimeout(loadVideoPlayer, 100);
+    }
+
+    return () => {
+      const scripts = document.querySelectorAll(
+        'script[src*="kolorowey.com"], script[data-playerPro]'
+      );
+      scripts.forEach((script) => script.remove());
+    };
+  }, [keywordData]);
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country.apiReference);
@@ -242,19 +274,30 @@ const WhatsTrending = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="bg-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center">
+                      <div
+                        id="kt-ad-1"
+                        className="bg-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center"
+                      >
                         <h1 className="text-md lg:text-2xl font-bold">AD</h1>
+                      </div>
+                      <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl  overflow-hidden border border-gray-200">
+                        <div
+                          className="relative w-full"
+                          style={{ paddingBottom: "56.25%" }}
+                        >
+                          <div
+                            id="p2P21nhppseX"
+                            className="absolute inset-0 w-full h-full"
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-[#12153d] text-white mt-6 p-4 rounded-md text-center lg:text-left">
-                    <p className="text-xs sm:text-base">
-                      To find more information and get more insights check out{" "}
-                      <a href="" className="text-[#E5590F]">
-                        SEO difficulty
-                      </a>{" "}
-                      to understand your local and global audience.
-                    </p>
+                  <div
+                    id="kt-ad-3"
+                    className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md"
+                  >
+                    ads
                   </div>
                 </>
               )
