@@ -37,6 +37,7 @@ import ContactForm from "./Components/ContactForm/ContactForm.jsx";
 import Courses from "./Components/Courses/Courses.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ShowCourses from "./Components/Courses/ShowCourses.jsx";
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -172,6 +173,7 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/courses" element={<Courses/>} />
+      <Route path="/courses/:id" element={<ShowCourses />} />
       <Route path="/contactForm" element={<ContactForm />} />
       {/* Admin Routes */}
       <Route
