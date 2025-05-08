@@ -61,7 +61,7 @@ export const CPCPage = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}api/keywords/keyword-Everywhere-Volume`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
