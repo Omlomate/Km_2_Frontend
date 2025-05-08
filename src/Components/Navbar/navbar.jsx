@@ -57,11 +57,15 @@ const Navbar = () => {
       const token = localStorage.getItem("jwt");
       if (!token) {
         setUnreadCount(0);
-        console.warn("No JWT token found in localStorage for fetching unread notifications");
+        console.warn(
+          "No JWT token found in localStorage for fetching unread notifications"
+        );
         return;
       }
 
-      const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications/unread-count`;
+      const url = `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/forum/notifications/unread-count`;
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -69,7 +73,9 @@ const Navbar = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch unread count for userId with isRead=false: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch unread count for userId with isRead=false: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
@@ -83,10 +89,13 @@ const Navbar = () => {
   const markNotificationsRead = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications/mark-read`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications/mark-read`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
     } catch (error) {
       console.error("Error marking notifications as read:", error.message);
     }
@@ -108,17 +117,19 @@ const Navbar = () => {
     try {
       setIsLoadingNotifications(true); // Set loading to true when starting fetch
       setShowNotifications(true); // Show the panel immediately with loading state
-      
+
       const token = localStorage.getItem("jwt");
       if (!token) {
-        console.error("No JWT token found in localStorage for fetching notifications");
+        console.error(
+          "No JWT token found in localStorage for fetching notifications"
+        );
         alert("Please log in to view notifications");
         navigate("/login");
         return;
       }
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/api/forum/notifications`;
-      
+
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -128,7 +139,9 @@ const Navbar = () => {
       if (!response.ok) {
         const text = await response.text();
         console.error("Response body:", text.slice(0, 100));
-        throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch notifications: ${response.status} ${response.statusText}`
+        );
       }
 
       const contentType = response.headers.get("content-type");
@@ -139,7 +152,7 @@ const Navbar = () => {
       }
 
       const data = await response.json();
-     
+
       setNotifications(data);
       setUnreadCount(0); // Reset unread count after viewing notifications
       await markNotificationsRead();
@@ -173,15 +186,15 @@ const Navbar = () => {
     setIsLoginVisible(false);
     const isUserAuthenticated = isAuthenticated();
     setLoggedIn(isUserAuthenticated);
-
+  
     if (isUserAuthenticated && !loggedIn) {
-      localStorage.setItem("selectedOption", "Home");
+      localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
-        detail: { redirectTo: "/" },
+        detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/related-keywords";
       }, 100);
     }
   };
@@ -190,15 +203,15 @@ const Navbar = () => {
     setIsRegisterVisible(false);
     const isUserAuthenticated = isAuthenticated();
     setLoggedIn(isUserAuthenticated);
-
+  
     if (isUserAuthenticated && !loggedIn) {
-      localStorage.setItem("selectedOption", "Home");
+      localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
-        detail: { redirectTo: "/" },
+        detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/related-keywords";
       }, 100);
     }
   };
@@ -214,7 +227,7 @@ const Navbar = () => {
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     setLoggedIn(false);
-    window.location.href = "/";
+    window.location.href = "/related-keywords";
   };
 
   return (
@@ -224,9 +237,9 @@ const Navbar = () => {
         style={{ fontFamily: "wantedsans" }}
       >
         <div className="h-16 mx-auto md:px-4 container flex items-center justify-between">
-        <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
+          <div className="flex items-center gap-4 w-full justify-center md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
-              <a href="/" className="flex items-center gap-2 logo-hover ">
+              <a href="/related-keywords" className="flex items-center gap-2 logo-hover ">
                 {/* Logo mark SVG - smaller on mobile */}
                 <svg
                   className="w-8 h-8 sm:w-7 sm:h-7 md:w-8 md:h-8"
@@ -311,7 +324,7 @@ const Navbar = () => {
           <div className="hidden md:block text-gray-900">
             <ul className="flex font-semibold items-center space-x-6">
               <li>
-                <Link to="/" className="nav-link">
+                <Link to="/related-keywords" className="nav-link">
                   Research
                 </Link>
               </li>
@@ -326,7 +339,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/courses"   className="nav-link">
+                <Link to="/courses" className="nav-link">
                   Courses
                 </Link>
               </li>
@@ -374,18 +387,24 @@ const Navbar = () => {
                     {isLoadingNotifications ? (
                       <div className="py-4 flex flex-col items-center justify-center">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#E5590F]"></div>
-                        <p className="text-sm text-gray-500 mt-2">Loading notifications...</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Loading notifications...
+                        </p>
                       </div>
                     ) : notifications.length > 0 ? (
                       notifications.map((notification) => (
                         <div
                           key={notification._id}
                           className="py-2 border-b last:border-b-0 cursor-pointer hover:bg-gray-100"
-                          onClick={() => handleNotificationClick(notification.postId)}
+                          onClick={() =>
+                            handleNotificationClick(notification.postId)
+                          }
                         >
                           <p className="text-sm">{notification.message}</p>
                           <span className="text-xs text-gray-500">
-                            {new Date(notification.createdAt).toLocaleTimeString()}
+                            {new Date(
+                              notification.createdAt
+                            ).toLocaleTimeString()}
                           </span>
                         </div>
                       ))
@@ -399,7 +418,27 @@ const Navbar = () => {
                     Hi, {userData.firstName || "User"}
                   </span>
                 )}
-                  <button
+                {/* <button
+                  onClick={handleLogout}
+                  className="group flex items-center justify-start w-11 h-11 bg-[#12153d] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
+                >
+                  <span>Logout</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                </button> */}
+                <button
                   onClick={handleLogout}
                   className="group flex items-center justify-start w-11 h-11 bg-[#12153d] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
                 >
@@ -415,7 +454,7 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                 <button
+                <button
                   onClick={showLogin}
                   className="group flex items-center justify-start w-11 h-11 bg-[#E5590F] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
                 >
@@ -461,9 +500,10 @@ const Navbar = () => {
         <div className="md:hidden w-full border-t border-gray-100">
           <div className="overflow-x-auto">
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
-              <Link to="/related-keywords">
-                <li>Research</li>
-              </Link>
+              <li>
+                
+                <Link to="/related-keywords">Research</Link>
+              </li>
               <li>
                 <Link to="/blog" className="nav-link text-sm">
                   Blog
@@ -475,7 +515,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/courses"  className="nav-link text-sm">
+                <Link to="/courses" className="nav-link text-sm">
                   Courses
                 </Link>
               </li>
