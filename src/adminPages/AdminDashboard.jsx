@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Home, Users, BarChart, FileText, Tag, MessageSquare } from "lucide-react";
+import {
+  Home,
+  Users,
+  BarChart,
+  FileText,
+  Tag,
+  MessageSquare,
+} from "lucide-react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -40,6 +49,7 @@ const AdminPanel = () => {
     },
   });
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const menuItems = [
@@ -94,13 +104,17 @@ const AdminPanel = () => {
       const token = localStorage.getItem("jwt");
       if (!token) throw new Error("No JWT token found");
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      if (!response.ok) throw new Error(`Failed to fetch settings: ${response.statusText}`);
+      if (!response.ok)
+        throw new Error(`Failed to fetch settings: ${response.statusText}`);
       const data = await response.json();
       setSettings(data);
     } catch (err) {
@@ -127,6 +141,7 @@ const AdminPanel = () => {
 
   // Save settings to backend
   const saveSettings = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("jwt");
       if (!token) {
@@ -135,30 +150,43 @@ const AdminPanel = () => {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(settings),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin-toggle-control`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(settings),
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Failed to save settings: ${response.statusText} - ${errorText}`);
+        throw new Error(
+          `Failed to save settings: ${response.statusText} - ${errorText}`
+        );
       }
 
       const data = await response.json();
       setSettings(data);
       setError(null);
       window.dispatchEvent(new Event("adminSettingsChange"));
+      toast.success("Settings applied successfully!");
     } catch (err) {
       console.error("Error saving settings:", err.message);
-      setError(err.message.includes("Unauthorized") ? "Unauthorized: Invalid or expired token. Please log in again." : `Failed to save settings: ${err.message}`);
+      setError(
+        err.message.includes("Unauthorized")
+          ? "Unauthorized: Invalid or expired token. Please log in again."
+          : `Failed to save settings: ${err.message}`
+      );
       if (err.message.includes("Unauthorized")) {
         navigate("/login");
       }
+      toast.error("Failed to save settings.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -226,7 +254,9 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 pb-16"> {/* Changed h-screen to min-h-screen and added pb-16 */}
+    <div className="flex min-h-screen bg-gray-100 pb-16">
+      {" "}
+      {/* Changed h-screen to min-h-screen and added pb-16 */}
       <aside className="w-64 bg-white shadow-md p-4">
         <h1 className="text-2xl font-bold text-center text-blue-600">
           Admin Panel
@@ -248,10 +278,10 @@ const AdminPanel = () => {
           ))}
         </nav>
       </aside>
-
-      <main className="flex-1 p-6 mb-8"> {/* Added mb-8 for additional bottom margin */}
+      <main className="flex-1 p-6 mb-8">
+        {" "}
+        {/* Added mb-8 for additional bottom margin */}
         <h2 className="text-3xl font-semibold text-gray-800">{activeTab}</h2>
-
         {activeTab === "Dashboard" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             {/* User Count Card */}
@@ -269,17 +299,20 @@ const AdminPanel = () => {
             {/* Published Blogs Card */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="text-xl font-bold">Published Blogs</p>
-              <p className="text-2xl text-green-600">{blogCounts.publishedCount}</p>
+              <p className="text-2xl text-green-600">
+                {blogCounts.publishedCount}
+              </p>
             </div>
 
             {/* Draft Blogs Card */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <p className="text-xl font-bold">Draft Blogs</p>
-              <p className="text-2xl text-orange-600">{blogCounts.draftCount}</p>
+              <p className="text-2xl text-orange-600">
+                {blogCounts.draftCount}
+              </p>
             </div>
           </div>
         )}
-
         {activeTab === "Users" && (
           <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">User List</h3>
@@ -311,13 +344,15 @@ const AdminPanel = () => {
             </table>
           </div>
         )}
-
         {activeTab === "Ads Control" && (
           <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">Upload ads.txt</h3>
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
-                <label htmlFor="adsTxtInput" className="block text-gray-700 font-medium mb-2">
+                <label
+                  htmlFor="adsTxtInput"
+                  className="block text-gray-700 font-medium mb-2"
+                >
                   Select ads.txt file
                 </label>
                 <input
@@ -348,20 +383,25 @@ const AdminPanel = () => {
             )}
           </div>
         )}
-
         {activeTab === "Dashboard" && (
           <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Toggle Control Settings</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              Toggle Control Settings
+            </h3>
             {error && <p className="text-red-500 mb-4">{error}</p>}
 
             {/* Side Panel Toggles */}
             <div className="mb-6">
-              <h4 className="text-lg font-medium mb-2 text-gray-700">Side Panel Visibility</h4>
+              <h4 className="text-lg font-medium mb-2 text-gray-700">
+                Side Panel Visibility
+              </h4>
               <div className="space-y-4">
                 {Object.keys(settings.sidePanel).map((key) => (
                   <div key={key} className="flex items-center justify-between">
                     <span className="text-gray-700 font-medium">
-                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      {key
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (str) => str.toUpperCase())}
                     </span>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -380,7 +420,9 @@ const AdminPanel = () => {
 
             {/* Navigation Toggles */}
             <div className="mb-6">
-              <h4 className="text-lg font-medium mb-2 text-gray-700">Navigation Visibility</h4>
+              <h4 className="text-lg font-medium mb-2 text-gray-700">
+                Navigation Visibility
+              </h4>
               <div className="space-y-4">
                 {Object.keys(settings.navigation).map((key) => (
                   <div key={key} className="flex items-center justify-between">
@@ -402,30 +444,42 @@ const AdminPanel = () => {
 
             {/* Social Media Links */}
             <div className="mb-6">
-              <h4 className="text-lg font-medium mb-2 text-gray-700">Social Media Links</h4>
+              <h4 className="text-lg font-medium mb-2 text-gray-700">
+                Social Media Links
+              </h4>
               <div className="space-y-4">
-                {["linkedin", "instagram", "youtube", "facebook"].map((platform) => (
-                  <div key={platform}>
-                    <label className="block text-gray-700 font-medium capitalize">{platform}</label>
-                    <input
-                      type="url"
-                      value={settings.socialLinks[platform]}
-                      onChange={(e) => handleSocialLinkChange(platform, e.target.value)}
-                      placeholder={`https://www.${platform}.com/...`}
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                ))}
+                {["linkedin", "instagram", "youtube", "facebook"].map(
+                  (platform) => (
+                    <div key={platform}>
+                      <label className="block text-gray-700 font-medium capitalize">
+                        {platform}
+                      </label>
+                      <input
+                        type="url"
+                        value={settings.socialLinks[platform]}
+                        onChange={(e) =>
+                          handleSocialLinkChange(platform, e.target.value)
+                        }
+                        placeholder={`https://www.${platform}.com/...`}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  )
+                )}
               </div>
             </div>
 
             {/* Save Button */}
             <button
               onClick={saveSettings}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isLoading}
             >
-              Save Settings
+              {isLoading ? "Saving Settings" : "Save Settings"}
             </button>
+            <ToastContainer position="top-right" autoClose={3000} />
           </div>
         )}
       </main>
