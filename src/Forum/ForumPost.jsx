@@ -14,6 +14,7 @@ export const ForumPosts = ({ post, onReact }) => {
   // Check if user is admin
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
   const isAdmin = userData.isAdmin || false;
+  const isLoggedIn = !!localStorage.getItem('jwt');
 
   // Format creation date
   const formatDate = (dateString) => {
@@ -26,7 +27,25 @@ export const ForumPosts = ({ post, onReact }) => {
     });
   };
 
+  const requireLogin = (action) => {
+    toast.error('Please login to ' + action);
+  };
+
+  const handlePostClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      requireLogin('view posts');
+      return false;
+    }
+    return true;
+  };
+
   const handleReaction = (e, type) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      requireLogin('react to posts');
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     const newReactedState = !reacted || reactionType !== type;
@@ -44,6 +63,11 @@ export const ForumPosts = ({ post, onReact }) => {
   };
 
   const handleShare = (e, platform) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      requireLogin('share posts');
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     
@@ -118,7 +142,7 @@ export const ForumPosts = ({ post, onReact }) => {
 
   return (
     <div className="bg-white w-full md:w-[44rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
-      <Link to={`/forum/${post._id}`} className="block">
+      <Link to={`/forum/${post._id}`} className="block" onClick={handlePostClick}>
         <div className="p-4">
           <div className="flex items-center mb-2">
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
@@ -370,7 +394,17 @@ export const ForumPosts = ({ post, onReact }) => {
           </div>
 
           <Link to={`/forum/${post._id}`}>
-            <button className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors">
+            <button
+              className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors"
+              onClick={(e) => {
+                if (!isLoggedIn) {
+                  e.preventDefault();
+                  requireLogin('comment on posts');
+                  return;
+                }
+                // Proceed with comment action
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -483,7 +517,7 @@ export const ForumPosts = ({ post, onReact }) => {
                     ></path>
                     <path
                       fill="#cfd8dc"
-                      d="M24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974M24.014,4C24.014,4,24.014,4,24.014,4C12.998,4,4.032,12.962,4.027,23.979c-0.001,3.367,0.849,6.685,2.461,9.622l-2.585,9.439c-0.094,0.345,0.002,0.713,0.254,0.967c0.19,0.192,0.447,0.297,0.711,0.297c0.085,0,0.17-0.011,0.254-0.033l9.687-2.54c2.828,1.468,5.998,2.243,9.197,2.244c11.024,0,19.99-8.963,19.995-19.98c0.002-5.339-2.075-10.359-5.848-14.135C34.378,6.083,29.357,4.002,24.014,4L24.014,4z"
+                      d="M24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974M24.014,4C24.014,4,24.014,4,24.014,4C12.998,4,4.032,12.962,4.027,23.979c-0.001,3.367,0.849,6.685,2.461,9.622l-2.585,9.439c-0.094,0.345,0.002,0.713,0.254,0.967c0.19,0.192,0.447,0.297,0.711,0.297c0.085,0,0.17-0.011,0.254-0.033l9.687-2.54c2.828,1.468,5.998,2.243,9.197,2.244c11.024,0,19.99-8.963,19.995-19.98c0.002-5.339-2.075-10.359-5.848-14.135C34.378,6.083,29.357,4.002,24.014,4L24.014,4z"
                     ></path>
                     <path
                       fill="#40c351"
@@ -580,3 +614,6 @@ export const ForumPosts = ({ post, onReact }) => {
 };
 
 export default ForumPosts;
+
+
+// Define isLoggedIn based on user data
