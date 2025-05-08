@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ForumPosts from "./ForumPost.jsx";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { LoginDialog } from "../Components/Login&Registation/loginForm.jsx";
 
 const Forum = () => {
   const [posts, setPosts] = useState([]);
@@ -12,8 +15,11 @@ const Forum = () => {
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
   const [mobileFilterVisible, setMobileFilterVisible] = useState(false);
+  const [IsLoginVisible, setIsLoginVisible] = useState(false);
 
-  // Check localStorage for isAdmin on component mount
+  const isLoggedIn = localStorage.getItem("jwt");
+
+  // Check localStorage for isAdmin and isLoggedIn on component mount
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
@@ -142,6 +148,10 @@ const Forum = () => {
   const toggleMobileFilter = () => {
     setMobileFilterVisible(!mobileFilterVisible);
   };
+  const showLogin = () => {
+    setIsLoginVisible(true);
+    // setIsRegisterVisible(false);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen pb-10">
@@ -180,26 +190,50 @@ const Forum = () => {
               <i className="fa-solid fa-magnifying-glass text-xl text-gray-700 hover:text-[#E5590F]"></i>
             </button>
           </div>
-          <Link
-            to="/create"
-            className="group bg-[#12153D] text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto hover:bg-[#1a1f4d] transition-colors"
-          >
-            <svg
-              className="stroke-[#E5590F] fill-none transition-transform duration-300 group-hover:rotate-90 group-hover:fill-[#12153d]/10 group-active:stroke-[#E5590f]/20 group-active:fill-[#E5590f]/50 group-active:duration-0"
-              viewBox="0 0 24 24"
-              height="24px"
-              width="24px"
-              xmlns="http://www.w3.org/2000/svg"
+          {isLoggedIn ? (
+            <Link
+              to="/create"
+              className="group bg-[#12153D] text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto hover:bg-[#1a1f4d] transition-colors"
             >
-              <path
-                strokeWidth="1.5"
-                d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-              ></path>
-              <path strokeWidth="1.5" d="M8 12H16"></path>
-              <path strokeWidth="1.5" d="M12 16V8"></path>
-            </svg>
-            <span>Create Post</span>
-          </Link>
+              <svg
+                className="stroke-[#E5590F] fill-none transition-transform duration-300 group-hover:rotate-90 group-hover:fill-[#12153d]/10 group-active:stroke-[#E5590f]/20 group-active:fill-[#E5590f]/50 group-active:duration-0"
+                viewBox="0 0 24 24"
+                height="24px"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeWidth="1.5"
+                  d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                ></path>
+                <path strokeWidth="1.5" d="M8 12H16"></path>
+                <path strokeWidth="1.5" d="M12 16V8"></path>
+              </svg>
+              <span>Create Post</span>
+            </Link>
+          ) : (
+            <LoginDialog
+              onClick={() => toast.error("Please log in to create a post.")}
+              buttonClassName="group bg-[#12153D] cursor-pointer text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto hover:bg-[#1a1f4d] transition-colors"
+            >
+              <svg
+                className="stroke-[#E5590F] fill-none transition-transform duration-300 group-hover:rotate-90 group-hover:fill-[#12153d]/10 group-active:stroke-[#E5590f]/20 group-active:fill-[#E5590f]/50 group-active:duration-0"
+                viewBox="0 0 24 24"
+                height="24px"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeWidth="1.5"
+                  d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                ></path>
+                <path strokeWidth="1.5" d="M8 12H16"></path>
+                <path strokeWidth="1.5" d="M12 16V8"></path>
+              </svg>
+              <span>Create Post</span>
+            </LoginDialog>
+            // <LoginDialog buttonText="Cretae post" buttonClassName="p-2 bg-blue-500 text-white rounded" />
+          )}
         </div>
 
         {/* Mobile filter toggle button */}
@@ -379,7 +413,7 @@ const Forum = () => {
                   to="/create"
                   className="inline-block bg-[#12153D] hover:bg-[#1a1f4d] text-white font-medium py-2 px-6 rounded-md transition-colors duration-300"
                 >
-                  Create Your First Post
+                  Create Your Post
                 </Link>
               </div>
             )}

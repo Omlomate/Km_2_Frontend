@@ -11,6 +11,7 @@ const CreateForum = () => {
   const [activeTab, setActiveTab] = useState("text");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+ 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -114,6 +115,8 @@ const CreateForum = () => {
   const handleDragOver = (e) => {
     e.preventDefault();
   };
+
+
 
   return (
     <section id="createForum">

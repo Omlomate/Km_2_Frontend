@@ -5,6 +5,31 @@ import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import { isAuthenticated } from "../../utils/auth";
 
+// Updated wrapper component that supports children elements
+function LoginDialog({ buttonText, buttonClassName = "p-3 bg-[#12153D] text-white rounded-lg", children, onClick }) {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  const showLogin = () => {
+    setIsVisible(true);
+    if (onClick) onClick();
+  };
+  
+  const hideLogin = () => setIsVisible(false);
+  
+  return (
+    <>
+      <button 
+        onClick={showLogin}
+        className={buttonClassName}
+      >
+        {children || buttonText || "Login"}
+      </button>
+      
+      <LoginPage isVisible={isVisible} onClose={hideLogin} />
+    </>
+  );
+}
+
 function LoginPage({ isVisible, onClose }) {
   const modalRef = useRef(null);
   const [transform, setTransform] = useState("scale(0)");
@@ -473,4 +498,6 @@ function LoginPage({ isVisible, onClose }) {
   );
 }
 
+// Export both components
+export { LoginDialog };
 export default LoginPage;
