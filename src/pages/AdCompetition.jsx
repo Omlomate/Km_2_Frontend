@@ -103,7 +103,7 @@ export const AdCompetition = () => {
         <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
           {/* Header */}
           <div className="w-full py-3 sm:py-6">
-            <div className="animate-fadeIn">
+            <div className=" ">
               <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
                 Ad <span className="text-[#E5590F]">Competition</span> Checker
               </h1>
