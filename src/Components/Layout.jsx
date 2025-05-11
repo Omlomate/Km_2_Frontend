@@ -35,31 +35,36 @@ const Layout = ({ children }) => {
   return (
     <div className="layout min-h-screen bg-gray-50">
       {/* <Navbar /> */}
-      <div className="flex flex-col md:flex-row w-full min-h-screen px-2 sm:px-4 md:px-6 gap-4 md:gap-6">
-        {/* Sidebar - Hidden on extra small screens, collapsible on small screens */}
-        <aside className="w-full sm:w-auto md:sticky md:top-6 md:self-start order-2 md:order-1">
+      <div className="flex flex-col md:flex-row w-full min-h-screen  sm:px-4 md:px-6 lg:px-8 gap-3 sm:gap-4 md:gap-5 lg:gap-6 py-3 sm:py-4 md:py-5 lg:py-6">
+        {/* Sidebar - Enhanced for all device types */}
+        <aside className="w-full xs:w-full sm:w-60 md:w-64 lg:w-72 md:sticky md:top-6 md:self-start md:order-1 mb-3 sm:mb-0  h-auto rounded-lg overflow-hidden">
           <Sidepanel className="h-auto md:h-screen shadow-md rounded-lg overflow-hidden" />
         </aside>
 
-        {/* Main Content - Full width on mobile, centered on larger screens */}
-        <main className="flex-1 flex flex-col justify-between pb-8 md:pb-6 order-1 md:order-2 min-w-0">
-          {children}
+        {/* Main Content - Responsive for all devices */}
+        <main className="flex-1 flex flex-col justify-between pb-4 sm:pb-6 md:pb-6 lg:pb-8 order-1 md:order-2 min-w-0 w-full sm:w-[calc(100%-240px)] md:w-[calc(100%-260px)] lg:w-[calc(100%-288px)] rounded-lg">
+          <div className="w-full h-full p-2 sm:p-3 md:p-4 lg:p-5">
+            {children}
+          </div>
         </main>
 
-        {/* Advertisement Section - Horizontal on mobile, vertical on desktop */}
-        <aside className="w-full md:w-auto flex justify-center md:sticky md:top-6 md:h-screen md:flex-col md:self-start mb-6 md:mb-0 order-3">
-          <div className="w-full max-w-[320px] md:max-w-none md:w-[160px] h-[180px] sm:h-[250px] md:h-[600px] bg-backdrop-blur rounded-lg flex items-center justify-center text-gray-400 font-medium sticky top-6">
-            <div className="banner-container">
+        {/* Advertisement Section - Responsive for all devices */}
+        {/* Uncomment and use if needed */}
+        {/* <aside className="w-full xs:hidden sm:hidden md:flex lg:flex md:w-auto justify-center md:sticky md:top-6 md:h-screen md:flex-col md:self-start mb-4 sm:mb-0 order-3">
+          <div className="w-full max-w-[300px] sm:max-w-[250px] md:max-w-none md:w-[160px] lg:w-[180px] xl:w-[200px] h-[120px] sm:h-[180px] md:h-[600px] bg-backdrop-blur rounded-lg flex items-center justify-center text-gray-400 font-medium sticky top-6">
+            <div className="banner-container w-full h-full overflow-hidden rounded-lg">
               {adData ? (
-                <a href={adData.link} target="_blank" rel="noopener noreferrer">
-                  <img src={adData.image} alt="Ad Banner" className="banner" />
+                <a href={adData.link} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                  <img src={adData.image} alt="Ad Banner" className="banner w-full h-full object-contain" />
                 </a>
               ) : (
-                <p>Loading Ad...</p>
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-sm sm:text-base">Loading Ad...</p>
+                </div>
               )}
             </div>
           </div>
-        </aside>
+        </aside> */}
       </div>
     </div>
   );

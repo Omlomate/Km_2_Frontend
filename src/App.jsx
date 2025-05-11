@@ -35,9 +35,10 @@ import Footer from "./Components/Footer/Footer.jsx";
 import ForumPosts from "./adminPages/ForumPosts.jsx";
 import ContactForm from "./Components/ContactForm/ContactForm.jsx";
 import Courses from "./Components/Courses/Courses.jsx";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ShowCourses from "./Components/Courses/ShowCourses.jsx";
+import { SidebarProvider } from './context/SidebarContext';
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -93,13 +94,17 @@ const AppContent = () => {
 
   useEffect(() => {
     try {
-      const adminSettings = JSON.parse(localStorage.getItem("adminToggleSettings")) || {};
+      const adminSettings =
+        JSON.parse(localStorage.getItem("adminToggleSettings")) || {};
       setToggleSettings({
         navOptions: adminSettings.navOptions || {},
         sidePanelOptions: adminSettings.sidePanelOptions || {},
       });
     } catch (error) {
-      console.error("Error parsing adminToggleSettings from localStorage:", error);
+      console.error(
+        "Error parsing adminToggleSettings from localStorage:",
+        error
+      );
       setToggleSettings({ navOptions: {}, sidePanelOptions: {} });
     }
   }, []);
@@ -172,7 +177,7 @@ const AppContent = () => {
 
   return (
     <Routes>
-      <Route path="/courses" element={<Courses/>} />
+      <Route path="/courses" element={<Courses />} />
       <Route path="/courses/:id" element={<ShowCourses />} />
       <Route path="/contactForm" element={<ContactForm />} />
       {/* Admin Routes */}
@@ -242,26 +247,29 @@ const AppContent = () => {
           <Layout className="w-full">
             <Routes>
               <Route path="/" element={<KeywordResearch />} />
-              {privateRoutes.map(({ path, element, toggleKey, toggleType, requiresAuth }) => {
-                const isEnabled = toggleSettings[toggleType][toggleKey] !== false; // Enabled unless explicitly false
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    element={
-                      isEnabled ? (
-                        requiresAuth ? (
-                          <PrivateRoute>{element}</PrivateRoute>
+              {privateRoutes.map(
+                ({ path, element, toggleKey, toggleType, requiresAuth }) => {
+                  const isEnabled =
+                    toggleSettings[toggleType][toggleKey] !== false; // Enabled unless explicitly false
+                  return (
+                    <Route
+                      key={path}
+                      path={path}
+                      element={
+                        isEnabled ? (
+                          requiresAuth ? (
+                            <PrivateRoute>{element}</PrivateRoute>
+                          ) : (
+                            element
+                          )
                         ) : (
-                          element
+                          <Navigate to="/" replace />
                         )
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                );
-              })}
+                      }
+                    />
+                  );
+                }
+              )}
             </Routes>
           </Layout>
         }
@@ -272,18 +280,20 @@ const AppContent = () => {
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <Router basename="/">
-        <Navbar />
-        <div className="pt-28 md:pt-16">
-          <AppContent />
-        </div>
-        <div className="md:px-6">
-          <Footer />
-        </div>
-        <ToastContainer position="top-right" autoClose={3000} />
-      </Router>
-    </GoogleOAuthProvider>
+    <SidebarProvider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <Router basename="/">
+          <Navbar />
+          <div className="pt-28 md:pt-16">
+            <AppContent />
+          </div>
+          <div className="md:px-6">
+            <Footer />
+          </div>
+          <ToastContainer position="top-right" autoClose={3000} />
+        </Router>
+      </GoogleOAuthProvider>
+    </SidebarProvider>
   );
 }
 

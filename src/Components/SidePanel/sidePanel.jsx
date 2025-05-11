@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginPage from "../Login&Registation/loginForm";
 import { isAuthenticated } from "../../utils/auth";
 import Profile from "../../assets/profile.svg";
+import { useSidebar } from '../../context/SidebarContext';
 
 const Sidebar = () => {
+  const { toggleSidebar, isSidebarOpen } = useSidebar();
   const [selectedOption, setSelectedOption] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User");
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
@@ -83,9 +85,9 @@ const Sidebar = () => {
     navigate("/profile-edit");
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setIsSidebarOpen(!isSidebarOpen);
+  // };
 
   const hideLogin = () => {
     setIsLoginVisible(false);
@@ -111,15 +113,17 @@ const Sidebar = () => {
 
   return (
     <>     
-      {isSidebarOpen && (
+    
+      {/* {isSidebarOpen && (
         <div
           className="md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
           onClick={toggleSidebar}
         ></div>
-      )}
+      )} */}
 
-      {!isSidebarOpen && (
-        <div className="md:hidden fixed top-4 left-4 z-50">
+      {/* Toggle button when sidebar is closed */}
+      {/* {!isSidebarOpen && (
+        <div className="md:hidden fixed top-20 left-4 z-50">
           <button
             onClick={toggleSidebar}
             className="p-2 rounded-full bg-white shadow-md border-none"
@@ -127,27 +131,18 @@ const Sidebar = () => {
             <i className="fas fa-arrow-right text-2xl text-[#E5590F]"></i>
           </button>
         </div>
-      )}
+      )} */}
 
-      {isSidebarOpen && (
-        <div className="md:hidden fixed top-4 left-4 z-50">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-full bg-white shadow-md border-none"
-          >
-            <i className="fas fa-times text-2xl text-[#E5590F]"></i>
-          </button>
-        </div>
-      )}
-
+      {/* Sidebar container */}
       <div
         className={`bg-white text-black p-6 fixed md:relative transition-all duration-300 ease-in-out z-45 top-0 md:top-0 overflow-y-auto ${
           isSidebarOpen
-            ? "translate-x-0 rounded-none w-1/2"
+            ? "translate-x-0 rounded-none w-80" /* Increased width from w-1/2 to w-80 */
             : "-translate-x-full rounded-r-xl w-96"
         } md:translate-x-0 md:ml-0 md:w-96`}
         style={{
-          width: "19rem",
+          width: isSidebarOpen ? "80%" : "19rem", /* Use percentage width on mobile when open */
+          maxWidth: "320px", /* Add max-width for very large screens */
           height: "101vh",
           fontFamily: "wantedsans",
           maxHeight: "100vh",
@@ -156,6 +151,18 @@ const Sidebar = () => {
           msOverflowStyle: "none",
         }}
       >
+        {/* Close button inside sidebar */}
+        {isSidebarOpen && (
+          <div className="md:hidden absolute top-4 right-4">
+            <button
+              onClick={toggleSidebar}
+              className="p-2 rounded-full bg-white shadow-sm border border-gray-200"
+            >
+              <i className="fas fa-times text-xl text-[#E5590F]"></i>
+            </button>
+          </div>
+        )}
+        
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
@@ -164,7 +171,7 @@ const Sidebar = () => {
         <div className="pt-12 md:pt-0">
           {/* Profile Section */}
           <Link to="/profile-edit" onClick={handleProfileClick}>
-            <div className="flex flex-col items-center justify-center mb-10 mt-2">
+            <div className="flex flex-col items-center justify-center mb-10 mt-4">
               <div className="w-24 h-24 rounded-full overflow-hidden mb-3 border-2 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300">
                 <img
                   src={profileImage}
