@@ -1,0 +1,156 @@
+/* Media Queries for relatedKeyword.jsx */
+
+/* Small devices (phones, 576px and up) */
+@media only screen and (max-width: 576px) {
+  .w-full.max-w-4xl {
+    padding: 1rem !important;
+  }
+  
+  h1.text-2xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .w-\[300px\] {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* AudienceVolume.jsx - Small devices */
+  .flex.flex-col.lg\:flex-row.w-full.gap-4 {
+    gap: 1rem !important;
+  }
+  
+  .text-3xl.sm\:text-6xl {
+    font-size: 2rem !important;
+  }
+  
+  .w-12.h-8.sm\:w-16.sm\:h-12 {
+    width: 2.5rem !important;
+    height: 1.75rem !important;
+  }
+  
+  .p-4.sm\:p-6 {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 577px) and (max-width: 991px) {
+  .grid.grid-cols-1.lg\:grid-cols-2 {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .w-\[300px\] {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* AudienceVolume.jsx - Medium devices */
+  .flex.flex-col.lg\:flex-row.w-full {
+    flex-direction: column !important;
+  }
+  
+  .lg\:w-3\/5, .lg\:w-2\/5 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .sm\:max-w-\[335px\] {
+    max-width: 100% !important;
+  }
+  
+  .w-full.max-w-3xl {
+    max-width: 90% !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .w-full.max-w-6xl {
+    max-width: 90% !important;
+  }
+  
+  /* AudienceVolume.jsx - Large devices */
+  .lg\:w-3\/5 {
+    width: 58% !important;
+  }
+  
+  .lg\:w-2\/5 {
+    width: 42% !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .w-full.max-w-6xl {
+    max-width: 1140px !important;
+  }
+  
+  /* AudienceVolume.jsx - Extra large devices */
+  .max-h-\[220px\] {
+    max-height: 250px !important;
+  }
+  
+  .min-h-\[250px\] {
+    min-height: 280px !important;
+  }
+}
+
+/* iPad Pro specific adjustments */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait), 
+       only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .w-full.max-w-4xl {
+    max-width: 100% !important;
+    padding: 10px !important;
+  }
+  
+  /* Force column layout for iPad Pro */
+  .grid.grid-cols-1.lg\:grid-cols-12,
+  .grid.grid-cols-1.lg\:grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* Ensure full width for grid items */
+  .col-span-8,
+  .col-span-4 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  #rk-ad-3 {
+    margin-top: 10px !important;
+  }
+  
+  .text-2xl.sm\:text-3xl.md\:text-5xl {
+    font-size: 2.5rem !important;
+  }
+  
+  /* AudienceVolume.jsx - iPad Pro specific */
+  .flex.flex-col.lg\:flex-row.w-full {
+    flex-direction: column !important;
+  }
+  
+  .lg\:w-3\/5, .lg\:w-2\/5 {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  
+  .sm\:max-w-\[335px\] {
+    max-width: 100% !important;
+  }
+  
+  .p-5.sm\:p-8 {
+    padding: 1.5rem !important;
+  }
+  
+  .object-contain.w-full.max-h-\[220px\] {
+    max-height: 300px !important;
+  }
+}

@@ -11,7 +11,7 @@ import { useSidebar } from "../../context/SidebarContext";
 
 const Navbar = () => {
   const { toggleSidebar, isSidebarOpen } = useSidebar();
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -434,42 +434,40 @@ const Navbar = () => {
         </div>
 
         {/* Changed from md:hidden to show below 882px */}
-        <div className="md:hidden max-[882px]:block w-full border-t border-gray-100">
-          <div className="overflow-x-auto">
-            <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-2 whitespace-nowrap">
-              <li>
+        <div className="md:hidden max-[882px]:block w-full border-t border-gray-100 overflow-hidden">
+          <div 
+            className="overflow-x-auto scrollbar-hide scroll-smooth" 
+            style={{
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
+            <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-4 whitespace-nowrap min-w-max transition-transform duration-300 ease-out">
+              <li className="px-2">
                 <button
                   onClick={toggleSidebar}
-                  className="flex items-center gap-1 text-sm"
+                  className="flex items-center gap-1 text-sm hover:text-[#E5590F] transition-colors"
                 >
                   <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'} text-[#E5590F]`}></i>
-                  <span>Menu</span>
+                  <span>Tools</span>
                 </button>
               </li>
-              <li>
-                <Link to="/related-keywords" className="nav-link text-sm">Research</Link>
+              <li className="px-2">
+                <Link to="/related-keywords" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Research</Link>
               </li>
-              <li>
-                <Link to="/blog" className="nav-link text-sm">Blog</Link>
+              <li className="px-2">
+                <Link to="/blog" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Blog</Link>
               </li>
-              <li>
-                <Link to="/forum" className="nav-link text-sm">Forum</Link>
+              <li className="px-2">
+                <Link to="/forum" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Forum</Link>
               </li>
-              <li>
-                <Link to="/courses" className="nav-link text-sm">Courses</Link>
+              <li className="px-2">
+                <Link to="/courses" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Courses</Link>
               </li>
-              {/* <li>
-                <button
-                  onClick={toggleSidebar}
-                  className="flex items-center gap-1 text-sm nav-link"
-                >
-                  <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'} text-[#E5590F]`}></i>
-                  <span>Menu</span>
-                </button>
-              </li> */}
               {userData?.isAdmin && (
-                <li>
-                  <a href="/admin-dashboard" className="nav-link text-sm">Admin</a>
+                <li className="px-2">
+                  <a href="/admin-dashboard" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Admin</a>
                 </li>
               )}
             </ul>

@@ -38,7 +38,8 @@ import Courses from "./Components/Courses/Courses.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShowCourses from "./Components/Courses/ShowCourses.jsx";
-import { SidebarProvider } from './context/SidebarContext';
+import { SidebarProvider } from "./context/SidebarContext";
+import PrivacyAndPolicy from "./Components/PrivacyAndPolicy/PrivacyAndPolicy.jsx";
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -180,6 +181,8 @@ const AppContent = () => {
       <Route path="/courses" element={<Courses />} />
       <Route path="/courses/:id" element={<ShowCourses />} />
       <Route path="/contactForm" element={<ContactForm />} />
+      <Route path="/privacy&policy" element={<PrivacyAndPolicy />} />
+
       {/* Admin Routes */}
       <Route
         path="/admin-dashboard"
