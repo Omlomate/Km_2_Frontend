@@ -7,7 +7,7 @@ import KeywordContainer from "../Components/ui/LongTailKeyword/KeywordContainer.
 import SVG1 from "../assets/releatedKI.svg";
 import Loader from "../Components/Loading/Loader.jsx";
 // import "../../public/style/style.css";
-import "../../public/style/mediaQueries.css";
+import "../pages/style/mediaQueries.css";
 
 export const KeywordResearch = () => {
   const [keywordData, setKeywordData] = useState(null);

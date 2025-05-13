@@ -5,7 +5,7 @@ import SearchInput from "../Components/ui/KeywordInput/SearchInput.jsx";
 import KeywordContainer from "../Components/ui/LongTailKeyword/KeywordContainer.jsx";
 import Loader from "../Components/Loading/Loader.jsx";
 // Import the mediaQueries.css file
-import "../../public/style/mediaQueries.css";
+import "../pages/style/mediaQueries.css";
 // Import the video player script utility
 import { loadVideoPlayerScript, cleanupVideoPlayerScripts } from "../utils/adsScript.js";
 
