@@ -157,11 +157,11 @@ export const KeywordResearch = () => {
           className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
-          <div className="w-full py-3 sm:py-6 md:py-8">
+          {/* <div className="w-full py-3 sm:py-6 md:py-8">
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
-              <div className="relative inline-block mx-auto ">
+              <div className="absolute inline-block mx-auto ">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/20 to-[#12153D]/20 rounded-lg blur-md"></div>
-                <h1 className="relative text-2xl sm:text-3xl md:text-5xl font-bold text-center lg:text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown transition-all duration-300">
+                <h1 className="absolute text-2xl sm:text-3xl md:text-5xl font-bold text-center lg:text-center text-[#12153D] mb-2 sm:mb-4  transition-all duration-300">
                   Related Keywords{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Finder
@@ -172,18 +172,47 @@ export const KeywordResearch = () => {
                 Find keyword ideas closely connected to your topic to help expand your content and reach more relevant search traffic.
               </p>
             </div>
+          </div> */}
+          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Related Keywords{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Finder
+                  </span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                Find keyword ideas closely connected to your topic to help expand your content and reach more relevant search traffic.
+
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01]">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl  hover:scale-[1.01]">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#E5590F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-[#E5590F]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">Search for Related Keywords</h3>
+                  <h3 className="text-lg font-semibold text-[#12153D]">
+                    Search for Related Keywords
+                  </h3>
                 </div>
                 <SearchInput onSearch={handleSearch} />
               </div>
@@ -223,8 +252,19 @@ export const KeywordResearch = () => {
                       <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
                         <div className="flex items-center">
                           <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-white"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
                             </svg>
                           </div>
                           <div>
@@ -235,7 +275,8 @@ export const KeywordResearch = () => {
                               </span>
                             </h2>
                             <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3">
-                              Found {keywordData.relatedKeywords.length} related keywords
+                              Found {keywordData.relatedKeywords.length} related
+                              keywords
                             </p>
                           </div>
                         </div>
@@ -246,8 +287,19 @@ export const KeywordResearch = () => {
                           <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
                             <div className="flex items-center mb-4 lg:mb-6">
                               <div className="w-8 h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                                  />
                                 </svg>
                               </div>
                               <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D]">
@@ -309,20 +361,18 @@ export const KeywordResearch = () => {
                                     in search engines. The goal is to use this
                                     information to improve your marketing.
                                   </p>
-                                  
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div
-                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center  "
-                          >
+                          <div className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center  ">
                             <div className="text-gray-700">ad 300X250 </div>
                           </div>
-                          <div
-                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center "
-                          >
-                            <div id="p2P21nhppseX" className="text-gray-700"></div>
+                          <div className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center ">
+                            <div
+                              id="p2P21nhppseX"
+                              className="text-gray-700"
+                            ></div>
                           </div>
                         </div>
                       </div>

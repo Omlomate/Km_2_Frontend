@@ -63,7 +63,9 @@ export const CPCPage = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/keywords/keyword-Everywhere-Volume`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -105,7 +107,7 @@ export const CPCPage = () => {
       >
         <div className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 cpc-main-container">
           {/* Header */}
-          <div className="w-full py-3 sm:py-6 md:py-8 cpc-header">
+          {/* <div className="w-full py-3 sm:py-6 md:py-8 cpc-header">
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
               <div className="relative inline-block mx-auto">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/20 to-[#12153D]/20 rounded-lg blur-md"></div>
@@ -119,19 +121,49 @@ export const CPCPage = () => {
                 helping you spot keywords with strong earning potential.{" "}
               </p>
             </div>
+          </div> */}
+          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Cost
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Per Click
+                  </span>
+                  Calculator
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                  Find out how much advertisers pay per click for a keyword,
+                  helping you spot keywords with strong earning potential.{" "}
+                </p>
+              </div>
+            </div>
           </div>
-          
+
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center cpc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto cpc-search-container">
               <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01] cpc-search-box">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#E5590F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-[#E5590F]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">Search for CPC Data</h3>
+                  <h3 className="text-lg font-semibold text-[#12153D]">
+                    Search for CPC Data
+                  </h3>
                 </div>
                 <SearchInput
                   onSearch={handleSearch}
@@ -156,12 +188,23 @@ export const CPCPage = () => {
                     <style>
                       {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                     </style>
-                    
+
                     <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] cpc-results-header animate-fadeIn">
                       <div className="flex flex-col sm:flex-row sm:items-center">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-4 shadow-md transform hover:rotate-12 transition-all duration-300 mb-3 sm:mb-0">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
                           </svg>
                         </div>
                         <div className="relative">
@@ -180,15 +223,26 @@ export const CPCPage = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 cpc-results-grid">
                       {/* CPC Value Card */}
                       <div className="flex flex-col space-y-5 sm:space-y-6 cpc-left-column">
                         <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01] cpc-value-card animate-fadeIn">
                           <div className="flex items-center mb-4 lg:mb-6">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#12153D] to-[#1c2260] flex items-center justify-center mr-3 shadow-md transform hover:rotate-6 transition-all duration-300">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
                               </svg>
                             </div>
                             <div className="relative">
@@ -213,7 +267,7 @@ export const CPCPage = () => {
                             </div>
                           </div>
                         </div>
-                        
+
                         <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left cpc-info-card">
                           <h3 className="text-lg font-semibold mb-2 cpc-info-title">
                             CPC for SEO
@@ -224,12 +278,12 @@ export const CPCPage = () => {
                             marketing goals while maintaining a positive ROI.
                           </p>
                         </div>
-                        
+
                         <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center cpc-ad-container">
                           <h4 className="text-2xl font-bold">AD</h4>
                         </div>
                       </div>
-                      
+
                       {/* Info and Ads */}
                       <div className="w-full lg:w-fit flex flex-col items-center lg:items-start space-y-4 sm:space-y-6 cpc-right-column animate-fadeIn">
                         <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden cpc-what-card transform hover:scale-[1.02] group bg-white">
@@ -237,12 +291,23 @@ export const CPCPage = () => {
                             {/* Decorative elements */}
                             <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-[#E5590F]/20 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-70 transition-all duration-300 transform -translate-x-4 translate-y-0"></div>
                             <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-[#12153D]/40 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-300"></div>
-                            
+
                             {/* Card header */}
                             <div className="flex items-center mb-3 relative z-10">
                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-3 shadow-md transform group-hover:rotate-6 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
                                 </svg>
                               </div>
                               <h1 className="text-lg sm:text-xl md:text-2xl font-semibold relative z-10 animate-slideDown group-hover:text-[#E5590F] transition-colors duration-300">
@@ -250,47 +315,66 @@ export const CPCPage = () => {
                                 <div className="absolute -bottom-1 left-0 w-12 h-0.5 bg-[#E5590F] rounded-full transform origin-left scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></div>
                               </h1>
                             </div>
-                            
+
                             {/* Card content */}
                             <div className="pl-11 relative z-10">
                               <p className="text-xs sm:text-sm text-gray-200 cpc-what-text animate-slideUp">
                                 <span className="text-[#E5590F] font-medium inline-block hover:text-[#ff6a1e] transition-colors duration-300 transform hover:scale-105">
                                   CPC
                                 </span>{" "}
-                                is the highest amount that you're willing to pay for
-                                a click on your ad. Your max. CPC is the most you'll
-                                be charged for a click, but you'll often be charged
-                                less—sometimes much less.
+                                is the highest amount that you're willing to pay
+                                for a click on your ad. Your max. CPC is the
+                                most you'll be charged for a click, but you'll
+                                often be charged less—sometimes much less.
                               </p>
                             </div>
-                            
+
                             {/* Card footer */}
                             <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                              <a href="#" className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center">
+                              <a
+                                href="#"
+                                className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
+                              >
                                 Learn more
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-3 w-3 ml-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
                                 </svg>
                               </a>
                             </div>
-                            
+
                             {/* Bottom border */}
                             <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5590F] to-transparent opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
                           </div>
                         </div>
-                        
+
                         <div className="bg-gradient-to-br from-gray-200 to-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center cpc-ad-small shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] overflow-hidden relative group">
                           <div className="absolute inset-0 bg-gradient-to-r from-[#12153D]/5 to-[#E5590F]/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
                           <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-all duration-700"></div>
-                          <h1 className="text-md lg:text-2xl font-bold relative z-10 text-gray-700 group-hover:text-gray-800 transition-all duration-300 transform group-hover:scale-110 animate-pulse">AD</h1>
+                          <h1 className="text-md lg:text-2xl font-bold relative z-10 text-gray-700 group-hover:text-gray-800 transition-all duration-300 transform group-hover:scale-110 animate-pulse">
+                            AD
+                          </h1>
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-[#12153d] text-white mt-6 p-4 rounded-xl text-center lg:text-left shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] cpc-footer">
                       <p className="text-xs sm:text-base cpc-footer-text">
                         To find more information and get more insights check out{" "}
-                        <a href="#" className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                        <a
+                          href="#"
+                          className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300"
+                        >
                           SEO difficulty
                         </a>{" "}
                         to understand your local and global audience.
