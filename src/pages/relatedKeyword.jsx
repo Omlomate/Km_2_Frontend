@@ -152,29 +152,39 @@ export const KeywordResearch = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4 md:py-8 md:px-6">
+      <div className="flex justify-center w-full min-h-screen  px-2 sm:py-1 sm:px-1   bg-gradient-to-b from-gray-50 to-white">
         <div
-          className="w-full max-w-4xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-6 md:p-8 shadow-sm"
+          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
           <div className="w-full py-3 sm:py-6 md:py-8">
-            <div className="space-y-2 sm:space-y-3 md:space-y-4">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown transition-all duration-300">
-                Related Keywords{" "}
-                <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
-                  Finder
-                </span>
-              </h1>
+            <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
+              <div className="relative inline-block mx-auto ">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/20 to-[#12153D]/20 rounded-lg blur-md"></div>
+                <h1 className="relative text-2xl sm:text-3xl md:text-5xl font-bold text-center lg:text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown transition-all duration-300">
+                  Related Keywords{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Finder
+                  </span>
+                </h1>
+              </div>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-6 md:mb-8 animate-slideUp transition-all duration-300">
-                Find keyword ideas closely connected to your topic to help
-                expand your content and reach more relevant search traffic.
+                Find keyword ideas closely connected to your topic to help expand your content and reach more relevant search traffic.
               </p>
             </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01]">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#E5590F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#12153D]">Search for Related Keywords</h3>
+                </div>
                 <SearchInput onSearch={handleSearch} />
               </div>
 
@@ -200,7 +210,7 @@ export const KeywordResearch = () => {
 
             <div className="w-full mt-6 sm:mt-8 md:mt-10">
               {searchLoading ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-sm border border-gray-200 p-4 transition-all duration-300">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300">
                   <Loader />
                   <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse">
                     Searching for related keywords...
@@ -210,25 +220,40 @@ export const KeywordResearch = () => {
                 <div className="w-full max-w-6xl mx-auto">
                   {keywordData && (
                     <div className="space-y-6 sm:space-y-8 md:space-y-10 animate-fadeIn transition-all duration-500">
-                      <div className="mb-4 sm:mb-6 lg:mb-8 px-4 sm:px-5 lg:px-6 bg-[#E5590f]/5 p-4 sm:p-5 lg:p-6 rounded-xl border-l-4 border-[#E5590F] shadow-sm hover:shadow-md transition-all duration-300">
-                        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#12153D]">
-                          Results for: {" "}
-                          <span className="text-[#E5590F]">
-                            {keywordData.keyword}
-                          </span>
-                        </h2>
-                        <p className="text-sm sm:text-base text-gray-600 mt-2 sm:mt-3">
-                          Found {keywordData.relatedKeywords.length} related
-                          keywords
-                        </p>
+                      <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                              Results for:{" "}
+                              <span className="text-[#E5590F]">
+                                {keywordData.keyword}
+                              </span>
+                            </h2>
+                            <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3">
+                              Found {keywordData.relatedKeywords.length} related keywords
+                            </p>
+                          </div>
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
                         <div className="flex flex-col space-y-5 sm:space-y-6">
-                          <div className="w-full bg-white rounded-xl shadow-md p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                            <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D] mb-4 lg:mb-6">
-                              Related Keywords
-                            </h3>
+                          <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
+                            <div className="flex items-center mb-4 lg:mb-6">
+                              <div className="w-8 h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                </svg>
+                              </div>
+                              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D]">
+                                Related Keywords
+                              </h3>
+                            </div>
                             <KeywordContainer
                               maxHeight="560px"
                               Width={100}
@@ -238,7 +263,6 @@ export const KeywordResearch = () => {
                           </div>
                         </div>
                         <div>
-                          {" "}
                           <div className="flex flex-col gap-5 sm:gap-6">
                             <div
                               onClick={() => setHover(!hover)}
@@ -285,26 +309,20 @@ export const KeywordResearch = () => {
                                     in search engines. The goal is to use this
                                     information to improve your marketing.
                                   </p>
-                                  <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
-                                    <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-full hover:bg-orange-400 transition-colors duration-300 cursor-pointer">
-                                      Learn more
-                                    </span>
-                                  </div>
+                                  
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div
-                           
-                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center"
+                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center  "
                           >
                             <div className="text-gray-700">ad 300X250 </div>
                           </div>
                           <div
-                           
-                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center"
+                            className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center "
                           >
-                            <div  id="p2P21nhppseX" className="text-gray-700"></div>
+                            <div id="p2P21nhppseX" className="text-gray-700"></div>
                           </div>
                         </div>
                       </div>

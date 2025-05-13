@@ -154,3 +154,693 @@
     max-height: 300px !important;
   }
 }
+
+/* Additional Media Queries for AudienceVolume.jsx */
+
+/* Small devices (phones, 576px and up) */
+@media only screen and (max-width: 576px) {
+  .w-full.max-w-4xl {
+    padding: 1rem !important;
+  }
+  
+  h1.text-2xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .w-\[300px\] {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* AudienceVolume.jsx - Enhanced small device styles */
+  .av-container {
+    padding: 0.5rem !important;
+  }
+  
+  .av-main-container {
+    padding: 0.75rem !important;
+    margin: 0 !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .av-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .av-description {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .av-search-box {
+    padding: 0.75rem !important;
+  }
+  
+  .av-results-header {
+    padding: 1rem !important;
+  }
+  
+  .av-results-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .av-results-subtitle {
+    font-size: 0.75rem !important;
+  }
+  
+  .av-volume-card {
+    padding: 1rem !important;
+  }
+  
+  .av-volume-title {
+    font-size: 1.125rem !important;
+  }
+  
+  .av-volume-number {
+    font-size: 2rem !important;
+  }
+  
+  .av-volume-content {
+    min-height: 200px !important;
+    padding: 0.75rem !important;
+  }
+  
+  .av-results-grid {
+    gap: 0.75rem !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 577px) and (max-width: 991px) {
+  .grid.grid-cols-1.lg\:grid-cols-2 {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .w-\[300px\] {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* AudienceVolume.jsx - Enhanced medium device styles */
+  .av-main-container {
+    max-width: 95% !important;
+    padding: 1.5rem !important;
+  }
+  
+  .av-title {
+    font-size: 2rem !important;
+  }
+  
+  .av-search-container {
+    max-width: 90% !important;
+  }
+  
+  .av-results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .av-left-column, .av-right-column {
+    width: 100% !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .w-full.max-w-6xl {
+    max-width: 90% !important;
+  }
+  
+  /* AudienceVolume.jsx - Enhanced large device styles */
+  .av-main-container {
+    max-width: 95% !important;
+  }
+  
+  .av-search-container {
+    max-width: 80% !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .w-full.max-w-6xl {
+    max-width: 1140px !important;
+  }
+  
+  /* AudienceVolume.jsx - Enhanced extra large device styles */
+  .av-main-container {
+    max-width: 1140px !important;
+  }
+  
+  .av-search-container {
+    max-width: 70% !important;
+  }
+}
+
+/* Media Queries for KeywordDifficulty.jsx */
+
+/* Small devices (phones, 576px and up) */
+@media only screen and (max-width: 576px) {
+  /* KeywordDifficulty.jsx - Small devices */
+  .kd-container {
+    padding: 0.5rem !important;
+  }
+  
+  .kd-main-container {
+    padding: 0.75rem !important;
+    margin: 0 !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .kd-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .kd-description {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .kd-search-box {
+    padding: 0.75rem !important;
+  }
+  
+  .kd-results-header {
+    padding: 1rem !important;
+  }
+  
+  .kd-results-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .kd-results-subtitle {
+    font-size: 0.75rem !important;
+  }
+  
+  .kd-difficulty-card, .kd-description-card, .kd-what-card {
+    padding: 1rem !important;
+  }
+  
+  .kd-difficulty-title, .kd-description-title, .kd-what-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .kd-difficulty-number {
+    font-size: 2.5rem !important;
+  }
+  
+  .kd-ad-container, .kd-ad-small {
+    height: 150px !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 577px) and (max-width: 991px) {
+  /* KeywordDifficulty.jsx - Medium devices */
+  .kd-results-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .kd-left-column, .kd-right-column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .kd-what-card {
+    max-width: 100% !important;
+  }
+  
+  .kd-search-container {
+    max-width: 90% !important;
+  }
+  
+  .kd-ad-container {
+    width: 100% !important;
+    max-width: 336px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .kd-ad-small {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .kd-video-container {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .kd-main-container {
+    max-width: 95% !important;
+    padding: 1.5rem !important;
+  }
+  
+  .kd-title {
+    font-size: 2rem !important;
+  }
+  
+  .kd-right-column {
+    align-items: center !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* KeywordDifficulty.jsx - Large devices */
+  .kd-main-container {
+    max-width: 95% !important;
+  }
+  
+  .kd-search-container {
+    max-width: 80% !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* KeywordDifficulty.jsx - Extra large devices */
+  .kd-main-container {
+    max-width: 1140px !important;
+  }
+  
+  .kd-search-container {
+    max-width: 70% !important;
+  }
+}
+
+/* iPad Pro specific adjustments */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait), 
+       only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  /* KeywordDifficulty.jsx - iPad Pro specific */
+  .kd-results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .kd-left-column, .kd-right-column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .kd-right-column {
+    align-items: center !important;
+  }
+  
+  .kd-what-card {
+    max-width: 100% !important;
+  }
+  
+  .kd-ad-container, .kd-ad-small, .kd-video-container {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Media Queries for AdCompetition.jsx */
+
+/* Small devices (phones, 576px and up) */
+@media only screen and (max-width: 576px) {
+  /* AdCompetition.jsx - Small devices */
+  .adc-container {
+    padding: 0.5rem !important;
+  }
+  
+  .adc-main-container {
+    padding: 0.75rem !important;
+    margin: 0 !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .adc-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .adc-description {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .adc-search-box {
+    padding: 0.75rem !important;
+  }
+  
+  .adc-results-header {
+    padding: 1rem !important;
+  }
+  
+  .adc-results-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .adc-results-subtitle {
+    font-size: 0.75rem !important;
+  }
+  
+  .adc-value-card, .adc-scale-card, .adc-what-card {
+    padding: 1rem !important;
+  }
+  
+  .adc-value-title, .adc-scale-title, .adc-what-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .adc-value-number {
+    font-size: 2.5rem !important;
+  }
+  
+  .adc-ad-container, .adc-ad-small {
+    height: 150px !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 577px) and (max-width: 991px) {
+  /* AdCompetition.jsx - Medium devices */
+  .adc-results-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .adc-left-column, .adc-right-column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .adc-what-card {
+    max-width: 100% !important;
+  }
+  
+  .adc-search-container {
+    max-width: 90% !important;
+  }
+  
+  .adc-ad-container {
+    width: 100% !important;
+    max-width: 336px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .adc-ad-small {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .adc-video-container {
+    width: 100% !important;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* AdCompetition.jsx - Large devices */
+  .adc-left-column {
+    width: 58% !important;
+  }
+  
+  .adc-right-column {
+    width: 42% !important;
+  }
+  
+  .adc-main-container {
+    max-width: 90% !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* AdCompetition.jsx - Extra large devices */
+  .adc-main-container {
+    max-width: 1140px !important;
+  }
+  
+  .adc-ad-container {
+    height: 280px !important;
+  }
+  
+  .adc-ad-small {
+    height: 250px !important;
+  }
+}
+
+/* iPad Pro specific adjustments */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait), 
+       only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  /* AdCompetition.jsx - iPad Pro specific */
+  .adc-results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .adc-left-column, .adc-right-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  
+  .adc-what-card {
+    max-width: 100% !important;
+  }
+  
+  .adc-value-card, .adc-scale-card {
+    padding: 1.5rem !important;
+  }
+  
+  .adc-footer {
+    margin-top: 1.5rem !important;
+  }
+}
+
+/* Media Queries for CPCPage.jsx */
+
+/* Small devices (phones, 576px and up) */
+@media only screen and (max-width: 576px) {
+  /* CPCPage.jsx - Small devices */
+  .cpc-container {
+    padding: 0.5rem !important;
+  }
+  
+  .cpc-main-container {
+    padding: 0.75rem !important;
+    margin: 0 !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .cpc-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .cpc-description {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .cpc-search-box {
+    padding: 0.75rem !important;
+  }
+  
+  .cpc-results-header {
+    padding: 1rem !important;
+  }
+  
+  .cpc-results-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .cpc-results-subtitle {
+    font-size: 0.75rem !important;
+  }
+  
+  .cpc-value-card {
+    padding: 1rem !important;
+  }
+  
+  .cpc-value-title {
+    font-size: 1.125rem !important;
+  }
+  
+  .cpc-value-number {
+    font-size: 2.5rem !important;
+  }
+  
+  .cpc-value-content {
+    min-height: 120px !important;
+    padding: 0.75rem !important;
+  }
+  
+  .cpc-results-grid {
+    gap: 0.75rem !important;
+  }
+  
+  .cpc-info-card {
+    padding: 1rem !important;
+  }
+  
+  .cpc-info-title {
+    font-size: 1rem !important;
+  }
+  
+  .cpc-info-text {
+    font-size: 0.75rem !important;
+  }
+  
+  .cpc-what-card {
+    padding: 1rem !important;
+  }
+  
+  .cpc-what-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .cpc-what-text {
+    font-size: 0.75rem !important;
+  }
+  
+  .cpc-ad-container, .cpc-ad-small {
+    height: 150px !important;
+    margin-top: 0.5rem !important;
+  }
+  
+  .cpc-footer {
+    padding: 0.75rem !important;
+    margin-top: 1rem !important;
+  }
+  
+  .cpc-footer-text {
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 577px) and (max-width: 991px) {
+  /* CPCPage.jsx - Medium devices */
+  .cpc-main-container {
+    max-width: 95% !important;
+    padding: 1.5rem !important;
+  }
+  
+  .cpc-title {
+    font-size: 2rem !important;
+  }
+  
+  .cpc-search-container {
+    max-width: 90% !important;
+  }
+  
+  .cpc-results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .cpc-left-column, .cpc-right-column {
+    width: 100% !important;
+  }
+  
+  .cpc-right-column {
+    align-items: center !important;
+  }
+  
+  .cpc-what-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .cpc-ad-container {
+    width: 100% !important;
+    max-width: 336px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  .cpc-ad-small {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* CPCPage.jsx - Large devices */
+  .cpc-main-container {
+    max-width: 95% !important;
+  }
+  
+  .cpc-search-container {
+    max-width: 80% !important;
+  }
+  
+  .cpc-right-column {
+    width: 100% !important;
+  }
+  
+  .cpc-what-card {
+    max-width: 100% !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* CPCPage.jsx - Extra large devices */
+  .cpc-main-container {
+    max-width: 1140px !important;
+  }
+  
+  .cpc-search-container {
+    max-width: 70% !important;
+  }
+  
+  .cpc-right-column {
+    padding-left: 1rem !important;
+  }
+}
+
+/* iPad Pro specific adjustments */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait), 
+       only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  /* CPCPage.jsx - iPad Pro specific */
+  .cpc-results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .cpc-left-column, .cpc-right-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  
+  .cpc-right-column {
+    align-items: center !important;
+  }
+  
+  .cpc-what-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .cpc-ad-container, .cpc-ad-small {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}

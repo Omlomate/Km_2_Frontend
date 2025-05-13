@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
 
         {/* Main Content - Responsive for all devices */}
         <main className="flex-1 flex flex-col justify-between pb-4 sm:pb-6 md:pb-6 lg:pb-8 order-1 md:order-2 min-w-0 w-full sm:w-[calc(100%-240px)] md:w-[calc(100%-260px)] lg:w-[calc(100%-288px)] rounded-lg">
-          <div className="w-full h-full p-2 sm:p-3 md:p-4 lg:p-5">
+          <div className="w-full h-full p-2  lg:p-5">
             {children}
           </div>
         </main>
