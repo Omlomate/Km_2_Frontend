@@ -192,8 +192,8 @@ export const KeywordResearch = () => {
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl  hover:scale-[1.01]">
-                <div className="flex items-center mb-4">
+              <div className="transition-all duration-300 p-1 sm:p-6 rounded-xl">
+                <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +210,7 @@ export const KeywordResearch = () => {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-md font-semibold text-[#12153D]">
                     Search for Related Keywords
                   </h3>
                 </div>

@@ -8,7 +8,6 @@ import { useSidebar } from '../../context/SidebarContext';
 const Sidebar = () => {
   const { toggleSidebar, isSidebarOpen } = useSidebar();
   const [selectedOption, setSelectedOption] = useState(null);
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [username, setUsername] = useState("Guest User");
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
@@ -27,7 +26,6 @@ const Sidebar = () => {
       setUsername(storedFirstName);
     }
 
-    // Set selected option based on current URL path
     const currentPath = location.pathname;
     const currentOption = menuItems.find(item => item.path === currentPath)?.name;
     
@@ -35,7 +33,6 @@ const Sidebar = () => {
       setSelectedOption(currentOption);
       localStorage.setItem("selectedOption", currentOption);
     } else if (authStatus && currentPath === "/") {
-      // Default to Related Keywords for authenticated users on root path
       setSelectedOption("Related Keywords");
       localStorage.setItem("selectedOption", "Related Keywords");
     } else if (currentPath === "/profile-edit") {
@@ -43,7 +40,6 @@ const Sidebar = () => {
       localStorage.setItem("selectedOption", "Profile");
     }
 
-    // Show login page if not authenticated and not on related-keywords page
     if (!authStatus && currentPath !== "/related-keywords") {
       setIsLoginVisible(true);
     } else {
@@ -51,7 +47,6 @@ const Sidebar = () => {
     }
   }, [location.pathname]);
 
-  // Listen for login events with redirect behavior
   useEffect(() => {
     const handleLoginSuccess = () => {
       setIsLoggedIn(true);
@@ -70,7 +65,6 @@ const Sidebar = () => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     localStorage.setItem("selectedOption", option);
-    setIsSidebarOpen(false);
 
     const currentPath = menuItems.find((item) => item.name === option)?.path;
     if (currentPath && location.pathname !== currentPath) {
@@ -81,13 +75,8 @@ const Sidebar = () => {
   const handleProfileClick = () => {
     setSelectedOption("Profile");
     localStorage.setItem("selectedOption", "Profile");
-    setIsSidebarOpen(false);
     navigate("/profile-edit");
   };
-
-  // const toggleSidebar = () => {
-  //   setIsSidebarOpen(!isSidebarOpen);
-  // };
 
   const hideLogin = () => {
     setIsLoginVisible(false);
@@ -112,46 +101,31 @@ const Sidebar = () => {
   ];
 
   return (
-    <>     
-    
-      {/* {isSidebarOpen && (
+    <>
+      {/* Overlay for closing the sidebar */}
+      {isSidebarOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-transparent backdrop-blur-xl bg-opacity-50 z-40 md:hidden"
           onClick={toggleSidebar}
         ></div>
-      )} */}
+      )}
 
-      {/* Toggle button when sidebar is closed */}
-      {/* {!isSidebarOpen && (
-        <div className="md:hidden fixed top-20 left-4 z-50">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-full bg-white shadow-md border-none"
-          >
-            <i className="fas fa-arrow-right text-2xl text-[#E5590F]"></i>
-          </button>
-        </div>
-      )} */}
-
-      {/* Sidebar container */}
       <div
         className={`bg-white text-black p-6 fixed md:relative transition-all duration-300 ease-in-out z-45 top-0 md:top-0 overflow-y-auto ${
           isSidebarOpen
-            ? "translate-x-0 rounded-none w-80" /* Increased width from w-1/2 to w-80 */
+            ? "translate-x-0 rounded-none w-80"
             : "-translate-x-full rounded-r-xl w-96"
         } md:translate-x-0 md:ml-0 md:w-96`}
         style={{
-          width: isSidebarOpen ? "80%" : "19rem", /* Use percentage width on mobile when open */
-          maxWidth: "320px", /* Add max-width for very large screens */
-          height: "101vh",
+          width: isSidebarOpen ? "100%" : "25rem",
+          maxWidth: "320px",
+          height: "100vh",
           fontFamily: "wantedsans",
-          maxHeight: "100vh",
           marginTop: "20px",
           scrollbarWidth: "none",
           msOverflowStyle: "none",
         }}
       >
-        {/* Close button inside sidebar */}
         {isSidebarOpen && (
           <div className="md:hidden absolute top-4 right-4">
             <button
@@ -168,8 +142,8 @@ const Sidebar = () => {
             display: none;
           }
         `}</style>
-        <div className="pt-12 md:pt-0">
-          {/* Profile Section */}
+
+        <div className="pt-12 md:pt-0 pb-20">
           <Link to="/profile-edit" onClick={handleProfileClick}>
             <div className="flex flex-col items-center justify-center mb-10 mt-4">
               <div className="w-24 h-24 rounded-full overflow-hidden mb-3 border-2 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300">
@@ -183,7 +157,6 @@ const Sidebar = () => {
             </div>
           </Link>
 
-          {/* Menu Section */}
           <div className="mb-8">
             <h3 className="text-sm uppercase text-gray-700 font-bold mb-4 tracking-wider pl-2">
               Tools
