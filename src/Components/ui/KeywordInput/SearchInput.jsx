@@ -47,7 +47,7 @@ const SearchInput = ({
       }
     } else {
       if (!country || !server) {
-        toast.error('Country and Server are required');
+        toast.error('Country and Search engine are required');
         return;
       }
     }
