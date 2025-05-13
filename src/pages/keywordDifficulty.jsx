@@ -122,7 +122,7 @@ const KeywordDifficulty = () => {
           className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 kd-main-container"
           style={{ fontFamily: "wantedsans" }}
         >
-          <div className="w-full py-3 sm:py-6 md:py-8">
+          {/* <div className="w-full py-3 sm:py-6 md:py-8">
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
               <div className="relative inline-block mx-auto">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/20 to-[#12153D]/20 rounded-lg blur-md"></div>
@@ -138,6 +138,23 @@ const KeywordDifficulty = () => {
                 See how hard it is to rank for a keyword so you can focus on
                 easier wins with less competition and more ranking chances.
               </p>
+            </div>
+          </div> */}
+          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                Keyword{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                  Difficulty
+                  </span>
+                  Checker
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                See how hard it is to rank for a keyword so you can focus on
+                easier wins with less competition and more ranking chances.
+                </p>
+              </div>
             </div>
           </div>
 
