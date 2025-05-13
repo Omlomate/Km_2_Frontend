@@ -33,7 +33,7 @@ export const CPCPage = () => {
         setMetaTags({
           title: "CPC - Keyword Raja",
           description:
-            "Calculate Cost Per Click (CPC) with Keyword Raja to optimize your ad spend.",
+            "Calculate Cost Per Click (CPC) with Keyword Raja to optimize your ad spend .",
         });
       }
     };
