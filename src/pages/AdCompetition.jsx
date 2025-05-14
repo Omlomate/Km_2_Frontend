@@ -153,7 +153,7 @@ export const AdCompetition = () => {
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
-                  AD
+                  AD{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Competition
                   </span>
@@ -169,7 +169,7 @@ export const AdCompetition = () => {
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center adc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto adc-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01] adc-search-box">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl  transform hover:scale-[1.01] adc-search-box">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
                     <svg

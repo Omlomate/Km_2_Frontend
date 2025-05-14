@@ -141,55 +141,38 @@ const LongTailKeywordPage = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white">
+      <div className="flex justify-center w-full min-h-screen px-2 bg-gradient-to-b from-gray-50 to-white">
         <div
           className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
-          {/* <div className="w-full py-3 sm:py-6 md:py-8">
-            <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
-              <div className="relative inline-block mx-auto">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/20 to-[#12153D]/20 rounded-lg blur-md"></div>
-                <h1 className="relative text-2xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown transition-all duration-300">
+          {/* Header Section */}
+          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+            <div className="container mx-auto px-2 sm:px-4">
+              <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-4 md:space-y-6 text-center">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
                   Long-Tail{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Keywords
                   </span>{" "}
                   Finder
                 </h1>
-              </div>
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-6 md:mb-8 animate-slideUp transition-all duration-300">
-                Discover easy-to-rank long-tail keywords with lower competition
-                and better chances to bring targeted traffic to your site.
-              </p>
-            </div>
-          </div> */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
-            <div className="container mx-auto px-4">
-              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
-                Long-Tail{" "}
-                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
-                  Keywords
-                  </span>
-                  Finder
-                </h1>
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
-                Discover easy-to-rank long-tail keywords with lower competition
-                and better chances to bring targeted traffic to your site.
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up px-2">
+                  Discover easy-to-rank long-tail keywords with lower competition and better chances to bring targeted traffic to your site.
                 </p>
               </div>
             </div>
           </div>
 
+          {/* Search Section */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01]">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
+              <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-[#E5590F]"
+                      className="h-4 w-4 sm:h-5 sm:w-5 text-[#E5590F]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -202,7 +185,7 @@ const LongTailKeywordPage = () => {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-sm sm:text-md font-semibold text-[#12153D]">
                     Search for Long-Tail Keywords
                   </h3>
                 </div>
@@ -210,11 +193,11 @@ const LongTailKeywordPage = () => {
               </div>
 
               {error && (
-                <div className="mt-4 p-3 sm:p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm sm:text-base animate-fadeIn transition-all duration-300">
+                <div className="mt-3 sm:mt-4 p-2 sm:p-3 md:p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs sm:text-sm md:text-base animate-fadeIn transition-all duration-300">
                   <p className="flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 sm:h-5 sm:w-5 mr-2 flex-shrink-0"
+                      className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 flex-shrink-0"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -229,24 +212,26 @@ const LongTailKeywordPage = () => {
               )}
             </div>
 
-            <div className="w-full mt-6 sm:mt-8 md:mt-10">
+            {/* Results Section */}
+            <div className="w-full mt-4 sm:mt-6 md:mt-8 lg:mt-10">
               {loading ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300">
+                <div className="flex flex-col justify-center items-center h-36 sm:h-48 md:h-64 lg:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-3 sm:p-4 transition-all duration-300">
                   <Loader />
-                  <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse">
+                  <p className="mt-3 sm:mt-4 md:mt-5 lg:mt-6 text-xs sm:text-sm md:text-base text-gray-600 animate-pulse">
                     Searching for long-tail keywords...
                   </p>
                 </div>
               ) : (
                 <div className="w-full max-w-6xl mx-auto">
                   {keywordData && (
-                    <div className="space-y-6 sm:space-y-8 md:space-y-10 animate-fadeIn transition-all duration-500">
-                      <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+                    <div className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 animate-fadeIn transition-all duration-500">
+                      {/* Results Header */}
+                      <div className="mb-3 sm:mb-4 md:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-3 sm:p-4 md:p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
                         <div className="flex items-center">
-                          <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-4">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-3 sm:mr-4">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-white"
+                              className="h-4 w-4 sm:h-5 sm:w-5 text-white"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -260,28 +245,29 @@ const LongTailKeywordPage = () => {
                             </svg>
                           </div>
                           <div>
-                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white">
                               Results for:{" "}
                               <span className="text-[#E5590F]">
                                 {keywordData.keyword}
                               </span>
                             </h2>
-                            <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3">
-                              Found {keywordData.relatedKeywords.length}{" "}
-                              long-tail keywords
+                            <p className="text-xs sm:text-sm md:text-base text-gray-300 mt-1 sm:mt-2 md:mt-3">
+                              Found {keywordData.relatedKeywords.length} long-tail keywords
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
-                        <div className="flex flex-col space-y-5 sm:space-y-6">
-                          <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
-                            <div className="flex items-center mb-4 lg:mb-6">
-                              <div className="w-8 h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-3">
+                      {/* Content Grid */}
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+                        {/* Left Column */}
+                        <div className="flex flex-col space-y-4 sm:space-y-5 md:space-y-6">
+                          <div className="w-full bg-white rounded-xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
+                            <div className="flex items-center mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+                              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-2 sm:mr-3">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 text-white"
+                                  className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-white"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
@@ -294,20 +280,22 @@ const LongTailKeywordPage = () => {
                                   />
                                 </svg>
                               </div>
-                              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D]">
+                              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#12153D]">
                                 Long-Tail Keywords
                               </h3>
                             </div>
                             <KeywordContainer
-                              maxHeight="560px"
+                              maxHeight="calc(50vh + 150px)"
                               Width={100}
-                              className="min-h-[300px] sm:min-h-[350px] lg:min-h-[450px] w-full mx-auto bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
+                              className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[450px] w-full mx-auto bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
                               keywordData={keywordData}
                             />
                           </div>
                         </div>
+
+                        {/* Right Column */}
                         <div>
-                          <div className="flex flex-col gap-5 sm:gap-6">
+                          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
                             <div
                               onClick={() => setHover(!hover)}
                               onMouseEnter={handleMouseEnter}
@@ -319,49 +307,47 @@ const LongTailKeywordPage = () => {
                                   hover ? "opacity-100" : ""
                                 }`}
                               ></div>
-                              <div className="h-full w-full flex items-center justify-center bg-[#12153d] rounded-2xl p-4 transition-all duration-300 relative">
-                                <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 lg:p-8 text-white text-left z-20">
+                              <div className="h-full w-full flex items-center justify-center bg-[#12153d] rounded-2xl p-3 sm:p-4 transition-all duration-300 relative">
+                                <div
+                                  className={`absolute inset-0 flex flex-col justify-center p-3 sm:p-4 md:p-6 lg:p-8 text-white text-left z-20 transition-all duration-500 ${
+                                    hover
+                                      ? "opacity-100 transform translate-y-0"
+                                      : "opacity-0 transform translate-y-4"
+                                  }`}
+                                >
                                   <h1
-                                    className="text-lg sm:text-xl lg:text-2xl font-semibold mb-3 lg:mb-4"
+                                    className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold mb-2 sm:mb-3 md:mb-4 transition-all duration-500"
                                     style={{
                                       fontFamily: "Space Grotesk, sans-serif",
                                     }}
                                   >
                                     What is it?
                                   </h1>
-                                  <p className="text-sm sm:text-base text-gray-200">
+                                  <p className="text-xs sm:text-sm md:text-base text-gray-200 transition-all duration-500">
                                     <span className="text-orange-500 font-medium inline-block hover:text-orange-400 transition-colors duration-300">
                                       Long-Tail Keywords
                                     </span>{" "}
-                                    are specific, longer search phrases that
-                                    users type when they're closer to making a
-                                    purchase or when they're looking for precise
-                                    information.
+                                    are specific, longer search phrases that users type when they're closer to making a purchase or when they're looking for precise information.
                                   </p>
-                                  <div className="mt-4">
-                                    <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs rounded-full hover:bg-orange-400 transition-colors duration-300 cursor-pointer">
-                                      Learn more
-                                    </span>
-                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center ">
+
+                          {/* Ad Containers */}
+                          <div className="w-full sm:w-[300px] h-[150px] sm:h-[250px] mt-3 sm:mt-4 flex items-center justify-center text-center">
                             <div className="text-gray-700">ad 300X250 </div>
                           </div>
-                          <div className="w-[300px] h-[250px] mt-4 flex items-center justify-center text-center ">
-                            <div
-                              id="p2P21nhppseX"
-                              className="text-gray-700"
-                            ></div>
+                          <div className="w-full sm:w-[300px] h-[150px] sm:h-[250px] mt-3 sm:mt-4 flex items-center justify-center text-center">
+                            <div id="p2P21nhppseX" className="text-gray-700"></div>
                           </div>
                         </div>
                       </div>
 
+                      {/* Bottom Ad Banner */}
                       <div
                         id="rk-ad-3"
-                        className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                        className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-4 sm:mt-6 md:mt-8 lg:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full sm:max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-auto sm:aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
                       >
                         ads
                       </div>

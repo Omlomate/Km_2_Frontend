@@ -1,67 +1,199 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const IndicatorScale = ({ value = 0 }) => {
-  const clampedValue = Math.min(Math.max(0, value), 1);
-  const percentage = clampedValue * 100;
+const IndicatorScale = ({ 
+  value = 0, 
+  min = 0, 
+  max = 1, 
+  showPercentage = true,
+  color = "orange",
+  darkMode = true,
+  showLabels = true
+}) => {
+  const [animatedValue, setAnimatedValue] = useState(value);
   
-  // Calculate position with limits to prevent overlap with endpoints
-  const markerPosition = percentage === 0 ? 2 : 
-                         percentage === 100 ? 97 : 
-                         percentage;
+  // Map value to 0-100 range with proper clamping
+  const normalizeValue = (val) => {
+    const clampedValue = Math.min(Math.max(min, val), max);
+    return ((clampedValue - min) / (max - min)) * 100;
+  };
+  
+  const percentage = normalizeValue(animatedValue);
+  
+  // More accurate positioning - no arbitrary limits
+  // This keeps the circle centered exactly where it should be
+  const markerPosition = percentage;
+  
+  // Determine color schemes based on theme
+  const colors = {
+    orange: {
+      primary: darkMode ? "bg-orange-500" : "bg-orange-600",
+      secondary: darkMode ? "bg-orange-500/50" : "bg-orange-300",
+      text: darkMode ? "text-orange-400" : "text-orange-700",
+      border: darkMode ? "border-orange-500" : "border-orange-600",
+      fill: darkMode ? "#f97316" : "#ea580c", // orange-500 or orange-600
+      stroke: darkMode ? "#fff" : "#f8fafc",  // white or slate-50
+    },
+    blue: {
+      primary: darkMode ? "bg-blue-500" : "bg-blue-600",
+      secondary: darkMode ? "bg-blue-500/50" : "bg-blue-300",
+      text: darkMode ? "text-blue-400" : "text-blue-700",
+      border: darkMode ? "border-blue-500" : "border-blue-600",
+      fill: darkMode ? "#3b82f6" : "#2563eb", // blue-500 or blue-600
+      stroke: darkMode ? "#fff" : "#f8fafc",  // white or slate-50
+    },
+    green: {
+      primary: darkMode ? "bg-green-500" : "bg-green-600",
+      secondary: darkMode ? "bg-green-500/50" : "bg-green-300",
+      text: darkMode ? "text-green-400" : "text-green-700",
+      border: darkMode ? "border-green-500" : "border-green-600",
+      fill: darkMode ? "#22c55e" : "#16a34a", // green-500 or green-600
+      stroke: darkMode ? "#fff" : "#f8fafc",  // white or slate-50
+    }
+  };
+  
+  const selectedColor = colors[color] || colors.orange;
+  const bgColor = darkMode ? "bg-gray-800" : "bg-white";
+  const textColor = darkMode ? "text-white" : "text-gray-800";
+  
+  // Improved animation with better easing
+  useEffect(() => {
+    if (Math.abs(value - animatedValue) > 0.01) {
+      const duration = 300; // ms
+      const startTime = Date.now();
+      const startValue = animatedValue;
+      const endValue = value;
+      
+      const animateValue = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease out cubic function for smoother animation
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        
+        const newValue = startValue + (endValue - startValue) * easedProgress;
+        setAnimatedValue(newValue);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateValue);
+        }
+      };
+      
+      requestAnimationFrame(animateValue);
+    } else {
+      setAnimatedValue(value);
+    }
+  }, [value]);
+
+  // Calculate accurate positions for tick marks and labels
+  const getTickPosition = (tickValue) => {
+    return normalizeValue(tickValue);
+  };
 
   return (
-    <div className="w-full mt-4 max-w-md mx-auto p-4">
-      <div className="relative flex items-center">
-        {/* Base dotted line */}
-        <div className="w-full h-[2px] border-t-2 border-dashed border-orange-500/50" />
-
-        {/* Solid progress line */}
+    <div className={`w-full max-w-md mx-auto p-6 rounded-lg ${bgColor} shadow-lg`}>
+      {/* Percentage display with actual value instead of percentage */}
+      {showPercentage && (
+        <div className="flex justify-between items-center mb-2">
+          <span className={`text-sm font-medium ${selectedColor.text}`}>Progress</span>
+          <div className="flex flex-col items-end">
+            <span className={`text-xl font-bold ${textColor}`}>
+              {animatedValue.toFixed(max >= 100 ? 0 : 1)}
+            </span>
+            <span className={`text-xs ${textColor} opacity-70`}>
+              {percentage.toFixed(1)}%
+            </span>
+          </div>
+        </div>
+      )}
+      
+      <div className="relative flex items-center py-6">
+        {/* Base track */}
+        <div className={`w-full h-1.5 rounded-full ${selectedColor.secondary} shadow-inner`} />
+        
+        {/* Progress track with proper z-index */}
         <div
-          className="absolute left-0 h-[2px] bg-orange-500 transition-all duration-300"
+          className={`absolute left-0 h-1.5 rounded-full ${selectedColor.primary} transition-all duration-300 shadow-sm z-10`}
           style={{ width: `${percentage}%` }}
         />
         
-        {/* Indicator marker - positioned above the line */}
-        <div 
-          className="absolute transform -translate-x-1/2 -translate-y-3 transition-all duration-300"
-          style={{ left: `${markerPosition}%` }}
+        {/* Indicator marker with no arbitrary position adjustments */}
+        <div
+          className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 z-20"
+          style={{ left: `${markerPosition}%`, top: "50%" }}
         >
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 34" 
-            fill="none" 
+          <div className={`absolute -inset-1 rounded-full ${selectedColor.secondary} animate-pulse opacity-70`}></div>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
-            className="drop-shadow-sm"
+            className="drop-shadow-md relative"
           >
-            <path 
-              d="M22.5 11.9459C22.5 15.2119 20.8275 19.117 18.6041 22.8045C16.4114 26.441 13.8217 29.6432 12.2656 31.4504C12.1823 31.5472 12.0865 31.581 12 31.581C11.9135 31.581 11.8177 31.5472 11.7344 31.4504C10.1783 29.6432 7.58855 26.441 5.39592 22.8045C3.17246 19.117 1.5 15.2119 1.5 11.9459C1.5 7.53935 2.75029 5.04432 4.47601 3.60364C6.25563 2.11797 8.83618 1.5 12 1.5C15.1638 1.5 17.7444 2.11797 19.524 3.60364C21.2497 5.04432 22.5 7.53935 22.5 11.9459Z" 
-              fill="#12153D" 
-              stroke="#E5590F" 
-              strokeWidth="3"
+            <circle 
+              cx="12" 
+              cy="12" 
+              r="10" 
+              fill={selectedColor.fill} 
+              stroke={selectedColor.stroke}
+              strokeWidth="2"
+            />
+            <circle 
+              cx="12" 
+              cy="12" 
+              r="4" 
+              fill={selectedColor.stroke}
             />
           </svg>
         </div>
-
-        {/* Start point */}
-        <div className="absolute left-0 -translate-x-1/2 flex items-center">
-          <span className="mr-2 text-2xl font-bold text-white">
-            0
-          </span>
-          <div className="relative w-1 h-3 bg-orange-500 rounded-sm">
-            <div className="absolute top-1/2 -translate-y-1/2 left-0 w-3 h-[2px] bg-orange-500"></div>
-          </div>
-        </div>
-
-        {/* End point */}
-        <div className="absolute right-0 translate-x-1/2 flex items-center">
-          <div className="relative w-1 h-3 bg-orange-500 rounded-sm">
-            <div className="absolute top-1/2 -translate-y-1/2 right-0 w-3 h-[2px] bg-orange-500"></div>
-          </div>
-          <span className="ml-2 text-2xl font-bold text-white">
-            1
-          </span>
-        </div>
+        
+        {/* Dynamically positioned tick marks based on the actual scale */}
+        {[min, min + ((max - min) * 0.25), min + ((max - min) * 0.5), min + ((max - min) * 0.75), max].map((tick, index) => {
+          const tickPosition = getTickPosition(tick);
+          return (
+            <div 
+              key={index}
+              className={`absolute h-3 w-0.5 ${tickPosition <= percentage ? selectedColor.primary : 'bg-gray-400'} rounded-full z-0`}
+              style={{ left: `${tickPosition}%`, top: "50%", transform: "translateY(-50%)" }}
+            />
+          );
+        })}
+        
+        {/* Start and end points with accurate positioning */}
+        {showLabels && (
+          <>
+            <div className="absolute left-0 -bottom-8 flex flex-col items-start">
+              <span className={`text-sm font-semibold ${textColor}`}>
+                {Number(min).toFixed(max >= 100 ? 0 : 1)}
+              </span>
+            </div>
+            
+            <div className="absolute -bottom-8 flex flex-col items-center"
+                 style={{ left: `${getTickPosition(min + ((max - min) * 0.25))}%`, transform: "translateX(-50%)" }}>
+              <span className={`text-sm font-medium ${textColor} opacity-70`}>
+                {Number(min + ((max - min) * 0.25)).toFixed(max >= 100 ? 0 : 1)}
+              </span>
+            </div>
+            
+            <div className="absolute -bottom-8 flex flex-col items-center"
+                 style={{ left: `${getTickPosition(min + ((max - min) * 0.5))}%`, transform: "translateX(-50%)" }}>
+              <span className={`text-sm font-medium ${textColor} opacity-70`}>
+                {Number(min + ((max - min) * 0.5)).toFixed(max >= 100 ? 0 : 1)}
+              </span>
+            </div>
+            
+            <div className="absolute -bottom-8 flex flex-col items-center"
+                 style={{ left: `${getTickPosition(min + ((max - min) * 0.75))}%`, transform: "translateX(-50%)" }}>
+              <span className={`text-sm font-medium ${textColor} opacity-70`}>
+                {Number(min + ((max - min) * 0.75)).toFixed(max >= 100 ? 0 : 1)}
+              </span>
+            </div>
+            
+            <div className="absolute right-0 -bottom-8 flex flex-col items-end">
+              <span className={`text-sm font-semibold ${textColor}`}>
+                {Number(max).toFixed(max >= 100 ? 0 : 1)}
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

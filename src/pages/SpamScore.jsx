@@ -42,6 +42,10 @@ const SpamScore = () => {
       "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
   };
 
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.boxShadow = "none";
+  };
+
   // Load video player script
   useEffect(() => {
     const loadVideoPlayer = () => {
@@ -123,66 +127,129 @@ const SpamScore = () => {
 
   return (
     <>
-      {/* Add Helmet to set meta tags */}
       <Helmet>
         <title>{metaTags.title}</title>
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div
-        className="flex justify-center w-full bg-gray-50 min-h-screen py-4 px-2 sm:py-6 sm:px-4"
-        style={{ fontFamily: "wantedsans" }}
-      >
-        <div className="w-full max-w-6xl bg-gray-50 rounded-xl mx-auto p-3 sm:p-8">
-          <div className="w-full py-3 sm:py-6">
-            <div className=" ">
-              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-center text-[#12153D] mb-2 sm:mb-4 animate-slideDown">
-                Keyword <span className="text-[#E5590F]">Spam Score</span>{" "}
-                Checker
-              </h1>
-              <p className="text-xs sm:text-base md:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-4 sm:mb-8 animate-slideUp">
-                Avoid risky keywords by checking their spam score and stay safe
-                from Google penalties or low-quality traffic issues.{" "}
-              </p>
+      <div className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white">
+        <div
+          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
+          style={{ fontFamily: "wantedsans" }}
+        >
+          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Keyword{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Spam Score
+                  </span>{" "}
+                  Checker
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                  Avoid risky keywords by checking their spam score and stay
+                  safe from Google penalties or low-quality traffic issues.
+                </p>
+              </div>
             </div>
           </div>
+
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-3 sm:p-6 rounded-xl bg-gray-50   border border-gray-100">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl hover:scale-[1.01]">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-[#E5590F]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#12153D]">
+                    Check Spam Score
+                  </h3>
+                </div>
                 <SearchInput onSearch={handleSearch} />
               </div>
             </div>
-            <div className="w-full mt-6 sm:mt-10">
+
+            <div className="w-full mt-6 sm:mt-8 md:mt-10">
               {loadingState ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-80 w-full">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300">
                   <Loader />
-                  <p className="mt-3 sm:mt-4 text-xs sm:text-base text-gray-600">
+                  <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse">
                     Checking spam score...
                   </p>
                 </div>
               ) : (
                 keywordData && (
-                  <>
-                    <style>
-                      {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
-                    </style>
-                    <div className="mb-4 sm:mb-8 px-2 sm:px-4 bg-gray-50 p-3 sm:p-4 rounded-xl border-l-4 border-[#E5590F]">
-                      <h2 className="text-lg sm:text-2xl font-bold text-[#12153D]">
-                        Results for:{" "}
-                        <span className="text-[#E5590F]">
-                          {keywordData.keyword || "Keyword"}
-                        </span>
-                      </h2>
-                      <p className="text-xs sm:text-base text-gray-600 mt-1">
-                        Spam score analysis and risk insights
-                      </p>
+                  <div className="space-y-6 sm:space-y-8 md:space-y-10 animate-fadeIn transition-all duration-500">
+                    <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D] to-[#1c2260] p-6 rounded-xl border-l-4 border-[#E5590F] shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-4">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                            Results for:{" "}
+                            <span className="text-[#E5590F]">
+                              {keywordData.keyword || "Keyword"}
+                            </span>
+                          </h2>
+                          <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3">
+                            Spam score analysis and risk insights
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-col lg:flex-row w-full gap-4 sm:gap-8">
-                      <div className="flex flex-col space-y-4 sm:space-y-6 lg:w-3/5">
-                        <div className="w-full bg-white rounded-xl shadow-md p-3 sm:p-6 transition-all duration-300 hover:shadow-lg border border-gray-200">
-                          <h3 className="text-base sm:text-lg font-semibold text-[#12153D] mb-3 sm:mb-4">
-                            Spam Score
-                          </h3>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+                      <div className="flex flex-col space-y-5 sm:space-y-6">
+                        <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
+                          <div className="flex items-center mb-4 lg:mb-6">
+                            <div className="w-8 h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-3">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                                />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D]">
+                              Spam Score
+                            </h3>
+                          </div>
                           <div className="flex flex-col items-center space-y-4">
                             <p className="text-3xl sm:text-5xl font-bold text-orange-500">
                               {keywordData.spamRiskScore}
@@ -193,41 +260,98 @@ const SpamScore = () => {
                             />
                           </div>
                         </div>
-                        <div className="w-full bg-[#12153D] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left">
-                          <h1 className="text-lg sm:text-xl font-semibold mb-2">
-                            Spam Risk Description
-                          </h1>
-                          <p className="text-xs sm:text-base">
-                            {keywordData.spam_description}
-                          </p>
+                        <div className="w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-xl shadow-lg p-4 sm:p-8 text-white text-center lg:text-left border-l-4 border-[#E5590F] transition-all duration-300 hover:shadow-xl transform hover:scale-[1.01]"
+                          onMouseEnter={handleMouseEnter}
+                          onMouseLeave={handleMouseLeave}
+                        >
+                          <div className="flex items-center mb-3 sm:mb-4">
+                            <div className="w-8 h-8 rounded-full bg-[#E5590F] flex items-center justify-center mr-3">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                              </svg>
+                            </div>
+                            <h1 className="text-lg sm:text-xl font-semibold">
+                              Spam Risk Description
+                            </h1>
+                          </div>
+                          <div className="pl-11">
+                            <p className="text-sm sm:text-base leading-relaxed text-white font-medium tracking-wide animate-fadeIn">
+                              {keywordData.spam_description}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                      <div className="w-full lg:w-2/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
-                        <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
-                          <div className="h-full w-full bg-[#12153D] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-8 flex flex-col justify-center">
-                            <h1 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">
-                              What is it?
-                            </h1>
-                            <p className="text-xs sm:text-base text-justify">
-                              <span className="text-orange-500 font-medium">
-                                Spam score
-                              </span>{" "}
-                              is used to measure a website's likelihood of
-                              getting cancelled by search engines for being
-                              spam.
-                            </p>
+                      <div>
+                        <div className="flex flex-col gap-5 sm:gap-6">
+                          <div
+                            onClick={() => setHover(!hover)}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            className="cursor-pointer w-full aspect-[4/3] shadow-lg hover:shadow-xl transition-all duration-500 rounded-2xl overflow-hidden transform hover:scale-[1.02] group relative bg-gradient-to-br from-[#12153D] to-[#1c2260] border-l-4 border-[#E5590F]"
+                          >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#E5590F]/10 rounded-full -mr-12 -mt-12 z-0"></div>
+                            <div className="absolute bottom-0 left-0 w-16 h-16 bg-[#E5590F]/10 rounded-full -ml-8 -mb-8 z-0"></div>
+                            <div className="h-full w-full p-4 transition-all duration-300 relative z-10">
+                              <div className="h-full w-full flex flex-col justify-center p-4 sm:p-6 lg:p-8 text-white text-left">
+                                <div className="flex items-center mb-4">
+                                  <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-3 shadow-md">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-5 w-5 text-white"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <h1 className="text-xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+                                    What is it?
+                                  </h1>
+                                </div>
+                                <div className="pl-13 border-l-2 border-[#E5590F]/30 ml-5">
+                                  <p className="text-sm sm:text-base text-gray-200 leading-relaxed tracking-wide">
+                                    <span className="text-[#E5590F] font-semibold text-base sm:text-lg inline-block mb-1">
+                                      Spam score
+                                    </span>{" "}
+                                    is used to measure a website's likelihood of
+                                    getting cancelled by search engines for being
+                                    spam.
+                                  </p>
+                                </div>
+                                <div className="mt-4 sm:mt-6 flex justify-end">
+                                  <span className="text-xs text-gray-400 italic">Click to learn more</span>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div
                           id="rk-ad-1"
-                          className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200"
+                          className=" w-full lg:w-[300px] sm:max-w-[300px] h-[250px] sm:h-[250px] rounded-xl  flex justify-center items-center mt-4"
                         >
                           AD
                         </div>
-                        <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl  overflow-hidden border border-gray-200">
+                        <div className="w-full sm:w-[300px] relative  rounded-xl overflow-hidden  mt-4">
                           <div
                             className="relative w-full"
-                            style={{ paddingBottom: "56.25%" }}
+                            style={{ paddingBottom: "55%" }}
                           >
                             <div
                               id="p2P21nhppseX"
@@ -237,15 +361,17 @@ const SpamScore = () => {
                         </div>
                       </div>
                     </div>
-                    <div
-                      id="ks-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md"
+
+                  <div
+                      id="kd-ad-3"
+                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] kd-ad-container"
                     >
                       ads
                     </div>
-                  </>
+                  </div>
                 )
               )}
+              {/* )} */}
             </div>
           </div>
         </div>

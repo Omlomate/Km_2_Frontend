@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
   return (
     <div className="layout min-h-screen bg-gray-50">
       {/* <Navbar /> */}
-      <div className="flex flex-col md:flex-row w-full min-h-screen  sm:px-4 md:px-6 lg:px-8 gap-3 sm:gap-4 md:gap-5 lg:gap-6 py-3 sm:py-4 md:py-5 lg:py-6">
+      <div className="flex flex-col md:flex-row w-full min-h-screen  md:px-6 lg:px-8  md:gap-5 lg:gap-6    md:py-5 lg:py-6">
         {/* Sidebar - Enhanced for all device types */}
         <aside className="w-full xs:w-full sm:w-60 md:w-64 lg:w-72 md:sticky md:top-6 md:self-start md:order-1 mb-3 sm:mb-0  h-auto rounded-lg overflow-hidden">
           <Sidepanel className="h-auto md:h-screen shadow-md rounded-lg overflow-hidden" />

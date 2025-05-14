@@ -206,7 +206,7 @@ export const AudienceVolume = () => {
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center av-content-wrapper">
             <div className="w-full max-w-3xl mx-auto av-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01] av-search-box">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl transform hover:scale-[1.01] av-search-box">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
                     <svg
@@ -475,16 +475,16 @@ export const AudienceVolume = () => {
 
                         <div
                           id="sv-ad-1"
-                          className="bg-gray-100 w-[90%] sm:max-w-[300px] h-[180px] sm:h-[250px] rounded-xl shadow-sm flex justify-center items-center border border-gray-200"
+                          className="sm:max-w-[300px] h-[250px] sm:h-[250px] rounded-xl  flex justify-center items-center"
                         >
                           <h1 className="text-sm sm:text-lg lg:text-2xl font-bold text-gray-400">
                             AD
                           </h1>
                         </div>
-                        <div className="w-full sm:w-[300px] relative bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                        <div className="w-full sm:w-[300px] relative  rounded-xl shadow-sm overflow-hidden ">
                           <div
                             className="relative w-full"
-                            style={{ paddingBottom: "56.25%" }}
+                            style={{ paddingBottom: "55%" }}
                           >
                             <div
                               id="p2P21nhppseX"

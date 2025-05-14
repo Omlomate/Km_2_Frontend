@@ -126,9 +126,9 @@ export const CPCPage = () => {
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
-                  Cost
+                  Cost{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
-                    Per Click
+                    Per Click{" "}
                   </span>
                   Calculator
                 </h1>
@@ -143,7 +143,7 @@ export const CPCPage = () => {
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center cpc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto cpc-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl bg-white border border-gray-200 shadow-md hover:shadow-xl transform hover:scale-[1.01] cpc-search-box">
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl transform hover:scale-[1.01] cpc-search-box">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
                     <svg
@@ -268,18 +268,18 @@ export const CPCPage = () => {
                           </div>
                         </div>
 
-                        <div className="w-full bg-[#12153d] rounded-xl shadow-md p-4 sm:p-8 text-white text-center lg:text-left cpc-info-card">
-                          <h3 className="text-lg font-semibold mb-2 cpc-info-title">
+                        <div className="w-full bg-gradient-to-br from-[#12153d] to-[#1c2260] rounded-xl shadow-lg p-6 sm:p-10 text-white text-center lg:text-left cpc-info-card transition-transform duration-300 transform hover:scale-105 hover:shadow-xl">
+                          <h3 className="text-xl font-bold mb-3 cpc-info-title">
                             CPC for SEO
                           </h3>
-                          <p className="cpc-info-text">
+                          <p className="text-sm sm:text-base cpc-info-text leading-relaxed">
                             CPC for SEO depends entirely on your industry and
                             desired ROI. A good CPC allows you to achieve your
                             marketing goals while maintaining a positive ROI.
                           </p>
                         </div>
 
-                        <div className="bg-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center cpc-ad-container">
+                        <div className=" w-full sm:w-[336px] lg:h-[180px] lg:[280px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center cpc-ad-container">
                           <h4 className="text-2xl font-bold">AD</h4>
                         </div>
                       </div>
@@ -358,27 +358,17 @@ export const CPCPage = () => {
                           </div>
                         </div>
 
-                        <div className="bg-gradient-to-br from-gray-200 to-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center cpc-ad-small shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] overflow-hidden relative group">
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#12153D]/5 to-[#E5590F]/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                          <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-all duration-700"></div>
-                          <h1 className="text-md lg:text-2xl font-bold relative z-10 text-gray-700 group-hover:text-gray-800 transition-all duration-300 transform group-hover:scale-110 animate-pulse">
-                            AD
-                          </h1>
+                        <div className=" w-[300px] sm:w-[300px] h-[250px] sm:h-[250px] mt-4  ">
+                          <h1 className="text-md lg:text-2xl font-bold ">AD</h1>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-[#12153d] text-white mt-6 p-4 rounded-xl text-center lg:text-left shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] cpc-footer">
-                      <p className="text-xs sm:text-base cpc-footer-text">
-                        To find more information and get more insights check out{" "}
-                        <a
-                          href="#"
-                          className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300"
-                        >
-                          SEO difficulty
-                        </a>{" "}
-                        to understand your local and global audience.
-                      </p>
+                    <div
+                      id="cpc-ad-3"
+                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                    >
+                      ads
                     </div>
                   </>
                 )
