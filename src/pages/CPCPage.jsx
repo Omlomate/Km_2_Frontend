@@ -176,7 +176,7 @@ export const CPCPage = () => {
             {/* Results */}
             <div className="w-full max-w-3xl mt-6 sm:mt-8 md:mt-10 cpc-results-container">
               {loadingState ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300 cpc-loading-container">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
                   <Loader />
                   <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse cpc-loading-text">
                     Calculating CPC...

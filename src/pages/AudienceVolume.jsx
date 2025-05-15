@@ -239,7 +239,7 @@ export const AudienceVolume = () => {
 
             <div className="w-full mt-6 sm:mt-8 md:mt-10 av-results-container flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
               {loadingState ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300 av-loading-container">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
                   <Loader />
                   <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse av-loading-text">
                     Analyzing search volume data...
@@ -252,12 +252,12 @@ export const AudienceVolume = () => {
                       {`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');`}
                     </style>
 
-                    <div className="mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-[#12153D]/80 to-[#1c2260]/80 p-6 rounded-2xl border-l-4 border-[#E5590F] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm">
-                      <div className="flex flex-wrap items-center">
-                        <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-4">
+                    <div className="max-w-3xl w-full mb-4 sm:mb-6 lg:mb-8 bg-[#12153d] p-6 rounded-2xl border-l-4 border-[#E5590F] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm animate-fadeIn">
+                      <div className="flex flex-wrap items-center justify-center">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff7a3d] flex items-center justify-center mr-4 shadow-md animate-pulse-slow">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-white"
+                            className="h-5 w-5 sm:h-6 sm:w-6 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -270,22 +270,29 @@ export const AudienceVolume = () => {
                             />
                           </svg>
                         </div>
-                        <div className="flex-1">
-                          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white av-results-title">
+                        <div className=" max-w-3xl flex-1">
+                          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white av-results-title tracking-tight animate-slideDown">
                             Results for:{" "}
-                            <span className="text-[#E5590F]">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E5590F] to-[#ff7a3d] hover:from-[#ff7a3d] hover:to-[#E5590F] transition-all duration-300">
                               {keywordData?.data[0]?.keyword || "Keyword"}
                             </span>
                           </h2>
-                          <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3 av-results-subtitle">
-                            Search volume analysis for{" "}
-                            {displayedCountry.name || "selected region"}
+                          <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3 av-results-subtitle animate-slideUp">
+                            <span className="inline-flex items-center">
+                              <svg className="w-4 h-4 mr-1 text-[#E5590F]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"></path>
+                              </svg>
+                              Search volume analysis for{" "}
+                            </span>
+                            <span className="font-medium text-white">
+                              {displayedCountry.name || "selected region"}
+                            </span>
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 av-results-grid">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 av-results-grid w-full max-w-3xl mx-auto">
                       <div className="flex flex-col space-y-5 sm:space-y-6 av-left-column">
                         <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01] av-volume-card">
                           <div className="flex items-center mb-4 lg:mb-6">

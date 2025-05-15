@@ -224,7 +224,7 @@ export const KeywordResearch = () => {
             {/* Results Section - Improved responsive spacing */}
             <div className="w-full mt-4 sm:mt-6 md:mt-8 lg:mt-10">
               {searchLoading ? (
-                <div className="flex flex-col justify-center items-center h-36 sm:h-48 md:h-64 lg:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-3 sm:p-4 transition-all duration-300">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
                   <Loader />
                   <p className="mt-3 sm:mt-4 md:mt-5 lg:mt-6 text-xs sm:text-sm md:text-base text-gray-600 animate-pulse">
                     Searching for related keywords...

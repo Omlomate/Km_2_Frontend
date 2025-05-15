@@ -146,7 +146,7 @@ const KeywordDifficulty = () => {
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
                 Keyword{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
-                  Difficulty
+                  Difficulty{" "}
                   </span>
                   Checker
                 </h1>

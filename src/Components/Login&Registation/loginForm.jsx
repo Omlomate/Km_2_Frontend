@@ -34,7 +34,7 @@ function LoginPage({ isVisible, onClose }) {
   const modalRef = useRef(null);
   const [transform, setTransform] = useState("scale(0)");
   const [email, setEmail] = useState("");
-  const [forgotEmail, setForgotEmail] = useState(""); // Separate state for forgot password email
+  const [forgotEmail, setForgotEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignupVisible, setSignupVisible] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -91,7 +91,6 @@ function LoginPage({ isVisible, onClose }) {
   };
 
   const handleLoginSubmit = async (e) => {
-    // console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -169,7 +168,7 @@ function LoginPage({ isVisible, onClose }) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: credentialResponse.credential }), // Send ID token
+          body: JSON.stringify({ token: credentialResponse.credential }),
         }
       );
   
@@ -202,8 +201,31 @@ function LoginPage({ isVisible, onClose }) {
 
   if (!isVisible) return null;
 
+  const LoadingSpinner = () => (
+    <svg
+      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+  );
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[9999]">
       {isSignupVisible ? (
         <div className="w-full max-w-2xl">
           <SignupPage 
@@ -214,30 +236,38 @@ function LoginPage({ isVisible, onClose }) {
       ) : (
         <div
           ref={modalRef}
-          className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-4 sm:w-[60%] relative"
+          className="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden"
           style={{ transform, transition: "transform 0.3s ease-in-out" }}
         >
-          <button
-            onClick={handleClose}
-            className="absolute top-2 right-2 text-gray-500"
-          >
-            ×
-          </button>
+          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <h1 className="text-2xl font-bold text-gray-800">
+              {isForgotPassword ? "Reset Your Password" : "Login to Keyword Raja"}
+            </h1>
+            <button
+              onClick={handleClose}
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-          {isForgotPassword ? (
-            <>
-              <h1 className="text-2xl font-extrabold p-4 pl-9 text-center">
-                Reset Your Password
-              </h1>
-              <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
+          <div className="p-6">
+            {isForgotPassword ? (
+              <div className="mx-auto max-w-md">
+                <p className="mb-4 text-gray-600">
+                  Enter your email address below to receive a password reset link.
+                </p>
                 <form
                   onSubmit={otp ? handleResetPassword : handleForgotPassword}
+                  className="space-y-4"
                 >
-                  <div className="mb-4">
+                  <div>
                     <input
                       type="email"
                       placeholder="Enter your email"
-                      className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                      className="p-3 bg-gray-100 rounded-lg text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                       value={forgotEmail}
                       onChange={handleForgotEmailChange}
                       required
@@ -245,21 +275,21 @@ function LoginPage({ isVisible, onClose }) {
                   </div>
                   {message === "OTP sent to your email" && (
                     <>
-                      <div className="mb-4">
+                      <div>
                         <input
                           type="text"
                           placeholder="Enter OTP"
-                          className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                          className="p-3 bg-gray-100 rounded-lg text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
                           required
                         />
                       </div>
-                      <div className="mb-4">
+                      <div>
                         <input
                           type="password"
                           placeholder="Enter new password"
-                          className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                          className="p-3 bg-gray-100 rounded-lg text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
                           required
@@ -269,31 +299,12 @@ function LoginPage({ isVisible, onClose }) {
                   )}
                   <button
                     type="submit"
-                    className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center"
+                    className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center hover:bg-blue-800 transition-colors"
                     disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
-                        <svg
-                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
+                        <LoadingSpinner />
                         Processing...
                       </>
                     ) : otp ? (
@@ -304,47 +315,42 @@ function LoginPage({ isVisible, onClose }) {
                   </button>
                 </form>
                 {message && (
-                  <p className="mt-4 text-center text-red-500">{message}</p>
+                  <div className={`mt-4 p-3 rounded ${message.includes("Error") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                    {message}
+                  </div>
                 )}
+                <button 
+                  onClick={() => setIsForgotPassword(false)}
+                  className="mt-4 text-blue-600 hover:text-blue-800 flex items-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to login
+                </button>
               </div>
-            </>
-          ) : (
-            <>
-              <h1
-                className="text-2xl font-extrabold p-4 pl-9 text-center sm:text-left"
-                style={{ wordSpacing: "7px" }}
-              >
-                Login to your Keyword Raja account and access all the free of
-                cost services
-              </h1>
-              <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-x-2 sm:space-y-0">
-                <div className="w-full sm:w-[25rem] sm:p-8 mb-8">
-                  <p className="mt-4 text-justify mb-2 sm:text-left">
-                    Create an account
-                    <a
-                      href="#"
-                      className="text-blue-500 ml-1.5"
-                      onClick={handleGmailClick}
-                    >
-                      Click here
-                    </a>
+            ) : (
+              <div className="flex flex-col md:flex-row md:gap-8">
+                <div className="w-full md:w-1/2">
+                  <p className="mb-4 text-gray-600">
+                    Access all the free of cost services with your account
                   </p>
-                  <form onSubmit={handleLoginSubmit}>
-                    <div className="mb-4">
+                  <form onSubmit={handleLoginSubmit} className="space-y-4">
+                    <div>
                       <input
                         type="email"
-                        placeholder="Enter email or phone number"
-                        className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                        placeholder="Email address"
+                        className="p-3 bg-gray-100 rounded-lg text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         value={email}
                         onChange={handleEmailChange}
                         required
                       />
                     </div>
-                    <div className="mb-4">
+                    <div>
                       <input
                         type="password"
-                        placeholder="Enter a new password"
-                        className="p-3 bg-[#A1A1A1] border-none rounded-lg text-black w-full"
+                        placeholder="Password"
+                        className="p-3 bg-gray-100 rounded-lg text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         value={password}
                         onChange={handlePasswordChange}
                         required
@@ -352,31 +358,12 @@ function LoginPage({ isVisible, onClose }) {
                     </div>
                     <button
                       type="submit"
-                      className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center"
+                      className="p-3 bg-[#12153D] text-white rounded-lg w-full flex items-center justify-center hover:bg-blue-800 transition-colors"
                       disabled={isLoading}
                     >
                       {isLoading ? (
                         <>
-                          <svg
-                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
+                          <LoadingSpinner />
                           Logging in...
                         </>
                       ) : (
@@ -385,13 +372,11 @@ function LoginPage({ isVisible, onClose }) {
                     </button>
                   </form>
 
-                  {/* Add Google login button */}
-                  <div className="mt-4">
-                    <div className="relative flex items-center justify-center">
-                      <div className="absolute border-t border-gray-300 w-full"></div>
-                      <div className="relative bg-white px-4 text-sm text-gray-500">
-                        Or continue with
-                      </div>
+                  <div className="mt-6">
+                    <div className="flex items-center">
+                      <div className="flex-grow h-px bg-gray-300"></div>
+                      <span className="px-4 text-sm text-gray-500">Or continue with</span>
+                      <div className="flex-grow h-px bg-gray-300"></div>
                     </div>
 
                     <GoogleLogin
@@ -461,37 +446,46 @@ function LoginPage({ isVisible, onClose }) {
                     />
                   </div>
 
-                  <p className="mt-4 text-justify sm:text-left">
-                    Forgot password?{" "}
-                    <a
-                      href="#"
-                      className="text-blue-500 ml-1.5"
+                  <div className="mt-6 flex justify-between items-center text-sm">
+                    <button
                       onClick={handleForgotPasswordClick}
+                      className="text-blue-600 hover:text-blue-800"
                     >
-                      Click Here
-                    </a>
-                  </p>
+                      Forgot password?
+                    </button>
+                    <button
+                      onClick={handleGmailClick}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      Create an account
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="hidden md:block md:w-1/2">
+                  <div className="h-full flex items-center justify-center">
+                    <svg
+                      className="max-w-full h-auto"
+                      width="250"
+                      height="250"
+                      viewBox="0 0 360 398"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M54.9577 182.394L2.36267 391.782C1.56966 394.939 3.95687 398 7.21202 398H352.001C355.867 398 359.001 394.866 359.001 391V0L234.236 195.991L183.814 100.814L109.115 240.666L54.9577 182.394Z"
+                        fill="#12153D"
+                      />
+                      <path
+                        d="M1 199V398H347.2C353.827 398 359.2 392.627 359.2 386V199L259.7 290.54L180.1 199L100.5 290.54L1 199Z"
+                        fill="#E5590F"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            </>
-          )}
-          <svg
-            className="absolute right-0 bottom-0 hidden sm:block sm:mr-4 sm:mb-4"
-            width="250"
-            height="300"
-            viewBox="0 0 360 398"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M54.9577 182.394L2.36267 391.782C1.56966 394.939 3.95687 398 7.21202 398H352.001C355.867 398 359.001 394.866 359.001 391V0L234.236 195.991L183.814 100.814L109.115 240.666L54.9577 182.394Z"
-              fill="#12153D"
-            />
-            <path
-              d="M1 199V398H347.2C353.827 398 359.2 392.627 359.2 386V199L259.7 290.54L180.1 199L100.5 290.54L1 199Z"
-              fill="#E5590F"
-            />
-          </svg>
+            )}
+          </div>
         </div>
       )}
     </div>
