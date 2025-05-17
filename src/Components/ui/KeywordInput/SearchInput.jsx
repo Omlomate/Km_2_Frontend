@@ -25,19 +25,6 @@ const SearchInput = ({
     setInputValue(searchTerm || "");
   }, [searchTerm]);
 
-  // Add global Enter key listener
-  React.useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      if (e.key === "Enter") {
-        handleSearch();
-      }
-    };
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleGlobalKeyDown);
-    };
-  }, [inputValue, country, server, currency, location.pathname]);
-
   const handleSearch = () => {
     if (location.pathname === "/CPC") {
       if (!country || !currency) {
@@ -109,7 +96,12 @@ const SearchInput = ({
             placeholder="Search Keyword..."
             value={inputValue}
             onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
             aria-label="Search"
           />
           
