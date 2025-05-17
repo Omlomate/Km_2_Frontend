@@ -247,7 +247,7 @@ const KeywordDifficulty = () => {
                         <div className="w-full bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01] kd-difficulty-card">
                           <div className="flex items-center mb-4 lg:mb-6">
                             <div className="w-8 h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-3">
-                              <svg
+                              {/* <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-4 w-4 text-white"
                                 fill="none"
@@ -260,7 +260,8 @@ const KeywordDifficulty = () => {
                                   strokeWidth={2}
                                   d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                                 />
-                              </svg>
+                              </svg> */}
+                              <i className="fa-solid fa-chart-bar text-white"></i>
                             </div>
                             <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D] kd-difficulty-title">
                               Keyword Difficulty

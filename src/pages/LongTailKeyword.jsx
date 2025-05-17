@@ -289,7 +289,7 @@ const LongTailKeywordPage = () => {
                           <div className="w-full bg-white rounded-xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 transition-all duration-300 hover:shadow-xl border border-gray-200 transform hover:scale-[1.01]">
                             <div className="flex items-center mb-3 sm:mb-4 md:mb-5 lg:mb-6">
                               <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-[#12153D] flex items-center justify-center mr-2 sm:mr-3">
-                                <svg
+                                {/* <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-white"
                                   fill="none"
@@ -302,7 +302,8 @@ const LongTailKeywordPage = () => {
                                     strokeWidth={2}
                                     d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                                   />
-                                </svg>
+                                </svg> */}
+                                <i className="fa-solid fa-up-right-from-square text-white"></i>
                               </div>
                               <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#12153D]">
                                 Long-Tail Keywords
