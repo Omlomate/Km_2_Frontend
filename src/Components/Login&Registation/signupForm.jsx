@@ -153,11 +153,11 @@ function SignupPage({ onClose, isVisible }) {
         />
       ) : (
         <div
-          className="relative w-full max-w-md sm:max-w-3xl transition-transform duration-300"
+          className="relative w-full max-w-md sm:max-w-2xl transition-transform duration-300 top-6"
           style={{ transform }}
         >
           <div
-            className="bg-white p-4 sm:p-8 rounded-lg w-full"
+            className="bg-white p-1 rounded-lg w-full"
             style={{
               borderRadius: "15px",
               background:
@@ -171,11 +171,11 @@ function SignupPage({ onClose, isVisible }) {
               ×
             </button>
             <div className="absolute inset-0 opacity-50 pointer-events-none"></div>
-            <div className="p-4 sm:p-6 rounded-lg w-full max-w-md mx-auto">
-              <h2 className="text-xl sm:text-2xl font-bold mb-1">
+            <div className="p-3 sm:p-4 rounded-lg w-full max-w-md mx-auto">
+              <h2 className="text-lg sm:text-xl font-bold mb-1">
                 Create Account
               </h2>
-              <p className="mb-4 sm:mb-6 text-sm sm:text-md text-gray-500 text-bold">
+              <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-500 text-bold">
                 Grow your business like a Raja
               </p>
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6">
@@ -265,42 +265,42 @@ function SignupPage({ onClose, isVisible }) {
                 </button>
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Enter First Name</label>
+                <label className="block text-gray-700 text-sm mb-1">Enter First Name</label>
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
                   disabled={isLoading}
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Enter Last Name</label>
+                <label className="block text-gray-700 text-sm mb-1">Enter Last Name</label>
                 <input
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
                   disabled={isLoading}
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Enter Email</label>
+                <label className="block text-gray-700 text-sm mb-1">Enter Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
                   disabled={isLoading}
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Create Password</label>
+                <label className="block text-gray-700 text-sm mb-1">Create Password</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
                   disabled={isLoading}
                 />
               </div>
@@ -312,14 +312,14 @@ function SignupPage({ onClose, isVisible }) {
                   className="mr-2"
                   disabled={isLoading}
                 />
-                <label className="text-gray-700">
+                <label className="text-gray-700 text-sm">
                   I agree with privacy and policy
                 </label>
               </div>
               <button
                 onClick={handleSignup}
                 disabled={isLoading}
-                className="w-full bg-blue-900 text-white p-2 rounded-lg flex items-center justify-center disabled:opacity-50"
+                className="w-full bg-blue-900 text-white py-1.5 px-2 rounded-lg flex items-center justify-center disabled:opacity-50 text-sm"
               >
                 {isLoading ? (
                   <>
@@ -349,7 +349,7 @@ function SignupPage({ onClose, isVisible }) {
                   "Sign Up"
                 )}
               </button>
-              <p className="text-center mt-4 text-gray-600">
+              <p className="text-center mt-3 text-gray-600 text-sm">
                 Already have an account?{" "}
                 <button
                   onClick={handleLogin}
