@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import { isAuthenticated } from "../../utils/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Updated wrapper component that supports children elements
 function LoginDialog({ buttonText, buttonClassName = "p-3 bg-[#12153D] text-white rounded-lg", children, onClick }) {
@@ -107,7 +109,7 @@ function LoginPage({ isVisible, onClose }) {
       navigate("/related-keywords", { replace: true });
     } catch (error) {
       console.error("Error logging in:", error);
-      alert("Login failed. Please check your credentials.");
+      toast.error("Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
@@ -185,15 +187,15 @@ function LoginPage({ isVisible, onClose }) {
             isAdmin: data.isAdmin,
           })
         );
-        alert("Google Signup successful");
+        toast.success("Google Signup successful");
         navigate("/related-keywords", { replace: true });
         handleClose();
       } else {
-        alert(data.message || "Google Signup failed");
+        toast.error(data.message || "Google Signup failed");
       }
     } catch (error) {
       console.error("Google Signup Error:", error);
-      alert("An error occurred during Google signup");
+      toast.error("An error occurred during Google signup");
     } finally {
       setIsLoading(false);
     }

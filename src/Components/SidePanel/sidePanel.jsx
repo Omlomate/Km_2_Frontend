@@ -65,6 +65,11 @@ const Sidebar = () => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     localStorage.setItem("selectedOption", option);
+    
+    // Close sidebar on mobile
+    if (window.innerWidth < 768) {
+      toggleSidebar();
+    }
 
     const currentPath = menuItems.find((item) => item.name === option)?.path;
     if (currentPath && location.pathname !== currentPath) {
@@ -75,6 +80,12 @@ const Sidebar = () => {
   const handleProfileClick = () => {
     setSelectedOption("Profile");
     localStorage.setItem("selectedOption", "Profile");
+    
+    // Close sidebar on mobile
+    if (window.innerWidth < 768) {
+      toggleSidebar();
+    }
+    
     navigate("/profile-edit");
   };
 
@@ -102,7 +113,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Overlay for closing the sidebar */}
+    
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-transparent backdrop-blur-xl bg-opacity-50 z-40 md:hidden"
@@ -111,7 +122,7 @@ const Sidebar = () => {
       )}
 
       <div
-        className={`bg-white text-black p-6 fixed md:relative transition-all duration-300 ease-in-out z-45 top-0 md:top-0 overflow-y-auto ${
+        className={`bg-white shadow-sm rounded-lg text-black p-6 fixed md:relative transition-all duration-300 ease-in-out z-45 top-0 md:top-0 overflow-y-auto ${
           isSidebarOpen
             ? "translate-x-0 rounded-none w-80"
             : "-translate-x-full rounded-r-xl w-96"

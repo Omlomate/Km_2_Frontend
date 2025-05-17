@@ -119,7 +119,7 @@ const KeywordDifficulty = () => {
 
       <div className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white kd-container">
         <div
-          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 kd-main-container"
+          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100 kd-main-container"
           style={{ fontFamily: "wantedsans" }}
         >
           {/* <div className="w-full py-3 sm:py-6 md:py-8">
@@ -140,30 +140,31 @@ const KeywordDifficulty = () => {
               </p>
             </div>
           </div> */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+          <div className="w-full py-6 md:py-8 border-b border-gray-200">
             <div className="container mx-auto px-4">
-              <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
-                Keyword{" "}
+              <div className="flex flex-col items-center justify-center text-center">
+                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Keyword{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
-                  Difficulty{" "}
-                  </span>
+                    Difficulty
+                  </span>{" "}
                   Checker
                 </h1>
+
                 <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
-                See how hard it is to rank for a keyword so you can focus on
-                easier wins with less competition and more ranking chances.
+                  See how hard it is to rank for a keyword so you can focus on
+                  easier wins with less competition and more ranking chances.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
-            <div className="w-full max-w-3xl mx-auto kd-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl  kd-search-box">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg
+            <div className="w-full max-w-3xl mx-auto  ">
+              <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl  kd-search-box">
+                <div className="flex items-center  ">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -176,9 +177,10 @@ const KeywordDifficulty = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                       <i className="fa-solid fa-chart-bar text-[#E5590F]"></i>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-sm font-semibold text-[#12153D]">
                     Check Keyword Difficulty
                   </h3>
                 </div>
@@ -188,7 +190,7 @@ const KeywordDifficulty = () => {
 
             <div className="w-full mt-6 sm:mt-8 md:mt-10">
               {loadingState ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-full bg-white rounded-xl shadow-md border border-gray-200 p-4 transition-all duration-300">
+                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
                   <Loader />
                   <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse">
                     Checking keyword difficulty...
@@ -207,34 +209,30 @@ const KeywordDifficulty = () => {
                       {/* Decorative elements */}
                       <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#E5590F]/10 rounded-full blur-xl opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
                       <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-[#E5590F]/5 rounded-full blur-lg opacity-60 group-hover:opacity-90 transition-opacity duration-500"></div>
-                      
+
                       <div className="flex items-center gap-4 relative z-10">
-                        <div
-                          className="w-12 h-12 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-[#E5590F]/30 group-hover:animate-pulse"
-                          aria-label="Keyword analysis icon"
-                        >
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff7a3d] flex items-center justify-center mr-4 shadow-md animate-pulse-slow">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-white"
+                            className="h-5 w-5 sm:h-6 sm:w-6 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
-                            aria-hidden="true"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               strokeWidth={2}
-                              d="M10 21l4-4m0 0l4 4m-4-4v8m-2-12a6 6 0 100-12 6 6 0 000 12z"
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                           </svg>
                         </div>
-                        <div className="animate-fadeIn">
+                        <div className="">
                           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-200 tracking-tight kd-results-title drop-shadow-sm">
                             Results for:{" "}
-                            <span className="text-[#E5590F] font-semibold hover:text-[#ff6a1e] transition-colors duration-300 relative group-hover:animate-pulse">
+                              <span className="text-[#E5590F]">
                               {keywordData?.keyword || "Keyword"}
-                              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#E5590F] group-hover:w-full transition-all duration-500"></span>
+                              {/* <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#E5590F] group-hover:w-full transition-all duration-500"></span> */}
                             </span>
                           </h2>
                           <p className="text-sm sm:text-base text-gray-200 mt-2 sm:mt-3 kd-results-subtitle font-medium tracking-wide max-w-xl">
@@ -277,10 +275,11 @@ const KeywordDifficulty = () => {
                             />
                           </div>
                         </div>
-                        <div 
+                        <div
                           className="w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-xl shadow-lg p-4 sm:p-8 text-white text-center lg:text-left border-l-4 border-[#E5590F] transition-all duration-300 hover:shadow-xl transform hover:scale-[1.01] kd-description-card"
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
+                            e.currentTarget.style.boxShadow =
+                              "4px 4px 8px rgba(229, 89, 15, 0.5), -4px 4px 8px rgba(229, 89, 15, 0.5), 4px -4px 8px rgba(229, 89, 15, 0.5), -4px -4px 8px rgba(229, 89, 15, 0.5)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.boxShadow = "none";
@@ -315,13 +314,13 @@ const KeywordDifficulty = () => {
                         </div>
                       </div>
                       <div className="flex flex-col gap-5 sm:gap-6 kd-right-column">
-                        <div className="cursor-pointer w-full shadow-md hover:shadow-xl transition-all duration-500 rounded-2xl overflow-hidden transform hover:scale-[1.02] group relative kd-what-card">
-                          <div className="absolute inset-0 bg-gradient-to-br from-[#12153D]/80 to-[#12153D] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div  >
+                          {/* <div className="absolute inset-0 bg-gradient-to-br from-[#12153D]/80 to-[#12153D] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                           <div className="h-full w-full flex items-center justify-center bg-[#12153D] rounded-2xl p-4 transition-all duration-300 relative">
                             <div className="h-full w-full flex flex-col justify-center p-4 sm:p-6 lg:p-8 text-white text-left relative z-10">
                               <div className="absolute top-0 right-0 w-24 h-24 bg-[#E5590F]/10 rounded-full -mr-12 -mt-12 z-0"></div>
                               <div className="absolute bottom-0 left-0 w-16 h-16 bg-[#E5590F]/10 rounded-full -ml-8 -mb-8 z-0"></div>
-                              
+
                               <div className="flex items-center mb-4 relative z-10">
                                 <div className="w-10 h-10 rounded-full bg-[#E5590F] flex items-center justify-center mr-3 shadow-md">
                                   <svg
@@ -348,23 +347,95 @@ const KeywordDifficulty = () => {
                                   What is it?
                                 </h1>
                               </div>
-                              
+
                               <div className="pl-13 border-l-2 border-[#E5590F]/30 ml-5 relative z-10">
                                 <p className="text-sm sm:text-base text-white leading-relaxed tracking-wide kd-what-content">
                                   <span className="text-[#E5590F] font-semibold text-base sm:text-lg inline-block mb-1 hover:text-orange-400 transition-colors duration-300">
                                     Keyword Difficulty
                                   </span>{" "}
                                   estimates how difficult it is to rank for a
-                                  keyword. The higher the keyword difficulty, the
-                                  larger the competition.
+                                  keyword. The higher the keyword difficulty,
+                                  the larger the competition.
                                 </p>
                               </div>
-                              
+
                               <div className="mt-4 sm:mt-6 flex justify-end relative z-10">
-                                <span className="text-xs text-gray-400 italic animate-pulse">Click to learn more</span>
+                                <span className="text-xs text-gray-400 italic animate-pulse">
+                                  Click to learn more
+                                </span>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
+                          <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden cpc-what-card transform hover:scale-[1.02] group bg-white">
+                              <div className="relative h-full w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-6 md:p-6 flex flex-col justify-center">
+                                {/* Decorative elements */}
+                                <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-[#E5590F]/20 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-70 transition-all duration-300 transform -translate-x-4 translate-y-0"></div>
+                                <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-[#12153D]/40 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-300"></div>
+
+                                {/* Card header */}
+                                <div className="flex items-center mb-3 relative z-10">
+                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-3 shadow-md transform group-hover:rotate-6 transition-all duration-300">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 text-white"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <h1 className="text-lg sm:text-xl md:text-2xl font-semibold relative z-10 animate-slideDown group-hover:text-[#E5590F] transition-colors duration-300">
+                                    What is it?
+                                    <div className="absolute -bottom-1 left-0 w-12 h-0.5 bg-[#E5590F] rounded-full transform origin-left scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></div>
+                                  </h1>
+                                </div>
+
+                                {/* Card content */}
+                                <div className="pl-11 relative z-10">
+                                  <p className="text-sm sm:text-base text-white leading-relaxed tracking-wide kd-what-content">
+                                  <span className="text-[#E5590F] font-semibold text-base sm:text-lg inline-block mb-1 hover:text-orange-400 transition-colors duration-300">
+                                    Keyword Difficulty
+                                  </span>{" "}
+                                  estimates how difficult it is to rank for a
+                                  keyword. The higher the keyword difficulty,
+                                  the larger the competition.
+                                </p>
+                                </div>
+
+                                {/* Card footer */}
+                                <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                  <a
+                                    href="#"
+                                    className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
+                                  >
+                                    Learn more
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-3 w-3 ml-1"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 5l7 7-7 7"
+                                      />
+                                    </svg>
+                                  </a>
+                                </div>
+
+                                {/* Bottom border */}
+                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5590F] to-transparent opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
+                              </div>
+                            </div>
                         </div>
                         <div
                           id="kd-ad-1"
@@ -388,7 +459,7 @@ const KeywordDifficulty = () => {
 
                     <div
                       id="kd-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] kd-ad-container"
+                      className="  mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1]   kd-ad-container"
                     >
                       ads
                     </div>

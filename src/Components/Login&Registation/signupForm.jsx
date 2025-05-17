@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import LoginPage from "./loginForm";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignupPage({ onClose, isVisible }) {
   const [firstName, setFirstName] = useState("");
@@ -31,11 +33,11 @@ function SignupPage({ onClose, isVisible }) {
 
   const handleSignup = async () => {
     if (!firstName || !lastName || !email || !password) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
     if (!agree) {
-      alert("You must agree to the privacy policy");
+      toast.warning("You must agree to the privacy policy");
       return;
     }
     setIsLoading(true);
@@ -69,11 +71,11 @@ function SignupPage({ onClose, isVisible }) {
         navigate("/", { replace: true });
         handleClose();
       } else {
-        alert(data.message || "Signup failed");
+        toast.error(data.message || "Signup failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred");
+      toast.error("An error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -104,15 +106,15 @@ function SignupPage({ onClose, isVisible }) {
             isAdmin: data.isAdmin,
           })
         );
-        alert("Google Signup successful");       
+        toast.success("Google Signup successful");
         navigate("/related-keywords", { replace: true });
         handleClose();
       } else {
-        alert(data.message || "Google Signup failed");
+        toast.error(data.message || "Google Signup failed");
       }
     } catch (error) {
       console.error("Google Signup Error:", error);
-      alert("An error occurred during Google signup");
+      toast.error("An error occurred during Google signup");
     } finally {
       setIsLoading(false);
     }

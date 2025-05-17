@@ -133,7 +133,7 @@ export const AdCompetition = () => {
         className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white adc-container"
         style={{ fontFamily: "wantedsans" }}
       >
-        <div className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 adc-main-container">
+        <div className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100 adc-main-container">
           {/* Header */}
           {/* <div className="w-full py-3 sm:py-6 md:py-8 adc-header">
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
@@ -149,7 +149,7 @@ export const AdCompetition = () => {
               </p>
             </div>
           </div> */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+          {/* <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
@@ -164,15 +164,32 @@ export const AdCompetition = () => {
                 </p>
               </div>
             </div>
+          </div> */}
+          <div className="w-full py-6 md:py-8 border-b border-gray-200">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  AD{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Competition
+                  </span>
+                </h1>
+
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                  Check how many advertisers are bidding on a keyword to
+                  understand its commercial value and competition level.{" "}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center adc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto adc-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl  transform hover:scale-[1.01] adc-search-box">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg
+              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl  adc-search-box">
+                <div className="flex items-center  ">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -185,9 +202,10 @@ export const AdCompetition = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                     <i className="fa-solid fa-ad text-[#E5590F]"></i>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-sm font-semibold text-[#12153D]">
                     Search for Ad Competition
                   </h3>
                 </div>
@@ -293,7 +311,7 @@ export const AdCompetition = () => {
                         <div className="w-full bg-gradient-to-br from-[#12153d] to-[#1c2260] rounded-xl shadow-lg p-4 sm:p-6 md:p-8 text-white text-center lg:text-left adc-scale-card transform hover:scale-[1.01] transition-all duration-300 hover:shadow-xl border border-[#12153d]/80 animate-fadeIn group">
                           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center shadow-md transform group-hover:rotate-6 transition-all duration-300 flex-shrink-0">
-                              <svg
+                              {/* <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-5 w-5 text-white"
                                 fill="none"
@@ -306,7 +324,8 @@ export const AdCompetition = () => {
                                   strokeWidth={2}
                                   d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
                                 />
-                              </svg>
+                              </svg> */}
+                              <i className="fa-solid fa-rectangle-ad"></i>
                             </div>
 
                             <div className="relative">
@@ -352,11 +371,9 @@ export const AdCompetition = () => {
 
                         <div
                           id="adc-ad-1"
-                          className="bg-gradient-to-br from-gray-200 to-gray-300 w-full sm:w-[336px] h-[180px] sm:h-[280px] mt-4 rounded-md flex justify-center items-center adc-ad-container shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] overflow-hidden relative group"
+                          className="block lg:hidden w-full sm:w-[300px] h-[250px] sm:h-[250px] mt-4 relative"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#12153D]/5 to-[#E5590F]/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                          <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-all duration-700"></div>
-                          <h4 className="text-2xl font-bold relative z-10 text-gray-700 group-hover:text-gray-800 transition-all duration-300 transform group-hover:scale-110 animate-pulse">
+                          <h4 className="text-2xl font-bold relative text-gray-700">
                             AD
                           </h4>
                         </div>
@@ -389,10 +406,8 @@ export const AdCompetition = () => {
 
                         <div
                           id="adc-ad-2"
-                          className="bg-gradient-to-br from-gray-200 to-gray-300 w-full sm:w-[300px] h-[180px] sm:h-[250px] mt-4 rounded-md flex justify-center items-center adc-ad-small shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] overflow-hidden relative group"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#12153D]/5 to-[#E5590F]/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                          <div className="absolute -inset-1 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-all duration-700"></div>
+                          className=" w-full sm:w-[300px] h-[250px] sm:h-[250px] mt-4  relative"
+                        > 
                           <h1 className="text-md lg:text-2xl font-bold relative z-10 text-gray-700 group-hover:text-gray-800 transition-all duration-300 transform group-hover:scale-110 animate-pulse">
                             AD
                           </h1>
@@ -414,7 +429,7 @@ export const AdCompetition = () => {
 
                     <div
                       id="adc-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full mx-auto md:w-[728px] md:h-[90px] h-[60px] sm:h-[70px] flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] adc-footer"
+                      className="    mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6  text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1]   kd-ad-container"
                     >
                       ads
                     </div>

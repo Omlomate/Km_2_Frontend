@@ -168,9 +168,9 @@ export const AudienceVolume = () => {
         <meta name="description" content={metaTags.description} />
       </Helmet>
 
-      <div className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white av-container">
+      <div className="flex justify-center w-full min-h-screen px-2 bg-gradient-to-b from-gray-50 to-white">
         <div
-          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 av-main-container"
+          className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
           {/* <div className="w-full py-3 sm:py-6 md:py-8">
@@ -187,7 +187,7 @@ export const AudienceVolume = () => {
               </p>
             </div>
           </div> */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+          {/* <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
@@ -202,14 +202,31 @@ export const AudienceVolume = () => {
                 </p>
               </div>
             </div>
+          </div> */}
+          <div className="w-full py-6 md:py-8 border-b border-gray-200">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Search{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                   Volume
+                  </span> Analyzer
+                </h1>
+
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                  Check how many people search for a keyword each month to know
+                  if it's worth targeting in your content or SEO strategy.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="w-full mx-auto rounded-lg flex flex-col items-center av-content-wrapper">
-            <div className="w-full max-w-3xl mx-auto av-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl transform hover:scale-[1.01] av-search-box">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg
+          <div className="w-full mx-auto rounded-lg flex flex-col items-center">
+            <div className="w-full max-w-3xl mx-auto">
+              <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -222,9 +239,10 @@ export const AudienceVolume = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                       <i className="fa-solid fa-chart-line text-[#E5590F]"></i>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-sm font-semibold text-[#12153D]">
                     Search for Volume Data
                   </h3>
                 </div>
@@ -237,9 +255,9 @@ export const AudienceVolume = () => {
               </div>
             </div>
 
-            <div className="w-full mt-6 sm:mt-8 md:mt-10 av-results-container flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+            <div className="flex flex-col justify-center items-center w-full mt-4 sm:mt-6 md:mt-8 lg:mt-10">
               {loadingState ? (
-                <div className="flex flex-col justify-center items-center h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
+                <div className=" h-48 sm:h-64 md:h-80 w-fit mx-auto p-4 transition-all duration-300 adc-loading-container">
                   <Loader />
                   <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base text-gray-600 animate-pulse av-loading-text">
                     Analyzing search volume data...
@@ -277,14 +295,23 @@ export const AudienceVolume = () => {
                               {keywordData?.data[0]?.keyword || "Keyword"}
                             </span>
                           </h2>
-                          <p className="text-sm sm:text-base text-gray-300 mt-2 sm:mt-3 av-results-subtitle animate-slideUp">
-                            <span className="inline-flex items-center">
-                              <svg className="w-4 h-4 mr-1 text-[#E5590F]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"></path>
+                          <p className="flex flex-col sm:flex-row items-center gap-2 sm:gap-1 text-xs sm:text-sm md:text-base text-gray-300 mt-2 sm:mt-3 av-results-subtitle animate-slideUp">
+                            <span className="inline-flex items-center whitespace-nowrap">
+                              <svg
+                                className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-[#E5590F]"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                  clipRule="evenodd"
+                                ></path>
                               </svg>
-                              Search volume analysis for{" "}
+                              Search volume analysis for
                             </span>
-                            <span className="font-medium text-white">
+                            <span className="px-2 py-1 sm:py-0 font-medium text-white bg-[#E5590F]/10 rounded-full sm:bg-transparent">
                               {displayedCountry.name || "selected region"}
                             </span>
                           </p>
@@ -313,7 +340,7 @@ export const AudienceVolume = () => {
                               </svg>
                             </div>
                             <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#12153D] av-volume-title">
-                              Audience Volume
+                              Search Volume
                             </h3>
                           </div>
 
@@ -439,7 +466,7 @@ export const AudienceVolume = () => {
                       </div>
 
                       <div className="flex flex-col space-y-5 sm:space-y-6">
-                        <div className="w-full max-w-full sm:max-w-[335px] shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden group">
+                        {/* <div className="w-full max-w-full sm:max-w-[335px] shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden group">
                           <div
                             className="h-full w-full bg-gradient-to-br from-[#12153D] to-[#1a2057] rounded-2xl text-white text-left transition-all duration-300 p-5 sm:p-8 flex flex-col justify-center relative overflow-hidden"
                             onMouseEnter={() => setHover(true)}
@@ -478,6 +505,78 @@ export const AudienceVolume = () => {
                             </p>
                             <div className="mt-4 pt-2 border-t border-gray-700 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"></div>
                           </div>
+                        </div> */}
+
+                        <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden cpc-what-card transform hover:scale-[1.02] group bg-white">
+                          <div className="relative h-full w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-6 md:p-6 flex flex-col justify-center">
+                            {/* Decorative elements */}
+                            <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-[#E5590F]/20 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-70 transition-all duration-300 transform -translate-x-4 translate-y-0"></div>
+                            <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-[#12153D]/40 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-300"></div>
+
+                            {/* Card header */}
+                            <div className="flex items-center mb-3 relative z-10">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-3 shadow-md transform group-hover:rotate-6 transition-all duration-300">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                              </div>
+                              <h1 className="text-lg sm:text-xl md:text-2xl font-semibold relative z-10 animate-slideDown group-hover:text-[#E5590F] transition-colors duration-300">
+                                What is it?
+                                <div className="absolute -bottom-1 left-0 w-12 h-0.5 bg-[#E5590F] rounded-full transform origin-left scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></div>
+                              </h1>
+                            </div>
+
+                            {/* Card content */}
+                            <div className="pl-11 relative z-10">
+                              <p className="text-xs sm:text-base text-gray-200 relative z-10 leading-relaxed">
+                                <span className="text-[#E5590F] font-medium text-base sm:text-lg inline-block mb-1">
+                                  Audience Volume
+                                </span>{" "}
+                                represents the number of monthly searches for
+                                your keyword in the selected region. Higher
+                                volumes indicate greater search interest,
+                                helping you identify popular keywords for your
+                                SEO and content strategy.
+                              </p>
+                            </div>
+
+                            {/* Card footer */}
+                            {/* <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                              <a
+                                href="#"
+                                className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
+                              >
+                                Learn more
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-3 w-3 ml-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </a>
+                            </div> */}
+
+                            {/* Bottom border */}
+                          </div>
                         </div>
 
                         <div
@@ -502,9 +601,9 @@ export const AudienceVolume = () => {
                       </div>
                     </div>
 
-                    <div
-                      id="sv-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                   <div
+                      id="av-ad-3"
+                      className=" mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center   aspect-[8/1]   sv-ad-container"
                     >
                       ads
                     </div>

@@ -106,8 +106,7 @@ const Footer = () => {
               </a>
             </div>
 
-            <p className="text-gray-900 mb-3 font-bold  text-md md:text-md text-justify leading-normal">
-  
+            <p className="text-gray-900 mb-3 font-bold text-base sm:text-md md:text-lg lg:text-xl text-start leading-tight sm:leading-tight">
               KeywordRaja – Free AI-Powered Keyword Research Tool
             </p>
             <p className="text-gray-700 mb-4 md:mb-6 text-sm md:text-base text-justify leading-normal  ">

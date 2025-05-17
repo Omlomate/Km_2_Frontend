@@ -7,6 +7,7 @@ import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx";
 import SelectCurrency from "../Components/ui/KeywordInput/SelectCurrency.jsx";
 // Import the mediaQueries.css file
 import "../pages/style/mediaQueries.css";
+import { loadVideoPlayerScript, cleanupVideoPlayerScripts } from "../utils/adsScript";
 
 export const CPCPage = () => {
   const [keywordData, setKeywordData] = useState(null);
@@ -39,6 +40,19 @@ export const CPCPage = () => {
     };
     fetchMetaTags();
   }, []);
+
+  // Add useEffect hook for managing video player
+  useEffect(() => {
+    // Load video player when keywordData is available
+    if (keywordData) {
+      loadVideoPlayerScript("p2P21nhppseX", true);
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      cleanupVideoPlayerScripts();
+    };
+  }, [keywordData]);
 
   const handleMouseEnter = (e) => {
     e.currentTarget.style.boxShadow =
@@ -105,7 +119,7 @@ export const CPCPage = () => {
         className="flex justify-center w-full min-h-screen px-2 sm:py-1 sm:px-1 bg-gradient-to-b from-gray-50 to-white cpc-container"
         style={{ fontFamily: "wantedsans" }}
       >
-        <div className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100 cpc-main-container">
+        <div className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100 cpc-main-container">
           {/* Header */}
           {/* <div className="w-full py-3 sm:py-6 md:py-8 cpc-header">
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-center">
@@ -122,7 +136,7 @@ export const CPCPage = () => {
               </p>
             </div>
           </div> */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+          {/* <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
@@ -138,15 +152,33 @@ export const CPCPage = () => {
                 </p>
               </div>
             </div>
+          </div> */}
+          <div className="w-full py-6 md:py-8 border-b border-gray-200">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Cost{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Per Click{" "}
+                  </span>
+                  Calculator
+                </h1>
+
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                  Find out how much advertisers pay per click for a keyword,
+                  helping you spot keywords with strong earning potential.{" "}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center cpc-content-wrapper">
-            <div className="w-full max-w-3xl mx-auto cpc-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 rounded-xl transform hover:scale-[1.01] cpc-search-box">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-3">
-                    <svg
+            <div className="w-full max-w-3xl mx-auto ">
+              <div className="transition-all duration-300 p-4 sm:p-6  cpc-search-box">
+                <div className="flex items-center  ">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -159,9 +191,10 @@ export const CPCPage = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                    <i className="fa-solid fa-dollar-sign text-[#E5590F]"></i>
                   </div>
-                  <h3 className="text-lg font-semibold text-[#12153D]">
+                  <h3 className="text-sm font-semibold text-[#12153D]">
                     Search for CPC Data
                   </h3>
                 </div>
@@ -330,7 +363,7 @@ export const CPCPage = () => {
                             </div>
 
                             {/* Card footer */}
-                            <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                            {/* <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
                               <a
                                 href="#"
                                 className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
@@ -351,7 +384,7 @@ export const CPCPage = () => {
                                   />
                                 </svg>
                               </a>
-                            </div>
+                            </div> */}
 
                             {/* Bottom border */}
                             <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5590F] to-transparent opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
@@ -361,12 +394,19 @@ export const CPCPage = () => {
                         <div className=" w-[300px] sm:w-[300px] h-[250px] sm:h-[250px] mt-4  ">
                           <h1 className="text-md lg:text-2xl font-bold ">AD</h1>
                         </div>
+                        <div className="w-full sm:w-[300px] h-[150px] sm:h-[250px] mt-3 sm:mt-4 relative  ">
+                        <div 
+                          id="p2P21nhppseX" 
+                          className="absolute inset-0 "
+                        ></div>
                       </div>
+                      </div>
+                      
                     </div>
 
-                    <div
+                      <div
                       id="cpc-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                      className=" mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center   aspect-[8/1]   cpc-ad-container"
                     >
                       ads
                     </div>

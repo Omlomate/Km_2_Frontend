@@ -444,13 +444,14 @@ const Navbar = () => {
             }}
           >
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-4 whitespace-nowrap min-w-max transition-transform duration-300 ease-out">
-              <li className="px-2">
+              <li className="px-2 ">
                 <button
                   onClick={toggleSidebar}
                   className="flex items-center gap-1 text-sm hover:text-[#E5590F] transition-colors"
                 >
-                  <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'} text-[#E5590F]`}></i>
-                  <span>Tools</span>
+                  <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-arrow-right'} text-[#E5590F] text-lg`}></i>
+                  {/* <i class="fa-solid fa-arrow-right"></i> */}
+                 
                 </button>
               </li>
               <li className="px-2">

@@ -183,8 +183,6 @@ const WhatsTrending = () => {
     setSelectedCountry(country.apiReference);
   };
 
-  
-
   return (
     <>
       <Helmet>
@@ -194,20 +192,21 @@ const WhatsTrending = () => {
 
       <div className="flex justify-center w-full min-h-screen px-2 bg-gradient-to-b from-gray-50 to-white">
         <div
-          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
+          className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
           {/* Header Section - Keep the gradient background for all screen sizes */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
-            <div className="container mx-auto px-2 sm:px-4">
-              <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-4 md:space-y-6 text-center">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+          <div className="w-full py-6 md:py-8 border-b border-gray-200">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
                   Keyword{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Trends
                   </span>
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up px-2">
+
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
                   Track keyword trends over time to see what's rising or fading
                   in popularity and plan your content accordingly.
                 </p>
@@ -221,7 +220,7 @@ const WhatsTrending = () => {
               <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl">
                 <div className="flex items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    <svg
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4 sm:h-5 sm:w-5 text-[#E5590F]"
                       fill="none"
@@ -234,7 +233,8 @@ const WhatsTrending = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                    <i className="fa-solid fa-chart-area text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm sm:text-md font-semibold text-[#12153D]">
                     Search for Keyword Trends
@@ -267,7 +267,7 @@ const WhatsTrending = () => {
             </div>
 
             {/* Results Section */}
-            <div className="w-full mt-4 sm:mt-6 md:mt-8 lg:mt-10">
+            <div className="w-full max-w-3xl mt-4 sm:mt-6 md:mt-8 lg:mt-10">
               {loadingState ? (
                 <div className="flex flex-col justify-center items-center h-36 sm:h-48 md:h-64 lg:h-80 w-full p-3 sm:p-4 transition-all duration-300">
                   <Loader />
@@ -442,7 +442,7 @@ const WhatsTrending = () => {
                               <div className="pl-11 relative z-10">
                                 <p className="text-xs sm:text-sm text-gray-200 cpc-what-text animate-slideUp">
                                   <span className="text-[#E5590F] font-medium inline-block hover:text-[#ff6a1e] transition-colors duration-300 transform hover:scale-105">
-                                  What's Trending
+                                    What's Trending
                                   </span>{" "}
                                   shows you popularity of specific keywords over
                                   time. These trends show you what topics are
@@ -481,10 +481,10 @@ const WhatsTrending = () => {
                         </div>
 
                         {/* Ad Containers */}
-                        <div className="w-full sm:w-[300px] h-[150px] sm:h-[250px] mt-3 sm:mt-4 flex items-center justify-center text-center bg-gray-300 rounded-md">
+                        <div className=" w-[300px] h-[250px] mt-3 sm:mt-4 flex  ">
                           <h1 className="text-md lg:text-2xl font-bold">AD</h1>
                         </div>
-                        <div className="w-full sm:w-[300px] relative bg-gray-100 rounded-xl overflow-hidden border border-gray-200 mt-3 sm:mt-4 h-[150px] sm:h-[250px]">
+                        <div className=" w-[300px]   mt-3 sm:mt-4 relative h-[250px]">
                           <div
                             id="p2P21nhppseX"
                             className="absolute inset-0 w-full h-full"
@@ -494,9 +494,9 @@ const WhatsTrending = () => {
                     </div>
 
                     {/* Bottom Ad Banner */}
-                    <div
+                     <div
                       id="kt-ad-3"
-                      className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-4 sm:mt-6 md:mt-8 lg:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full sm:max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-auto sm:aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                      className=" mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center   aspect-[8/1]  kt-ad-container"
                     >
                       ads
                     </div>

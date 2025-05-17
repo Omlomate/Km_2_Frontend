@@ -143,11 +143,11 @@ const LongTailKeywordPage = () => {
 
       <div className="flex justify-center w-full min-h-screen px-2 bg-gradient-to-b from-gray-50 to-white">
         <div
-          className="w-full max-w-4xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-lg border border-gray-100"
+          className="w-full max-w-6xl rounded-xl mx-auto p-3 sm:p-6 md:p-8 bg-white shadow-sm border border-gray-100"
           style={{ fontFamily: "wantedsans" }}
         >
           {/* Header Section */}
-          <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
+          {/* <div className="w-full py-4 sm:py-6 md:py-8 bg-gradient-to-r from-[#E5590F]/10 to-[#12153D]/10 rounded-lg">
             <div className="container mx-auto px-2 sm:px-4">
               <div className="flex flex-col items-center justify-center space-y-2 sm:space-y-4 md:space-y-6 text-center">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
@@ -164,7 +164,27 @@ const LongTailKeywordPage = () => {
                 </p>
               </div>
             </div>
+          </div> */}
+           <div className="w-full py-6 md:py-8 border-b border-gray-200">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col items-center justify-center text-center">
+               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                  Long-Tail{" "}
+                  <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
+                    Keywords
+                  </span>{" "}
+                  Finder
+                </h1>
+
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                   Discover easy-to-rank long-tail keywords with lower
+                  competition and better chances to bring targeted traffic to
+                  your site.
+                </p>
+              </div>
+            </div>
           </div>
+          
 
           {/* Search Section */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
@@ -172,7 +192,7 @@ const LongTailKeywordPage = () => {
               <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl">
                 <div className="flex items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    <svg
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4 sm:h-5 sm:w-5 text-[#E5590F]"
                       fill="none"
@@ -185,7 +205,8 @@ const LongTailKeywordPage = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg>
+                    </svg> */}
+                     <i className="fa-solid fa-key text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm sm:text-md font-semibold text-[#12153D]">
                     Search for Long-Tail Keywords
@@ -224,7 +245,7 @@ const LongTailKeywordPage = () => {
                   </p>
                 </div>
               ) : (
-                <div className="w-full max-w-6xl mx-auto">
+                <div className="w-full max-w-3xl mx-auto">
                   {keywordData && (
                     <div className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 animate-fadeIn transition-all duration-500">
                       {/* Results Header */}
@@ -420,11 +441,11 @@ const LongTailKeywordPage = () => {
 
                       {/* Bottom Ad Banner */}
                       <div
-                        id="rk-ad-3"
-                        className="bg-gradient-to-r from-[#12153d] to-[#1c2260] text-white mt-4 sm:mt-6 md:mt-8 lg:mt-10 p-3 sm:p-4 md:p-6 rounded-xl text-center w-full max-w-full sm:max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-auto sm:aspect-[8/1] hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
-                      >
-                        ads
-                      </div>
+                      id="ltk-ad-3"
+                      className="  mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center   aspect-[8/1]  ltk-ad-container"
+                    >
+                      ads
+                    </div>
                     </div>
                   )}
                 </div>
