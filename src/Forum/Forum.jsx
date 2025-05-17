@@ -290,7 +290,7 @@ const Forum = () => {
               </div>
             </div>{" "}
             <div className="mt-8 text-center  ">
-              <div className="bg-gray-200   w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+              <div className="    w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
                 AD
               </div>
             </div>
@@ -421,7 +421,7 @@ const Forum = () => {
 
           {/* Mobile advertisement - visible only on small screens (bottom) */}
           <div className="lg:hidden w-full order-4 mt-6">
-            <div className="bg-gray-200 w-full h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+            <div className="  w-[300px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
               ADVERTISEMENT
             </div>
           </div>
@@ -455,7 +455,7 @@ const Forum = () => {
                 </Link>
               </div>
             </div>
-            <div className="bg-gray-200 w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium mt-4">
+            <div className=" 0 w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium mt-4">
               AD
             </div>
           </div>
