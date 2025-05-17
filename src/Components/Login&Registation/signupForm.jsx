@@ -67,7 +67,7 @@ function SignupPage({ onClose, isVisible }) {
             isAdmin: data.isAdmin,
           })
         );
-        alert("Signup successful");
+        toast.success("Signup successful");
         navigate("/", { replace: true });
         handleClose();
       } else {
