@@ -164,7 +164,7 @@ export const CPCPage = () => {
                   Calculator
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Find out how much advertisers pay per click for a keyword,
                   helping you spot keywords with strong earning potential.{" "}
                 </p>

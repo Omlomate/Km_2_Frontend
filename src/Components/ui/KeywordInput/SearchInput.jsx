@@ -12,6 +12,7 @@ const SearchInput = ({
   onCountryChange = () => {},
   onServerChange = () => {},
   onCurrencyChange = () => {},
+  placeholder = "Search Keyword...",
 }) => {
   const { searchTerm, setSearchTerm } = useKeywordData();
   const [inputValue, setInputValue] = useState(searchTerm || "");
@@ -42,11 +43,11 @@ const SearchInput = ({
     onSearch(inputValue);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
+  // const handleKeyPress = (e) => {
+  //   if (e.key === "Enter") {
+  //     handleSearch();
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);

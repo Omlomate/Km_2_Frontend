@@ -175,7 +175,7 @@ export const AdCompetition = () => {
                   </span>
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Check how many advertisers are bidding on a keyword to
                   understand its commercial value and competition level.{" "}
                 </p>

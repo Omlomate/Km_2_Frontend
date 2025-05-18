@@ -182,7 +182,7 @@ export const KeywordResearch = () => {
                   </span> Finder
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Find keyword ideas closely connected to your topic to help
                   expand your content and reach more relevant search traffic.
                 </p>

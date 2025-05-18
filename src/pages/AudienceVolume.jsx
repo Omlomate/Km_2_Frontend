@@ -213,7 +213,7 @@ export const AudienceVolume = () => {
                   </span> Analyzer
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Check how many people search for a keyword each month to know
                   if it's worth targeting in your content or SEO strategy.
                 </p>
@@ -311,7 +311,7 @@ export const AudienceVolume = () => {
                               </svg>
                               Search volume analysis for
                             </span>
-                            <span className="px-2 py-1 sm:py-0 font-medium text-white bg-[#E5590F]/10 rounded-full sm:bg-transparent">
+                            <span className=" py-1 sm:py-0 font-bold text-white bg-[#E5590F]/10 rounded-full sm:bg-transparent">
                               {displayedCountry.name || "selected region"}
                             </span>
                           </p>
@@ -541,7 +541,7 @@ export const AudienceVolume = () => {
                             <div className="pl-11 relative z-10">
                               <p className="text-xs sm:text-base text-gray-200 relative z-10 leading-relaxed">
                                 <span className="text-[#E5590F] font-medium text-base sm:text-lg inline-block mb-1">
-                                  Audience Volume
+                                  Search Volume
                                 </span>{" "}
                                 represents the number of monthly searches for
                                 your keyword in the selected region. Higher

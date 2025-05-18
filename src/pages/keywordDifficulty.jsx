@@ -10,6 +10,7 @@ import "../pages/style/mediaQueries.css";
 
 const KeywordDifficulty = () => {
   const [keywordData, setKeywordData] = useState(null);
+
   const { data: data3, loading } = useKeywordData();
   const [loadingState, setLoading] = useState(false);
   const [metaTags, setMetaTags] = useState({ title: "", description: "" }); // State for meta tags
@@ -151,7 +152,7 @@ const KeywordDifficulty = () => {
                   Checker
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   See how hard it is to rank for a keyword so you can focus on
                   easier wins with less competition and more ranking chances.
                 </p>
@@ -271,7 +272,7 @@ const KeywordDifficulty = () => {
                             <p className="text-3xl sm:text-5xl font-bold text-orange-500 kd-difficulty-number">
                               {/* {keywordData.keyword_difficulty}% */}
                             </p>
-                            <Difficultycircle
+                            <Difficultycircle  
                               percentage={keywordData.keyword_difficulty}
                             />
                           </div>

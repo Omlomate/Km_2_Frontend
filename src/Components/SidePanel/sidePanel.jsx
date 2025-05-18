@@ -169,9 +169,9 @@ const Sidebar = () => {
           </Link>
 
           <div className="mb-8">
-            <h3 className="text-sm uppercase text-gray-700 font-bold mb-4 tracking-wider pl-2">
+            {/* <h3 className="text-sm uppercase text-gray-700 font-bold mb-4 tracking-wider pl-2">
               Tools
-            </h3>
+            </h3> */}
 
             <div className="space-y-2">
               {menuItems.map((option) => (

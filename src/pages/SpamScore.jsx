@@ -173,7 +173,7 @@ export const AdCompetition = () => {
                   Checker
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Avoid risky keywords by checking their spam score and stay
                   safe from Google penalties or low-quality traffic issues.{" "}
                 </p>
@@ -292,9 +292,9 @@ export const AdCompetition = () => {
                           </div>
                           <div className="flex flex-col items-center justify-center space-y-5 rounded-lg w-full h-auto min-h-[150px] p-4 bg-gradient-to-b from-white to-gray-50 border border-gray-100 shadow-inner adc-value-content">
                             <div className="flex flex-col items-center space-y-4">
-                              <p className="text-3xl sm:text-5xl font-bold text-orange-500">
+                              {/* <p className="text-3xl sm:text-5xl font-bold text-orange-500">
                                 {keywordData.spamRiskScore}
-                              </p>
+                              </p> */}
                               <SpamRiskCircle
                                 percentage={keywordData.spamRiskScore}
                                 description="Spam Risk Level"

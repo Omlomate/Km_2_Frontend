@@ -206,7 +206,7 @@ const WhatsTrending = () => {
                   </span>
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                   Track keyword trends over time to see what's rising or fading
                   in popularity and plan your content accordingly.
                 </p>

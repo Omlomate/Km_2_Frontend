@@ -176,7 +176,7 @@ const LongTailKeywordPage = () => {
                   Finder
                 </h1>
 
-                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up">
+                <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-slide-up lg:py-2">
                    Discover easy-to-rank long-tail keywords with lower
                   competition and better chances to bring targeted traffic to
                   your site.
