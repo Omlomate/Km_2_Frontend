@@ -199,6 +199,7 @@ export const CPCPage = () => {
                   </h3>
                 </div>
                 <SearchInput
+                 placeholder="Search Cost Per Click..."
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}
                   onCurrencyChange={handleCurrencyChange}

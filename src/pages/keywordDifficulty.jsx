@@ -185,7 +185,9 @@ const KeywordDifficulty = () => {
                     Check Keyword Difficulty
                   </h3>
                 </div>
-                <SearchInput onSearch={handleSearch} />
+                <SearchInput
+                 placeholder="Search keywords Difficulty..."
+                onSearch={handleSearch} />
               </div>
             </div>
 

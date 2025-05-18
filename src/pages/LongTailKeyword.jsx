@@ -212,7 +212,11 @@ const LongTailKeywordPage = () => {
                     Search for Long-Tail Keywords
                   </h3>
                 </div>
-                <SearchInput onSearch={handleSearch} />
+                <SearchInput 
+                onSearch={handleSearch} 
+                 placeholder="Search  Long-Tail keywords..."
+                
+                />
               </div>
 
               {error && (

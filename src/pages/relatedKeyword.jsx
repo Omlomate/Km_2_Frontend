@@ -216,7 +216,10 @@ export const KeywordResearch = () => {
                     Search for Related Keywords
                   </h3>
                 </div>
-                <SearchInput onSearch={handleSearch} />
+                <SearchInput 
+                  onSearch={handleSearch} 
+                  placeholder="Search related keywords..."
+                />
               </div>
 
               {error && (

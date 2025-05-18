@@ -12,7 +12,7 @@ const SearchInput = ({
   onCountryChange = () => {},
   onServerChange = () => {},
   onCurrencyChange = () => {},
-  placeholder = "Search Keyword...",
+  placeholder = "Search Keyword...", // Default placeholder
 }) => {
   const { searchTerm, setSearchTerm } = useKeywordData();
   const [inputValue, setInputValue] = useState(searchTerm || "");
@@ -73,7 +73,7 @@ const SearchInput = ({
     <div className="w-full max-w-3xl mx-auto space-y-6 pt-4">
       {/* Search Input */}
       <div className="w-full flex flex-col items-center justify-center">
-       <div className="w-full flex overflow-hidden rounded-lg border-1 border-gray-300 shadow-sm  bg-white">
+        <div className="w-full flex overflow-hidden rounded-lg border-1 border-gray-300 shadow-sm bg-white">
           {/* Search Icon */}
           {/* <div className="flex items-center justify-center pl-2 sm:pl-3 min-w-[40px]">
             <svg
@@ -90,11 +90,10 @@ const SearchInput = ({
             </svg>
           </div>
            */}
-         
           <input
             className="flex-grow min-w-0 w-full py-2 sm:py-3 px-1 sm:px-2 text-sm sm:text-base focus:outline-none bg-transparent truncate"
             type="search"
-            placeholder="Search Keyword..."
+            placeholder={placeholder} // Use the placeholder prop
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={(e) => {
@@ -105,14 +104,12 @@ const SearchInput = ({
             }}
             aria-label="Search"
           />
-          
           {/* Search Button */}
           <button
             className="px-3 sm:px-4 py-2 sm:py-3 text-white bg-gradient-to-r from-[#E5590F] to-[#E5590F]/90 flex items-center justify-center hover:from-[#E5590F]/90 hover:to-[#E5590F] transition-all duration-300 active:scale-95 touch-manipulation"
             aria-label="Search"
             onClick={handleSearch}
           >
-           
             <svg
               className="h-5 w-5"
               fill="currentColor"

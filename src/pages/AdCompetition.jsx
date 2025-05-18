@@ -210,6 +210,7 @@ export const AdCompetition = () => {
                   </h3>
                 </div>
                 <SearchInput
+                 placeholder="Search for AD Competition..."
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}
                 />

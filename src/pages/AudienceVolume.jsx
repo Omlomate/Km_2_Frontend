@@ -247,6 +247,7 @@ export const AudienceVolume = () => {
                   </h3>
                 </div>
                 <SearchInput
+                 placeholder="Search for Search Volume..."
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}
                   onServerChange={handleServerChange}

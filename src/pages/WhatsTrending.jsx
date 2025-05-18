@@ -241,6 +241,7 @@ const WhatsTrending = () => {
                   </h3>
                 </div>
                 <SearchInput
+                 placeholder="Search for Keyword Trends..."
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}
                 />

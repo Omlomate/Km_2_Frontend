@@ -207,7 +207,9 @@ export const AdCompetition = () => {
                     Check Spam Score
                   </h3>
                 </div>
-                <SearchInput onSearch={handleSearch} />
+                <SearchInput 
+                 placeholder="Check Spam Score ..."
+                onSearch={handleSearch} />
               </div>
             </div>
 
