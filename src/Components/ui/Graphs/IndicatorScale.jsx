@@ -89,19 +89,19 @@ const IndicatorScale = ({
   };
 
   return (
-    <div className={`w-full max-w-md mx-auto p-6 rounded-lg ${bgColor} shadow-lg`}>
+    <div className={`w-full max-w-md mx-auto p-3 py-10 rounded-lg ${bgColor} shadow-lg`}>
       {/* Percentage display with actual value instead of percentage */}
       {showPercentage && (
         <div className="flex justify-between items-center mb-2">
           <span className={`text-sm font-medium ${selectedColor.text}`}>Progress</span>
-          <div className="flex flex-col items-end">
+          {/* <div className="flex flex-col items-end">
             <span className={`text-xl font-bold ${textColor}`}>
               {animatedValue.toFixed(max >= 100 ? 0 : 1)}
             </span>
             <span className={`text-xs ${textColor} opacity-70`}>
               {percentage.toFixed(1)}%
             </span>
-          </div>
+          </div> */}
         </div>
       )}
       

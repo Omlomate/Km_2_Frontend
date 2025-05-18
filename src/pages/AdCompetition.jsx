@@ -362,12 +362,12 @@ export const AdCompetition = () => {
                             </div>
                           </div>
 
-                          <div className="mt-4 text-xs text-gray-300 italic text-center lg:text-left animate-fadeIn transition-all duration-500 delay-300">
+                          {/* <div className="mt-4 text-xs text-gray-300 italic text-center lg:text-left animate-fadeIn transition-all duration-500 delay-300">
                             <span className="inline-block border-b border-[#E5590F]/30 pb-1 group-hover:border-[#E5590F] transition-all duration-300">
                               Higher competition may indicate higher commercial
                               value
                             </span>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div
