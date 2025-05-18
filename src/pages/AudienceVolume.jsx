@@ -106,7 +106,7 @@ export const AudienceVolume = () => {
     setLoading(true);
 
     try {
-      if (!selectedCountry.apiReference) {
+      if (!selectedCountry) {
         alert("Please select a country before searching");
         setLoading(false);
         return;
