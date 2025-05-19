@@ -117,7 +117,7 @@ const SelectCurrency = ({ onCurrencyChange = () => {} }) => {
 
 
   return (
-    <div className="w-full">
+    <div className="flex justify-center w-full">
       <select
         className="w-full p-1.5 rounded-xl text-white font-medium border-none
         outline-none appearance-none bg-no-repeat 
