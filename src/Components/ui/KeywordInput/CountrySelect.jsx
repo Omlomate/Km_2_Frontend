@@ -16,7 +16,7 @@ const CountrySelect = ({ onCountryChange }) => {
   const [selectedCountry, setSelectedCountry] = useState("Select");
 
   const countries = [
-    { name: " Country", flag: "", apiReference: "" },
+    { name: "Country", flag: "", apiReference: "" },
     { name: "Global", flag: "", apiReference: "" },
     { name: "United States", flag: US, map: USA, apiReference: "us" },
     { name: "India", flag: India, map: IndiaMap, apiReference: "in" },
@@ -35,18 +35,18 @@ const CountrySelect = ({ onCountryChange }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="flex justify-center w-full">
       <select
-        className="w-full p-1.5 rounded-xl text-white font-medium border-none
+        className="w-full p-1.5 rounded-xl text-white font-medium border-none 
         outline-none appearance-none bg-no-repeat 
-        hover:bg-[#d14e0d] transition-all duration-300"
+        hover:bg-[#d14e0d] transition-all duration-300 text-center"
         id="country-select"
         value={selectedCountry}
         onChange={handleChange}
         style={{
           backgroundColor: "#E5590F",
-          textAlign: "center",
           backgroundImage: "none",
+          textAlignLast: "center", // Fix for iOS
         }}
       >
         {countries.map((country) => (
