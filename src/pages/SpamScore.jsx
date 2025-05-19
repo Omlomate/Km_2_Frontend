@@ -184,10 +184,10 @@ export const AdCompetition = () => {
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center adc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto adc-search-container">
-              <div className="transition-all duration-300 p-4 sm:p-6 adc-search-box">
-                <div className="flex items-center  ">
+              <div className="transition-all duration-300 p-1 sm:p-1 md:py-6 adc-search-box">
+                {/* <div className="flex items-center  ">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    {/* <svg
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -200,16 +200,20 @@ export const AdCompetition = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg> */}
+                    </svg>
                     <i className="fa-solid fa-shield-alt text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm font-semibold text-[#12153D]">
                     Check Spam Score
                   </h3>
-                </div>
-                <SearchInput 
-                 placeholder="Check Spam Score ..."
-                onSearch={handleSearch} />
+                </div> */}
+                <SearchInput
+                  placeholder="Check Spam Score ..."
+                  icon={
+                    <i className="fa-solid fa-shield-alt text-[#E5590F]"></i>
+                  }
+                  onSearch={handleSearch}
+                />
               </div>
             </div>
 
@@ -394,7 +398,7 @@ export const AdCompetition = () => {
                       </div>
                     </div>
 
-                     <div
+                    <div
                       id="sps-ad-3"
                       className="  mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center shadow-md aspect-[8/1]  spc-ad-container"
                     >

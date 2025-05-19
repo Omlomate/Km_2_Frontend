@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
+  LabelList,
 } from "recharts";
 
 const formatValue = (value) => {
@@ -40,23 +40,33 @@ const Bargraph = ({ data }) => {
           barCategoryGap="10%"
         >
           <XAxis
-            dataKey="name"
-            tick={false}
-            padding={{ left: 20, right: 20 }}
+            dataKey="name" // Display month names on the X-axis
+            tick={{ fontSize: 6, fill: "#12153D" }} // Customize tick style
+            padding={{ left: 10, right: 10 }}
+            tickFormatter={(name) => `${name.charAt(0)}${name.charAt(name.length - 1)}`} // Combine first and last letters
           />
           <YAxis 
-            tick={false} 
+            tick={{ fontSize: 12, fill: "#12153D" }} // Customize tick style
             padding={{ top: 20, bottom: 20 }}
             tickFormatter={formatValue}
           />
           <Tooltip content={<CustomTooltip />} />
-          {/* <Legend formatter={() => 'Monthly Trend'} margin={{left:45}}/> */}
           <Bar 
             dataKey="value"  // Use numeric value for bars
             fill="#12153D" 
             radius={[5, 5, 5, 5]}
             name="Monthly Trend"
-          />
+          >
+            <LabelList
+              dataKey="value"
+              position="inside"
+              style={{
+                fill: "white",
+                fontSize: 8,
+              }}
+              formatter={(value) => formatValue(value)} // Format the value
+            />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>

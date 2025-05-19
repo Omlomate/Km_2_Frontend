@@ -144,7 +144,7 @@ const KeywordDifficulty = () => {
           <div className="w-full py-6 md:py-8 border-b border-gray-200">
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center text-center">
-                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
                   Keyword{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Difficulty
@@ -162,10 +162,10 @@ const KeywordDifficulty = () => {
 
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto  ">
-              <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl  kd-search-box">
-                <div className="flex items-center  ">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    {/* <svg
+              <div className="transition-all duration-300 p-1 sm:p-1 md:py-6 rounded-xl  kd-search-box">
+                {/* <div className="flex items-center  ">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -178,16 +178,18 @@ const KeywordDifficulty = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg> */}
-                       <i className="fa-solid fa-chart-bar text-[#E5590F]"></i>
+                    </svg>
+                    <i className="fa-solid fa-chart-bar text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm font-semibold text-[#12153D]">
                     Check Keyword Difficulty
                   </h3>
-                </div>
+                </div> */}
                 <SearchInput
-                 placeholder="Search keywords Difficulty..."
-                onSearch={handleSearch} />
+                  placeholder="Search keywords Difficulty..."
+                  onSearch={handleSearch}
+                  icon={ <i className="fa-solid fa-chart-bar text-[#E5590F]"></i>}
+                />
               </div>
             </div>
 
@@ -233,7 +235,7 @@ const KeywordDifficulty = () => {
                         <div className="">
                           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-200 tracking-tight kd-results-title drop-shadow-sm">
                             Results for:{" "}
-                              <span className="text-[#E5590F]">
+                            <span className="text-[#E5590F]">
                               {keywordData?.keyword || "Keyword"}
                               {/* <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#E5590F] group-hover:w-full transition-all duration-500"></span> */}
                             </span>
@@ -274,7 +276,7 @@ const KeywordDifficulty = () => {
                             <p className="text-3xl sm:text-5xl font-bold text-orange-500 kd-difficulty-number">
                               {/* {keywordData.keyword_difficulty}% */}
                             </p>
-                            <Difficultycircle  
+                            <Difficultycircle
                               percentage={keywordData.keyword_difficulty}
                             />
                           </div>
@@ -318,7 +320,7 @@ const KeywordDifficulty = () => {
                         </div>
                       </div>
                       <div className="flex flex-col gap-5 sm:gap-6 kd-right-column">
-                        <div  >
+                        <div>
                           {/* <div className="absolute inset-0 bg-gradient-to-br from-[#12153D]/80 to-[#12153D] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                           <div className="h-full w-full flex items-center justify-center bg-[#12153D] rounded-2xl p-4 transition-all duration-300 relative">
                             <div className="h-full w-full flex flex-col justify-center p-4 sm:p-6 lg:p-8 text-white text-left relative z-10">
@@ -371,38 +373,38 @@ const KeywordDifficulty = () => {
                             </div>
                           </div> */}
                           <div className="w-full max-w-full sm:max-w-[335px] shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden cpc-what-card transform hover:scale-[1.02] group bg-white">
-                              <div className="relative h-full w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-6 md:p-6 flex flex-col justify-center">
-                                {/* Decorative elements */}
-                                <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-[#E5590F]/20 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-70 transition-all duration-300 transform -translate-x-4 translate-y-0"></div>
-                                <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-[#12153D]/40 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-300"></div>
+                            <div className="relative h-full w-full bg-gradient-to-br from-[#12153D] to-[#1c2260] rounded-2xl text-white text-left transition-all duration-300 p-4 sm:p-6 md:p-6 flex flex-col justify-center">
+                              {/* Decorative elements */}
+                              <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-[#E5590F]/20 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-70 transition-all duration-300 transform -translate-x-4 translate-y-0"></div>
+                              <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-[#12153D]/40 to-transparent rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-300"></div>
 
-                                {/* Card header */}
-                                <div className="flex items-center mb-3 relative z-10">
-                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-3 shadow-md transform group-hover:rotate-6 transition-all duration-300">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-4 w-4 text-white"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                  </div>
-                                  <h1 className="text-lg sm:text-xl md:text-2xl font-semibold relative z-10 animate-slideDown group-hover:text-[#E5590F] transition-colors duration-300">
-                                    What is it?
-                                    <div className="absolute -bottom-1 left-0 w-12 h-0.5 bg-[#E5590F] rounded-full transform origin-left scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></div>
-                                  </h1>
+                              {/* Card header */}
+                              <div className="flex items-center mb-3 relative z-10">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E5590F] to-[#ff6a1e] flex items-center justify-center mr-3 shadow-md transform group-hover:rotate-6 transition-all duration-300">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
                                 </div>
+                                <h1 className="text-lg sm:text-xl md:text-2xl font-semibold relative z-10 animate-slideDown group-hover:text-[#E5590F] transition-colors duration-300">
+                                  What is it?
+                                  <div className="absolute -bottom-1 left-0 w-12 h-0.5 bg-[#E5590F] rounded-full transform origin-left scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></div>
+                                </h1>
+                              </div>
 
-                                {/* Card content */}
-                                <div className="pl-11 relative z-10">
-                                  <p className="text-sm sm:text-base text-white leading-relaxed tracking-wide kd-what-content">
+                              {/* Card content */}
+                              <div className="pl-11 relative z-10">
+                                <p className="text-sm sm:text-base text-white leading-relaxed tracking-wide kd-what-content">
                                   <span className="text-[#E5590F] font-semibold text-base sm:text-lg inline-block mb-1 hover:text-orange-400 transition-colors duration-300">
                                     Keyword Difficulty
                                   </span>{" "}
@@ -410,36 +412,36 @@ const KeywordDifficulty = () => {
                                   keyword. The higher the keyword difficulty,
                                   the larger the competition.
                                 </p>
-                                </div>
-
-                                {/* Card footer */}
-                                <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                  <a
-                                    href="#"
-                                    className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
-                                  >
-                                    Learn more
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-3 w-3 ml-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 5l7 7-7 7"
-                                      />
-                                    </svg>
-                                  </a>
-                                </div>
-
-                                {/* Bottom border */}
-                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5590F] to-transparent opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
                               </div>
+
+                              {/* Card footer */}
+                              <div className="mt-4 pl-11 relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <a
+                                  href="#"
+                                  className="text-xs text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300 flex items-center"
+                                >
+                                  Learn more
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-3 w-3 ml-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 5l7 7-7 7"
+                                    />
+                                  </svg>
+                                </a>
+                              </div>
+
+                              {/* Bottom border */}
+                              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5590F] to-transparent opacity-0 group-hover:opacity-30 transition-all duration-300"></div>
                             </div>
+                          </div>
                         </div>
                         <div
                           id="kd-ad-1"

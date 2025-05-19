@@ -7,7 +7,10 @@ import CountrySelect from "../Components/ui/KeywordInput/CountrySelect.jsx";
 import SelectCurrency from "../Components/ui/KeywordInput/SelectCurrency.jsx";
 // Import the mediaQueries.css file
 import "../pages/style/mediaQueries.css";
-import { loadVideoPlayerScript, cleanupVideoPlayerScripts } from "../utils/adsScript";
+import {
+  loadVideoPlayerScript,
+  cleanupVideoPlayerScripts,
+} from "../utils/adsScript";
 
 export const CPCPage = () => {
   const [keywordData, setKeywordData] = useState(null);
@@ -175,10 +178,10 @@ export const CPCPage = () => {
           {/* Search Input */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center cpc-content-wrapper">
             <div className="w-full max-w-3xl mx-auto ">
-              <div className="transition-all duration-300 p-4 sm:p-6  cpc-search-box">
-                <div className="flex items-center  ">
+              <div className="transition-all duration-300 p-1 sm:p-1 md:py-6  cpc-search-box">
+                {/* <div className="flex items-center  ">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    {/* <svg
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-[#E5590F]"
                       fill="none"
@@ -191,15 +194,18 @@ export const CPCPage = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg> */}
+                    </svg>
                     <i className="fa-solid fa-dollar-sign text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm font-semibold text-[#12153D]">
                     Search for CPC Data
                   </h3>
-                </div>
+                </div> */}
                 <SearchInput
-                 placeholder="Search Cost Per Click..."
+                  placeholder="Search Cost Per Click..."
+                  icon={
+                    <i className="fa-solid fa-dollar-sign text-[#E5590F]"></i>
+                  }
                   onSearch={handleSearch}
                   onCountryChange={handleCountryChange}
                   onCurrencyChange={handleCurrencyChange}
@@ -396,16 +402,15 @@ export const CPCPage = () => {
                           <h1 className="text-md lg:text-2xl font-bold ">AD</h1>
                         </div>
                         <div className="w-full sm:w-[300px] h-[150px] sm:h-[250px] mt-3 sm:mt-4 relative  ">
-                        <div 
-                          id="p2P21nhppseX" 
-                          className="absolute inset-0 "
-                        ></div>
+                          <div
+                            id="p2P21nhppseX"
+                            className="absolute inset-0 "
+                          ></div>
+                        </div>
                       </div>
-                      </div>
-                      
                     </div>
 
-                      <div
+                    <div
                       id="cpc-ad-3"
                       className=" mt-6 sm:mt-8 lg:mt-10 p-4 lg:p-6 rounded-xl text-center w-full max-w-[728px] mx-auto flex items-center justify-center   aspect-[8/1]   cpc-ad-container"
                     >

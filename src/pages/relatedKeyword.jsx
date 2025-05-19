@@ -193,7 +193,7 @@ export const KeywordResearch = () => {
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             {/* Search Section - More responsive padding */}
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-1 sm:p-1 md:p-0 rounded-xl">
+              <div className="transition-all duration-300 p-1 sm:p-1 md:py-6 rounded-xl">
                 {/* <div className="flex items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
                     <svg

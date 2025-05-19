@@ -189,10 +189,10 @@ const LongTailKeywordPage = () => {
           {/* Search Section */}
           <div className="w-full mx-auto rounded-lg flex flex-col items-center">
             <div className="w-full max-w-3xl mx-auto">
-              <div className="transition-all duration-300 p-1 sm:p-3 md:p-6 rounded-xl">
-                <div className="flex items-center">
+              <div className="transition-all duration-300 p-1 sm:p-1 md:py-6 rounded-xl">
+                {/* <div className="flex items-center">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5590F]/10 flex items-center justify-center mr-2 sm:mr-3">
-                    {/* <svg
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4 sm:h-5 sm:w-5 text-[#E5590F]"
                       fill="none"
@@ -205,16 +205,17 @@ const LongTailKeywordPage = () => {
                         strokeWidth={2}
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
-                    </svg> */}
+                    </svg>
                      <i className="fa-solid fa-key text-[#E5590F]"></i>
                   </div>
                   <h3 className="text-sm sm:text-md font-semibold text-[#12153D]">
                     Search for Long-Tail Keywords
                   </h3>
-                </div>
+                </div> */}
                 <SearchInput 
                 onSearch={handleSearch} 
-                 placeholder="Search  Long-Tail keywords..."
+                 placeholder="Search Long-Tail keywords..."
+                 icon={<i className="fa-solid fa-key text-[#E5590F]"></i>}
                 
                 />
               </div>
