@@ -19,6 +19,13 @@ const Sidebar = () => {
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
+    // Set username from localStorage if available
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData && userData.firstName) {
+      setUsername(userData.firstName);
+    } else {
+      setUsername("Guest User");
+    }
 
     if (!isLoggedIn) {
       setSelectedOption("Related Keywords");
