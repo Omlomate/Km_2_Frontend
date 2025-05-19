@@ -168,7 +168,7 @@ const LongTailKeywordPage = () => {
            <div className="w-full py-6 md:py-8 border-b border-gray-200">
             <div className="container mx-auto px-4">
               <div className="flex flex-col items-center justify-center text-center">
-               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#12153D] transition-all duration-300">
                   Long-Tail{" "}
                   <span className="text-[#E5590F] hover:text-[#ff6a1e] transition-colors duration-300">
                     Keywords
