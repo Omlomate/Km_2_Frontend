@@ -17,15 +17,16 @@ const Sidebar = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const profileImage = userData?.profileImage || Profile;
 
-  useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
-    // Set username from localStorage if available
+  // Function to update username based on localStorage
+  const updateUsername = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
-    if (userData && userData.firstName) {
-      setUsername(userData.firstName);
-    } else {
-      setUsername("Guest User");
-    }
+    setUsername(userData && userData.firstName ? userData.firstName : "Guest User");
+  };
+
+  useEffect(() => {
+    // Initial username update
+    updateUsername();
+    setIsLoggedIn(isAuthenticated());
 
     if (!isLoggedIn) {
       setSelectedOption("Related Keywords");
@@ -46,12 +47,13 @@ const Sidebar = () => {
       setSelectedOption("Profile");
       localStorage.setItem("selectedOption", "Profile");
     }
-  }, [location.pathname, isLoggedIn]); // ✅ Sync selection with route changes
+  }, [location.pathname, isLoggedIn]);
 
   useEffect(() => {
     const handleLoginSuccess = () => {
       setIsLoggedIn(true);
       setIsLoginVisible(false);
+      updateUsername(); // Update username immediately after login
       const targetPath = intendedPath || "/related-keywords";
       const targetOption =
         menuItems.find((item) => item.path === targetPath)?.name ||
@@ -63,10 +65,21 @@ const Sidebar = () => {
       setIntendedPath(null);
     };
 
+    const handleLogout = () => {
+      setIsLoggedIn(false);
+      setUsername("Guest User"); // Reset username immediately
+      localStorage.removeItem("userData"); // Clear userData
+      setSelectedOption("Related Keywords");
+      localStorage.setItem("selectedOption", "Related Keywords");
+      navigate("/related-keywords");
+    };
+
     window.addEventListener("login-success", handleLoginSuccess);
+    window.addEventListener("logout", handleLogout); // Listen for logout event
 
     return () => {
       window.removeEventListener("login-success", handleLoginSuccess);
+      window.removeEventListener("logout", handleLogout);
     };
   }, [navigate, intendedPath]);
 
@@ -114,6 +127,7 @@ const Sidebar = () => {
 
     if (isAuthenticated() && !isLoggedIn) {
       setIsLoggedIn(true);
+      updateUsername(); // Update username when login modal is closed
       const targetPath = intendedPath || "/related-keywords";
       const targetOption =
         menuItems.find((item) => item.path === targetPath)?.name ||
