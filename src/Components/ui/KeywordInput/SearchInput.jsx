@@ -13,6 +13,7 @@ const SearchInput = ({
   onServerChange = () => {},
   onCurrencyChange = () => {},
   placeholder = "Search Keyword...", // Default placeholder
+  icon = null, // Default icon
 }) => {
   const { searchTerm, setSearchTerm } = useKeywordData();
   const [inputValue, setInputValue] = useState(searchTerm || "");
@@ -74,22 +75,11 @@ const SearchInput = ({
       {/* Search Input */}
       <div className="w-full flex flex-col items-center justify-center">
         <div className="w-full flex overflow-hidden rounded-lg border-1 border-gray-300 shadow-sm bg-white">
-          {/* Search Icon */}
-          {/* <div className="flex items-center justify-center pl-2 sm:pl-3 min-w-[40px]">
-            <svg
-              className="h-5 w-5 text-[#E5590F] block"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              />
-            </svg>
-          </div>
-           */}
+           {icon && (
+            <div className="w-fit h-full my-auto flex items-center justify-center bg-[#E5590F]/10 py-4 px-4">
+              {icon}
+            </div>
+           )}
           <input
             className="flex-grow min-w-0 w-full py-2 sm:py-3 px-1 sm:px-2 text-sm sm:text-base focus:outline-none bg-transparent truncate"
             type="search"

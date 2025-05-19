@@ -8,13 +8,11 @@ import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSidebar } from "../../context/SidebarContext";
 
-
 const Navbar = () => {
   const { toggleSidebar, isSidebarOpen } = useSidebar();
-  // const [isOpen, setIsOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(isAuthenticated()); // Initialize with auth check
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -26,11 +24,11 @@ const Navbar = () => {
       const isLoggedIn = isAuthenticated();
       setLoggedIn(isLoggedIn);
       if (isLoggedIn) {
-        fetchUnreadCount(); // Fetch unread count when user is logged in
+        fetchUnreadCount();
       } else {
-        setUnreadCount(0); // Reset count when logged out
-        setNotifications([]); // Clear notifications
-        setShowNotifications(false); // Hide notifications
+        setUnreadCount(0);
+        setNotifications([]);
+        setShowNotifications(false);
       }
     };
 
@@ -44,11 +42,10 @@ const Navbar = () => {
     };
   }, []);
 
-  // Poll for unread count every 30 seconds when logged in
   useEffect(() => {
     let interval;
     if (loggedIn) {
-      fetchUnreadCount(); // Initial fetch
+      fetchUnreadCount();
       interval = setInterval(fetchUnreadCount, 30000);
     }
     return () => {
@@ -56,7 +53,6 @@ const Navbar = () => {
     };
   }, [loggedIn]);
 
-  // Fetch unread notification count
   const fetchUnreadCount = async () => {
     try {
       const token = localStorage.getItem("jwt");
@@ -87,7 +83,7 @@ const Navbar = () => {
       setUnreadCount(data.unreadCount || 0);
     } catch (error) {
       console.error("Error fetching unread notification count:", error.message);
-      setUnreadCount(0); // Reset count on error to avoid stale data
+      setUnreadCount(0);
     }
   };
 
@@ -106,7 +102,6 @@ const Navbar = () => {
     }
   };
 
-  // Fetch full notifications when bell is clicked
   const handleBellClick = async () => {
     if (!loggedIn) {
       alert("Please log in to view notifications");
@@ -120,8 +115,8 @@ const Navbar = () => {
     }
 
     try {
-      setIsLoadingNotifications(true); // Set loading to true when starting fetch
-      setShowNotifications(true); // Show the panel immediately with loading state
+      setIsLoadingNotifications(true);
+      setShowNotifications(true);
 
       const token = localStorage.getItem("jwt");
       if (!token) {
@@ -159,14 +154,14 @@ const Navbar = () => {
       const data = await response.json();
 
       setNotifications(data);
-      setUnreadCount(0); // Reset unread count after viewing notifications
+      setUnreadCount(0);
       await markNotificationsRead();
     } catch (error) {
       console.error("Error fetching notifications:", error.message);
       alert(`Failed to load notifications: ${error.message}`);
-      setShowNotifications(false); // Hide panel on error
+      setShowNotifications(false);
     } finally {
-      setIsLoadingNotifications(false); // Set loading to false when fetch completes
+      setIsLoadingNotifications(false);
     }
   };
 
@@ -190,34 +185,28 @@ const Navbar = () => {
   const hideLogin = () => {
     setIsLoginVisible(false);
     const isUserAuthenticated = isAuthenticated();
-    setLoggedIn(isUserAuthenticated);
-
-    if (isUserAuthenticated && !loggedIn) {
+    setLoggedIn(isUserAuthenticated); // Update state immediately
+    if (isUserAuthenticated) {
       localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
-      setTimeout(() => {
-        window.location.href = "/related-keywords";
-      }, 100);
+      navigate("/related-keywords"); // Use navigate instead of window.location
     }
   };
 
   const hideRegister = () => {
     setIsRegisterVisible(false);
     const isUserAuthenticated = isAuthenticated();
-    setLoggedIn(isUserAuthenticated);
-
-    if (isUserAuthenticated && !loggedIn) {
+    setLoggedIn(isUserAuthenticated); // Update state immediately
+    if (isUserAuthenticated) {
       localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
-      setTimeout(() => {
-        window.location.href = "/related-keywords";
-      }, 100);
+      navigate("/related-keywords"); // Use navigate instead of window.location
     }
   };
 
@@ -232,7 +221,7 @@ const Navbar = () => {
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     setLoggedIn(false);
-    window.location.href = "/related-keywords";
+    navigate("/related-keywords");
   };
 
   return (
@@ -241,22 +230,19 @@ const Navbar = () => {
         className="bg-white w-full px-2 lg:px-8 shadow-sm transition-all duration-300 fixed top-0 z-50 animate-navbar"
         style={{ fontFamily: "wantedsans" }}
       >
-        <div className="h-16   flex items-center justify-between">
-          <div className="flex items-center gap-4 w-full justify-start md:justify-start md:w-auto lg:ml-0 ">
+        <div className="h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4 w-full justify-start md:justify-start md:w-auto lg:ml-0">
             <div className="flex items-center flex-shrink-0 text-gray-700">
               <a
                 href="/related-keywords"
-                className="flex items-center gap-2 logo-hover "
+                className="flex items-center gap-2 logo-hover"
               >
-                {/* Logo mark SVG - smaller on mobile */}
                 <img src={loginLogo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
-                {/* Text logo SVG - responsive width */}
-                <img src={logoText} alt="keywordRaja" className="h-6 md:h-8  xs:block" />
+                <img src={logoText} alt="keywordRaja" className="h-6 md:h-8 xs:block" />
               </a>
             </div>
           </div>
 
-          {/* Changed from md:block to custom breakpoint for 882px */}
           <div className="hidden max-[882px]:hidden md:block text-gray-900">
             <ul className="flex font-semibold items-center space-x-6">
               <li>
@@ -319,7 +305,6 @@ const Navbar = () => {
                 </button>
                 {showNotifications && (
                   <div className="absolute top-10 right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-50">
-                    {/* Add loading state */}
                     {isLoadingNotifications ? (
                       <div className="py-4 flex flex-col items-center justify-center">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#E5590F]"></div>
@@ -354,26 +339,6 @@ const Navbar = () => {
                     Hi, {userData.firstName || "User"}
                   </span>
                 )}
-                {/* <button
-                  onClick={handleLogout}
-                  className="group flex items-center justify-start w-11 h-11 bg-[#12153d] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
-                >
-                  <span>Logout</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                </button> */}
                 <button
                   onClick={handleLogout}
                   className="group flex items-center justify-start w-11 h-11 bg-[#12153d] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
@@ -433,42 +398,53 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Changed from md:hidden to show below 882px */}
         <div className="md:hidden max-[882px]:block w-full border-t border-gray-100 overflow-hidden">
-          <div 
-            className="overflow-x-auto scrollbar-hide scroll-smooth" 
+          <div
+            className="overflow-x-auto scrollbar-hide scroll-smooth"
             style={{
-              WebkitOverflowScrolling: 'touch',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none'
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
             }}
           >
             <ul className="flex justify-around font-semibold items-center space-x-5 py-2 px-4 whitespace-nowrap min-w-max transition-transform duration-300 ease-out">
-              <li className="px-2 ">
+              <li className="px-2">
                 <button
                   onClick={toggleSidebar}
                   className="flex items-center gap-1 text-sm hover:text-[#E5590F] transition-colors"
                 >
-                  <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-arrow-right'} text-[#E5590F] text-lg`}></i>
-                  {/* <i class="fa-solid fa-arrow-right"></i> */}
-                 
+                  <i
+                    className={`fas ${
+                      isSidebarOpen ? "fa-times" : "fa-arrow-right"
+                    } text-[#E5590F] text-lg`}
+                  ></i>
                 </button>
               </li>
               <li className="px-2">
-                <Link to="/related-keywords" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Research</Link>
+                <Link to="/related-keywords" className="nav-link text-sm hover:text-[#E5590F] transition-colors">
+                  Research
+                </Link>
               </li>
               <li className="px-2">
-                <Link to="/blog" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Blog</Link>
+                <Link to="/blog" className="nav-link text-sm hover:text-[#E5590F] transition-colors">
+                  Blog
+                </Link>
               </li>
               <li className="px-2">
-                <Link to="/forum" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Forum</Link>
+                <Link to="/forum" className="nav-link text-sm hover:text-[#E5590F] transition-colors">
+                  Forum
+                </Link>
               </li>
               <li className="px-2">
-                <Link to="/courses" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Courses</Link>
+                <Link to="/courses" className="nav-link text-sm hover:text-[#E5590F] transition-colors">
+                  Courses
+                </Link>
               </li>
               {userData?.isAdmin && (
                 <li className="px-2">
-                  <a href="/admin-dashboard" className="nav-link text-sm hover:text-[#E5590F] transition-colors">Admin</a>
+                  <a href="/admin-dashboard" className="nav-link text-sm hover:text-[#E5590F] transition-colors">
+                    Admin
+                  </a>
                 </li>
               )}
             </ul>
