@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateForum = () => {
   const [title, setTitle] = useState("");
@@ -11,7 +11,7 @@ const CreateForum = () => {
   const [activeTab, setActiveTab] = useState("text");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
- 
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,13 +19,17 @@ const CreateForum = () => {
     setIsLoading(true);
 
     if (activeTab === "text" && !content) {
-      toast.error("Please add content to your post");
+      toast.error("Please add content to your post", {
+        position: "top-center",
+      });
       setIsLoading(false);
       return;
     }
 
     if (activeTab === "images/video" && !image) {
-      toast.error("Please upload an image or video");
+      toast.error("Please upload an image or video", {
+        position: "top-center",
+      });
       setIsLoading(false);
       return;
     }
@@ -37,7 +41,7 @@ const CreateForum = () => {
       formData.append("contentType", activeTab === "text" ? "html" : "image");
 
       // Get userData from localStorage and set author as user._id and username
-      const userData = JSON.parse(localStorage.getItem("userData")) || {};     
+      const userData = JSON.parse(localStorage.getItem("userData")) || {};
       console.log(userData);
       if (!userData._id) {
         throw new Error("User ID not found in localStorage");
@@ -54,29 +58,38 @@ const CreateForum = () => {
       }
 
       const token = localStorage.getItem("jwt");
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setTitle("");
       setContent("");
       setImage(null);
-      toast.success("Post created successfully!");
-      
+      toast.success(
+        "Your Post is Under review!, you will notify once it is approved",
+        { position: "top-center" }
+      );
+
       // Add a small delay to allow the toast to be visible before navigation
       setTimeout(() => {
         navigate("/forum");
-      }, 1500);
+      }, 4000);
     } catch (error) {
       console.error("Error creating post:", error);
-      toast.error(`Failed to create post: ${error.message || "Unknown error"}`);
+      toast.error(
+        `Failed to create post: ${error.message || "Unknown error"}`,
+        { position: "top-center" }
+      );
       setIsLoading(false);
     }
   };
-
   const dataURLtoFile = (dataurl, filename) => {
     const arr = dataurl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -116,8 +129,6 @@ const CreateForum = () => {
     e.preventDefault();
   };
 
-
-
   return (
     <section id="createForum">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -126,13 +137,21 @@ const CreateForum = () => {
         <div className="mb-6">
           <div className="flex space-x-4">
             <button
-              className={`pb-2 ${activeTab === "text" ? "border-b-2 border-orange-500 font-semibold text-gray-800" : "text-gray-500"}`}
+              className={`pb-2 ${
+                activeTab === "text"
+                  ? "border-b-2 border-orange-500 font-semibold text-gray-800"
+                  : "text-gray-500"
+              }`}
               onClick={() => setActiveTab("text")}
             >
               text
             </button>
             <button
-              className={`pb-2 ${activeTab === "images/video" ? "border-b-2 border-orange-500 font-semibold text-gray-800" : "text-gray-500"}`}
+              className={`pb-2 ${
+                activeTab === "images/video"
+                  ? "border-b-2 border-orange-500 font-semibold text-gray-800"
+                  : "text-gray-500"
+              }`}
               onClick={() => setActiveTab("images/video")}
             >
               images/video
@@ -152,7 +171,11 @@ const CreateForum = () => {
           </div>
           {activeTab === "text" && (
             <div className="mb-6">
-              <TextEditor value={content} onChange={setContent} placeholder="Add Body" />
+              <TextEditor
+                value={content}
+                onChange={setContent}
+                placeholder="Add Body"
+              />
             </div>
           )}
           {activeTab === "images/video" && (
@@ -163,7 +186,11 @@ const CreateForum = () => {
             >
               {image ? (
                 <div className="relative w-full h-full">
-                  <img src={image} alt="Uploaded content" className="w-full h-full object-contain p-4" />
+                  <img
+                    src={image}
+                    alt="Uploaded content"
+                    className="w-full h-full object-contain p-4"
+                  />
                   <button
                     type="button"
                     className="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1"
@@ -221,8 +248,12 @@ const CreateForum = () => {
                   const formData = new FormData();
                   formData.append("title", title || "Untitled Draft");
                   formData.append("content", content);
-                  formData.append("contentType", activeTab === "text" ? "html" : "image");
-                  const userData = JSON.parse(localStorage.getItem("userData")) || {};
+                  formData.append(
+                    "contentType",
+                    activeTab === "text" ? "html" : "image"
+                  );
+                  const userData =
+                    JSON.parse(localStorage.getItem("userData")) || {};
                   if (!userData._id) {
                     throw new Error("User ID not found in localStorage");
                   }
@@ -236,16 +267,22 @@ const CreateForum = () => {
                     formData.append("image", file);
                   }
                   const token = localStorage.getItem("jwt");
-                  await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/draft`, formData, {
-                    headers: {
-                      "Content-Type": "multipart/form-data",
-                      Authorization: `Bearer ${token}`,
-                    },
-                  });
+                  await axios.post(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/draft`,
+                    formData,
+                    {
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
                   alert("Draft saved");
                 } catch (error) {
                   console.error("Error saving draft:", error);
-                  toast.error(`Failed to save draft: ${error.message || "Unknown error"}`);
+                  toast.error(
+                    `Failed to save draft: ${error.message || "Unknown error"}`
+                  );
                 }
               }}
             >
@@ -254,17 +291,37 @@ const CreateForum = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`px-5 py-2 bg-gray-800 cursor-pointer text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`px-5 py-2 bg-gray-800 cursor-pointer text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center ${
+                isLoading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
               {isLoading ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   posting...
                 </>
-              ) : 'post'}
+              ) : (
+                "post"
+              )}
             </button>
           </div>
         </form>
