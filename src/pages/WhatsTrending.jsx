@@ -126,11 +126,13 @@ const WhatsTrending = () => {
     }
   };
 
-  const formatTrendData = (trendData) => {
-    return trendData.map((item, index) => ({
-      name: `Months ${index + 1}`,
-      value: item.value || item,
-    }));
+ const formatTrendData = (trendData) => {
+    return trendData.map((item) => {
+      return {
+        month: item.month, // Ensure this matches the property name for month
+        value: item.value
+      };
+    });
   };
 
   const handleTimeRangeChange = (timeRange) => {

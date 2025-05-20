@@ -40,32 +40,31 @@ const Bargraph = ({ data }) => {
           barCategoryGap="10%"
         >
           <XAxis
-            dataKey="name" // Display month names on the X-axis
-            tick={{ fontSize: 6, fill: "#12153D" }} // Customize tick style
+            dataKey="month" // Use the month property from your trend data
+            tick={{ fontSize: 10, fill: "#12153D" }}
             padding={{ left: 10, right: 10 }}
-            tickFormatter={(name) => `${name.charAt(0)}${name.charAt(name.length - 1)}`} // Combine first and last letters
           />
           <YAxis 
-            tick={{ fontSize: 12, fill: "#12153D" }} // Customize tick style
+            tick={{ fontSize: 12, fill: "#12153D" }}
             padding={{ top: 20, bottom: 20 }}
             tickFormatter={formatValue}
           />
           <Tooltip content={<CustomTooltip />} />
           <Bar 
-            dataKey="value"  // Use numeric value for bars
+            dataKey="value"
             fill="#12153D" 
             radius={[5, 5, 5, 5]}
             name="Monthly Trend"
           >
-            <LabelList
+            {/* <LabelList
               dataKey="value"
               position="inside"
               style={{
                 fill: "white",
                 fontSize: 8,
               }}
-              formatter={(value) => formatValue(value)} // Format the value
-            />
+              formatter={(value) => formatValue(value)}
+            /> */}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
