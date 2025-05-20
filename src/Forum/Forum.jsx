@@ -94,6 +94,7 @@ const Forum = () => {
   };
 
   useEffect(() => {
+    const baseUrl = import.meta.env.VITE_BACKEND_URL;
     const fetchPosts = async () => {
       setLoading(true);
       try {
@@ -117,6 +118,7 @@ const Forum = () => {
               post.userReactions?.find((r) => r.userId.toString() === userId);
             return {
               ...post,
+              image: post.image ? `${baseUrl}${post.image}` : null,
               userReacted: !!userReaction,
               userReaction: userReaction?.reactionType || null,
             };

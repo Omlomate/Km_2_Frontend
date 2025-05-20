@@ -23,15 +23,19 @@ const ShowForum = () => {
     const fetchPost = async () => {
       setLoading(true); // Set loading to true when fetching starts
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}`
-        );
-        setPost(response.data);
+        const baseUrl = import.meta.env.VITE_BACKEND_URL;
+        const response = await axios.get(`${baseUrl}/api/forum/posts/${id}`);
+        setPost({
+          ...response.data,
+          image: response.data.image
+            ? `${baseUrl}${response.data.image}`
+            : null,
+          comments: response.data.comments.map((comment) => ({
+            ...comment,
+            image: comment.image ? `${baseUrl}${comment.image}` : null,
+          })),
+        });
         setError(null);
-      } catch (error) {
-        console.error("Error fetching post:", error);
-        setError("Failed to load post. Please try again.");
-        setPost(null);
       } finally {
         setLoading(false); // Set loading to false when fetching ends
       }
@@ -668,11 +672,11 @@ const ShowForum = () => {
                                           fill-rule="evenodd"
                                           clip-rule="evenodd"
                                           d="M15.0501 16.9558C15.4673 18.2075 14.5357 19.5 13.2164 19.5C12.5921 19.5 12.0063 19.1985 11.6435 18.6906L8.47164 14.25L5.85761 14.25L5.10761 13.5L5.10761 6L5.85761 5.25L16.8211 5.25L19.1247 9.85722C19.8088 11.2253 19.5407 12.8776 18.4591 13.9592C17.7927 14.6256 16.8888 15 15.9463 15L14.3982 15L15.0501 16.9558ZM9.60761 13.2596L12.8641 17.8187C12.9453 17.9325 13.0765 18 13.2164 18C13.5119 18 13.7205 17.7105 13.6271 17.4302L12.317 13.5L15.9463 13.5C16.491 13.5 17.0133 13.2836 17.3984 12.8985C18.0235 12.2735 18.1784 11.3186 17.7831 10.528L15.8941 6.75L9.60761 6.75L9.60761 13.2596ZM8.10761 6.75L6.60761 6.75L6.60761 12.75L8.10761 12.75L8.10761 6.75Z"
-                                            fill={
-                                          dislikedComments[comment._id]
-                                            ? "currentColor"
-                                            : "none"
-                                        }
+                                          fill={
+                                            dislikedComments[comment._id]
+                                              ? "currentColor"
+                                              : "none"
+                                          }
                                         />
                                       </svg>
                                       <span>
