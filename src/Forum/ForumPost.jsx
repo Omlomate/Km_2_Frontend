@@ -1,40 +1,41 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Configure base URL for API requests
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 export const ForumPosts = ({ post, onReact }) => {
   const [reacted, setReacted] = useState(post.userReacted || false);
   const [reactionType, setReactionType] = useState(post.userReaction || null);
   const navigate = useNavigate();
-  
+
   // Check if user is admin
-  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const isAdmin = userData.isAdmin || false;
-  const isLoggedIn = !!localStorage.getItem('jwt');
+  const isLoggedIn = !!localStorage.getItem("jwt");
 
   // Format creation date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const requireLogin = (action) => {
-    toast.error('Please login to ' + action);
+    toast.error("Please login to " + action);
   };
 
   const handlePostClick = (e) => {
     if (!isLoggedIn) {
       e.preventDefault();
-      requireLogin('view posts');
+      requireLogin("view posts");
       return false;
     }
     return true;
@@ -43,7 +44,7 @@ export const ForumPosts = ({ post, onReact }) => {
   const handleReaction = (e, type) => {
     if (!isLoggedIn) {
       e.preventDefault();
-      requireLogin('react to posts');
+      requireLogin("react to posts");
       return;
     }
     e.preventDefault();
@@ -54,42 +55,54 @@ export const ForumPosts = ({ post, onReact }) => {
     if (onReact) {
       onReact(post._id, newReactedState ? type : null);
     }
-    
+
     if (window.innerWidth < 768) {
       const reactionMenu = e.currentTarget.parentNode.parentNode;
-      reactionMenu.classList.add('opacity-0', 'invisible');
-      reactionMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+      reactionMenu.classList.add("opacity-0", "invisible");
+      reactionMenu.classList.remove("opacity-100", "visible", "scale-100");
     }
   };
 
   const handleShare = (e, platform) => {
     if (!isLoggedIn) {
       e.preventDefault();
-      requireLogin('share posts');
+      requireLogin("share posts");
       return;
     }
     e.preventDefault();
     e.stopPropagation();
-    
+
     const url = window.location.origin + `/forum/${post._id}`;
-    
-    switch(platform) {
-      case 'whatsapp':
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' - ' + url)}`);
+
+    switch (platform) {
+      case "whatsapp":
+        window.open(
+          `https://api.whatsapp.com/send?text=${encodeURIComponent(
+            post.title + " - " + url
+          )}`
+        );
         break;
-      case 'discord':
+      case "discord":
         navigator.clipboard.writeText(`${post.title} - ${url}`);
-        toast.success('Link copied to clipboard for sharing on Discord!');
+        toast.success("Link copied to clipboard for sharing on Discord!");
         break;
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+      case "facebook":
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            url
+          )}`
+        );
         break;
-      case 'telegram':
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(post.title)}`);
+      case "telegram":
+        window.open(
+          `https://t.me/share/url?url=${encodeURIComponent(
+            url
+          )}&text=${encodeURIComponent(post.title)}`
+        );
         break;
       default:
         navigator.clipboard.writeText(url);
-        toast.success('Link copied to clipboard!');
+        toast.success("Link copied to clipboard!");
     }
   };
 
@@ -102,47 +115,51 @@ export const ForumPosts = ({ post, onReact }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this post?')) {
+    if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const token = localStorage.getItem('jwt');
+        const token = localStorage.getItem("jwt");
         if (!token) {
-          throw new Error('No authentication token found');
+          throw new Error("No authentication token found");
         }
-        
+
         const response = await fetch(`${API_BASE_URL}/api/forum/${post._id}`, {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
-          }
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
         });
 
         if (!response.ok) {
           const errorData = await response.json();
           if (response.status === 401) {
-            throw new Error('Unauthorized: Invalid or expired token');
+            throw new Error("Unauthorized: Invalid or expired token");
           }
           if (response.status === 403) {
-            throw new Error('Forbidden: Admin access required');
+            throw new Error("Forbidden: Admin access required");
           }
           if (response.status === 404) {
-            throw new Error(errorData.error || 'Post not found');
+            throw new Error(errorData.error || "Post not found");
           }
           throw new Error(`HTTP error: ${response.status}`);
         }
 
-        toast.success('Post deleted successfully!');
-        navigate('/forum');
+        toast.success("Post deleted successfully!");
+        navigate("/forum");
       } catch (error) {
-        console.error('Error deleting post:', error.message);
-        toast.error(error.message || 'Failed to delete post');
+        console.error("Error deleting post:", error.message);
+        toast.error(error.message || "Failed to delete post");
       }
     }
   };
 
   return (
     <div className="bg-white w-full md:w-[42rem] rounded-lg overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1">
-      <Link to={`/forum/${post._id}`} className="block" onClick={handlePostClick}>
+      <Link
+        to={`/forum/${post._id}`}
+        className="block"
+        onClick={handlePostClick}
+      >
         <div className="p-4">
           <div className="flex items-center mb-2">
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
@@ -235,11 +252,24 @@ export const ForumPosts = ({ post, onReact }) => {
 
         {post.image && (
           <div className="w-full overflow-hidden max-h-[300px]">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full object-cover"
-            />
+            {post.contentType === "video" ? (
+              <video
+                src={post.image}
+                alt={post.title}
+                className="w-full h-full object-contain"
+                controls
+                muted
+                playsInline
+                onError={() => toast.error("Failed to load video")}
+                style={{ maxHeight: "300px" }}
+              />
+            ) : (
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full object-cover"
+              />
+            )}
           </div>
         )}
       </Link>
@@ -258,12 +288,20 @@ export const ForumPosts = ({ post, onReact }) => {
                   e.preventDefault();
                   e.stopPropagation();
                   const reactionMenu = e.currentTarget.nextElementSibling;
-                  if (reactionMenu.classList.contains('opacity-0')) {
-                    reactionMenu.classList.remove('opacity-0', 'invisible');
-                    reactionMenu.classList.add('opacity-100', 'visible', 'scale-100');
+                  if (reactionMenu.classList.contains("opacity-0")) {
+                    reactionMenu.classList.remove("opacity-0", "invisible");
+                    reactionMenu.classList.add(
+                      "opacity-100",
+                      "visible",
+                      "scale-100"
+                    );
                   } else {
-                    reactionMenu.classList.add('opacity-0', 'invisible');
-                    reactionMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                    reactionMenu.classList.add("opacity-0", "invisible");
+                    reactionMenu.classList.remove(
+                      "opacity-100",
+                      "visible",
+                      "scale-100"
+                    );
                   }
                 } else {
                   handleReaction(e, "like");
@@ -274,8 +312,12 @@ export const ForumPosts = ({ post, onReact }) => {
                   e.preventDefault();
                   const timer = setTimeout(() => {
                     const reactionMenu = e.currentTarget.nextElementSibling;
-                    reactionMenu.classList.remove('opacity-0', 'invisible');
-                    reactionMenu.classList.add('opacity-100', 'visible', 'scale-100');
+                    reactionMenu.classList.remove("opacity-0", "invisible");
+                    reactionMenu.classList.add(
+                      "opacity-100",
+                      "visible",
+                      "scale-100"
+                    );
                   }, 500);
                   e.currentTarget.dataset.longPressTimer = timer;
                 }
@@ -335,9 +377,7 @@ export const ForumPosts = ({ post, onReact }) => {
             </button>
 
             <div
-              className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left ${
-                "opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100"
-              } z-10`}
+              className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left ${"opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100"} z-10`}
             >
               <div className="bg-white rounded-full shadow-lg p-1 flex space-x-1 border border-gray-200">
                 <button
@@ -399,7 +439,7 @@ export const ForumPosts = ({ post, onReact }) => {
               onClick={(e) => {
                 if (!isLoggedIn) {
                   e.preventDefault();
-                  requireLogin('comment on posts');
+                  requireLogin("comment on posts");
                   return;
                 }
                 // Proceed with comment action
@@ -434,12 +474,20 @@ export const ForumPosts = ({ post, onReact }) => {
               e.stopPropagation();
               if (window.innerWidth < 768) {
                 const shareMenu = e.currentTarget.nextElementSibling;
-                if (shareMenu.classList.contains('opacity-0')) {
-                  shareMenu.classList.remove('opacity-0', 'invisible');
-                  shareMenu.classList.add('opacity-100', 'visible', 'scale-100');
+                if (shareMenu.classList.contains("opacity-0")) {
+                  shareMenu.classList.remove("opacity-0", "invisible");
+                  shareMenu.classList.add(
+                    "opacity-100",
+                    "visible",
+                    "scale-100"
+                  );
                 } else {
-                  shareMenu.classList.add('opacity-0', 'invisible');
-                  shareMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                  shareMenu.classList.add("opacity-0", "invisible");
+                  shareMenu.classList.remove(
+                    "opacity-100",
+                    "visible",
+                    "scale-100"
+                  );
                 }
               }
             }}
@@ -448,8 +496,12 @@ export const ForumPosts = ({ post, onReact }) => {
                 e.preventDefault();
                 const timer = setTimeout(() => {
                   const shareMenu = e.currentTarget.nextElementSibling;
-                  shareMenu.classList.remove('opacity-0', 'invisible');
-                  shareMenu.classList.add('opacity-100', 'visible', 'scale-100');
+                  shareMenu.classList.remove("opacity-0", "invisible");
+                  shareMenu.classList.add(
+                    "opacity-100",
+                    "visible",
+                    "scale-100"
+                  );
                 }, 500);
                 e.currentTarget.dataset.longPressTimer = timer;
               }
@@ -614,6 +666,5 @@ export const ForumPosts = ({ post, onReact }) => {
 };
 
 export default ForumPosts;
-
 
 // Define isLoggedIn based on user data

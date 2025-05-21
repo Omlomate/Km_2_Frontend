@@ -430,11 +430,26 @@ const ShowForum = () => {
 
                 {post.image && (
                   <div className="mt-6">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full rounded-lg shadow-md"
-                    />
+                    {post.contentType === "video" ? (
+                      <video
+                        src={post.image}
+                        alt={post.title}
+                        title={post.title}
+                        className="w-full rounded-lg shadow-md"
+                        controls
+                        muted
+                        playsInline
+                        onError={() =>
+                          alert("Failed to load video. Please try again later.")
+                        }
+                      />
+                    ) : (
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full rounded-lg shadow-md"
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -472,7 +487,7 @@ const ShowForum = () => {
                         <input
                           type="file"
                           id="comment-image-upload"
-                          accept="image/*"
+                          accept="image/jpeg,image/png,image/gif,video/mp4,video/webm,video/quicktime"
                           className="hidden"
                           onChange={(e) => {
                             const file = e.target.files[0];
@@ -485,7 +500,17 @@ const ShowForum = () => {
                                 );
                                 const previewImg =
                                   previewDiv.querySelector("img");
-                                previewImg.src = e.target.result;
+                                const previewVideo =
+                                  previewDiv.querySelector("video");
+                                if (file.type.startsWith("video/")) {
+                                  previewVideo.src = e.target.result;
+                                  previewVideo.classList.remove("hidden");
+                                  previewImg.classList.add("hidden");
+                                } else {
+                                  previewImg.src = e.target.result;
+                                  previewImg.classList.remove("hidden");
+                                  previewVideo.classList.add("hidden");
+                                }
                                 previewDiv.classList.remove("hidden");
                               };
                               reader.readAsDataURL(file);
@@ -525,7 +550,15 @@ const ShowForum = () => {
                       <img
                         src=""
                         alt="Preview"
-                        className="max-h-40 rounded-lg"
+                        className="max-h-40 rounded-lg hidden"
+                      />
+                      <video
+                        src=""
+                        alt="Preview"
+                        className="max-h-40 rounded-lg hidden"
+                        controls
+                        muted
+                        playsInline
                       />
                       <button
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
@@ -587,13 +620,25 @@ const ShowForum = () => {
                                   <p className="mt-1 text-gray-700">
                                     {comment.content}
                                   </p>
-                                  {comment.image && (
-                                    <img
-                                      src={comment.image}
-                                      alt="Comment attachment"
-                                      className="mt-2 max-w-xs rounded-lg"
-                                    />
-                                  )}
+                                  {comment.image &&
+                                    (comment.image.endsWith(".mp4") ||
+                                    comment.image.endsWith(".webm") ||
+                                    comment.image.endsWith(".mov") ? (
+                                      <video
+                                        src={comment.image}
+                                        alt="Comment attachment"
+                                        className="mt-2 max-w-xs rounded-lg"
+                                        controls
+                                        muted
+                                        playsInline
+                                      />
+                                    ) : (
+                                      <img
+                                        src={comment.image}
+                                        alt="Comment attachment"
+                                        className="mt-2 max-w-xs rounded-lg"
+                                      />
+                                    ))}
                                   <div className="flex items-center mt-2 space-x-4">
                                     <button
                                       className={`flex items-center text-xs space-x-1 ${

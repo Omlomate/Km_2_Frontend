@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 import { toast } from 'react-toastify';
@@ -12,11 +12,14 @@ const EditPost = () => {
     content: '',
     contentType: 'html',
     username: '',
-    image: null
+    image: null,
+    thumbnail: null,
   });
   const [newImage, setNewImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
 
   // Check if user is admin
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -41,12 +44,14 @@ const EditPost = () => {
           throw new Error('Failed to fetch post');
         }
         const data = await response.json();
+        console.log(`Fetched post: ID=${id}, ContentType=${data.contentType}, Image=${data.image}, Thumbnail=${data.thumbnail}`);
         setPost({
           title: data.title,
           content: data.content,
           contentType: data.contentType,
           username: data.username,
-          image: data.image
+          image: data.image ? `${import.meta.env.VITE_BACKEND_URL}${data.image}` : null,
+          thumbnail: data.thumbnail ? `${import.meta.env.VITE_BACKEND_URL}${data.thumbnail}` : null,
         });
         setLoading(false);
       } catch (error) {
@@ -68,6 +73,22 @@ const EditPost = () => {
     const file = e.target.files[0];
     if (file) {
       setNewImage(file);
+      console.log(`New file selected: Name=${file.name}, Type=${file.type}, Size=${file.size}`);
+      // Set contentType based on file type
+      const newContentType = file.type.startsWith('video/') ? 'video' : 'image';
+      setPost(prev => ({ ...prev, contentType: newContentType }));
+    }
+  };
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error('Error playing video preview:', err);
+          toast.error('Failed to play video preview', { position: 'top-center' });
+        });
     }
   };
 
@@ -81,6 +102,10 @@ const EditPost = () => {
       toast.error('Content is required for text posts');
       return;
     }
+    if (newImage && !['image', 'video'].includes(post.contentType)) {
+      toast.error('Invalid content type for file upload');
+      return;
+    }
 
     setSubmitting(true);
     const formData = new FormData();
@@ -91,6 +116,13 @@ const EditPost = () => {
     if (newImage) {
       formData.append('image', newImage);
     }
+
+    console.log('Submitting form:', {
+      title: post.title,
+      contentType: post.contentType,
+      username: post.username,
+      hasNewImage: !!newImage,
+    });
 
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/forum/edit/${id}`, {
@@ -171,24 +203,66 @@ const EditPost = () => {
         {post.contentType === 'html' && (
           <div className="mb-4">
             <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-            {/* <textarea
+            <TextEditor
               id="content"
-              name="content"
               value={post.content}
-              onChange={handleInputChange}
-              rows="6"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            ></textarea> */}
-            <TextEditor id="content" value={post.content} onChange={handleInputChange} placeholder="Add Body" />
+              onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
+              placeholder="Add Body"
+            />
           </div>
         )}
 
         <div className="mb-4">
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image/Video</label>
           {post.image && (
-            <div className="mb-2">
-              <p className="text-sm text-gray-500">Current image:</p>
-              <img src={post.image} alt="Current post" className="max-w-xs" />
+            <div className="mb-2 relative">
+              <p className="text-sm text-gray-500">Current media:</p>
+              {post.contentType === 'video' ? (
+                <>
+                  <video
+                    ref={videoRef}
+                    src={post.image}
+                    alt={post.title || "Video post"}
+                    title={post.title || "Video post"}
+                    className="max-w-xs max-h-[300px] object-contain rounded-lg shadow-md"
+                    controls
+                    muted
+                    playsInline
+                    poster={post.thumbnail || undefined}
+                    onError={(e) => {
+                      console.error(`Video preview failed to load: ${post.image}`, e);
+                      toast.error('Failed to load video preview', { position: 'top-center' });
+                    }}
+                  >
+                    <source src={post.image} type="video/mp4" />
+                    <source src={post.image} type="video/webm" />
+                    <source src={post.image} type="video/quicktime" />
+                    Your browser does not support the video tag.
+                  </video>
+                  {!isPlaying && (
+                    <button
+                      onClick={handlePlay}
+                      className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg"
+                      aria-label="Play video preview"
+                    >
+                      <svg
+                        className="w-12 h-12 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </button>
+                  )}
+                </>
+              ) : (
+                <img
+                  src={post.image}
+                  alt={post.title || "Current post"}
+                  className="max-w-xs max-h-[300px] object-contain rounded-lg shadow-md"
+                  onError={() => toast.error('Failed to load image preview', { position: 'top-center' })}
+                />
+              )}
             </div>
           )}
           <input

@@ -13,13 +13,12 @@ const Forum = () => {
   const [sort, setSort] = useState("newest");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mobileFilterVisible, setMobileFilterVisible] = useState(false);
-  const [IsLoginVisible, setIsLoginVisible] = useState(false);
+  const [isLoginVisible, setIsLoginVisible] = useState(false);
 
   const isLoggedIn = localStorage.getItem("jwt");
 
-  // Check localStorage for isAdmin and isLoggedIn on component mount
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
@@ -150,14 +149,10 @@ const Forum = () => {
   const toggleMobileFilter = () => {
     setMobileFilterVisible(!mobileFilterVisible);
   };
-  const showLogin = () => {
-    setIsLoginVisible(true);
-    // setIsRegisterVisible(false);
-  };
 
   return (
     <div className="bg-gray-100 min-h-screen pb-10">
-      {/* Header with gradient background */}
+      <ToastContainer />
       <div className="bg-gradient-to-r from-[#12153D] to-[#1a1f4d] text-white py-8 px-4 mb-6 shadow-md">
         <div className="max-w-7xl mx-auto">
           <h1
@@ -214,31 +209,41 @@ const Forum = () => {
               <span>Create Post</span>
             </Link>
           ) : (
-            <LoginDialog
-              onClick={() => toast.error("Please log in to create a post.")}
-              buttonClassName="group bg-[#12153D] cursor-pointer text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto hover:bg-[#1a1f4d] transition-colors"
-            >
-              <svg
-                className="stroke-[#E5590F] fill-none transition-transform duration-300 group-hover:rotate-90 group-hover:fill-[#12153d]/10 group-active:stroke-[#E5590f]/20 group-active:fill-[#E5590f]/50 group-active:duration-0"
-                viewBox="0 0 24 24"
-                height="24px"
-                width="24px"
-                xmlns="http://www.w3.org/2000/svg"
+            <>
+              <button
+                onClick={() => setIsLoginVisible(true)}
+                className="group bg-[#12153D] cursor-pointer text-white font-medium py-3 px-6 rounded-lg shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto hover:bg-[#1a1f4d] transition-colors"
               >
-                <path
-                  strokeWidth="1.5"
-                  d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-                ></path>
-                <path strokeWidth="1.5" d="M8 12H16"></path>
-                <path strokeWidth="1.5" d="M12 16V8"></path>
-              </svg>
-              <span>Create Post</span>
-            </LoginDialog>
-            // <LoginDialog buttonText="Cretae post" buttonClassName="p-2 bg-blue-500 text-white rounded" />
+                <svg
+                  className="stroke-[#E5590F] fill-none transition-transform duration-300 group-hover:rotate-90 group-hover:fill-[#12153d]/10 group-active:stroke-[#E5590f]/20 group-active:fill-[#E5590f]/50 group-active:duration-0"
+                  viewBox="0 0 24 24"
+                  height="24px"
+                  width="24px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeWidth="1.5"
+                    d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                  ></path>
+                  <path strokeWidth="1.5" d="M8 12H16"></path>
+                  <path strokeWidth="1.5" d="M12 16V8"></path>
+                </svg>
+                <span>Create Post</span>
+              </button>
+              {isLoginVisible && (
+                <LoginDialog
+                  onClose={() => setIsLoginVisible(false)}
+                  onLoginSuccess={() => {
+                    setIsLoginVisible(false);
+                    toast.success("Logged in successfully!", { position: "top-center" });
+                  }}
+                  onError={() => toast.error("Please log in to create a post.", { position: "top-center" })}
+                />
+              )}
+            </>
           )}
         </div>
 
-        {/* Mobile filter toggle button */}
         <button
           className="lg:hidden w-full bg-white rounded-lg shadow-sm p-3 mb-4 flex items-center justify-between font-medium text-gray-700"
           onClick={toggleMobileFilter}
@@ -252,7 +257,6 @@ const Forum = () => {
         </button>
 
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* Sidebar - hidden on mobile by default unless toggled */}
           <div
             className={`${
               mobileFilterVisible ? "block" : "hidden"
@@ -290,9 +294,9 @@ const Forum = () => {
                   </div>
                 </div>
               </div>
-            </div>{" "}
-            <div className="mt-8 text-center  ">
-              <div className="    w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+            </div>
+            <div className="mt-8 text-center">
+              <div className="w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
                 AD
               </div>
             </div>
@@ -333,27 +337,18 @@ const Forum = () => {
                     className="bg-white p-4 rounded-lg shadow-sm animate-pulse w-full"
                   >
                     <div className="flex items-start gap-4">
-                      {/* Avatar skeleton */}
                       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
-
                       <div className="flex-1 space-y-3 w-full">
-                        {/* Title skeleton */}
                         <div className="h-5 sm:h-6 bg-gray-200 rounded w-4/5"></div>
-
-                        {/* Content skeleton */}
                         <div className="space-y-2">
                           <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
                           <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
                           <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
                         </div>
-
-                        {/* Tags skeleton */}
                         <div className="flex flex-wrap gap-2 pt-2">
                           <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 rounded"></div>
                           <div className="h-5 sm:h-6 w-20 sm:w-24 bg-gray-200 rounded"></div>
                         </div>
-
-                        {/* Reactions skeleton */}
                         <div className="flex flex-wrap gap-3 sm:gap-4 mt-4">
                           <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
                           <div className="h-7 sm:h-8 w-16 sm:w-20 bg-gray-200 rounded"></div>
@@ -382,7 +377,7 @@ const Forum = () => {
                   if (!post._id) {
                     console.warn(`Post at index ${index} missing _id:`, post);
                     return null;
-                  }
+                  }                 
                   return (
                     <div
                       key={post._id}
@@ -396,7 +391,7 @@ const Forum = () => {
                         <ForumPosts
                           post={post}
                           onReact={handleReact}
-                          isAdmin={isAdmin} // Pass isAdmin to ForumPosts
+                          isAdmin={isAdmin}
                         />
                       </Link>
                     </div>
@@ -421,15 +416,14 @@ const Forum = () => {
             )}
           </div>
 
-          {/* Mobile advertisement - visible only on small screens (bottom) */}
           <div className="lg:hidden w-full order-4 mt-6">
-            <div className="  w-[300px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
+            <div className="w-[300px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium">
               ADVERTISEMENT
             </div>
           </div>
 
           <div className="hidden lg:block w-64 flex-shrink-0 order-3">
-            <div className="bg-white p-4 rounded-lg shadow-sm   top-4">
+            <div className="bg-white p-4 rounded-lg shadow-sm top-4">
               <h3 className="font-medium mb-3 text-[#12153D]">
                 Popular Topics
               </h3>
@@ -457,7 +451,7 @@ const Forum = () => {
                 </Link>
               </div>
             </div>
-            <div className=" 0 w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium mt-4">
+            <div className="w-[250px] h-[250px] rounded-lg flex items-center justify-center text-gray-500 font-medium mt-4">
               AD
             </div>
           </div>

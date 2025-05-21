@@ -72,7 +72,7 @@ const ForumPosts = () => {
                       <span>{post.content.substring(0, 100) + (post.content.length > 100 ? "..." : "")}</span>
                     )}
                   </td>
-                  <td className="border border-gray-300 p-2">{post.author}</td>
+                  <td className="border border-gray-300 p-2">{post.username}</td>
                   <td className="border border-gray-300 p-2">
                     <button
                       onClick={() => handleCheck(post._id)}

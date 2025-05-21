@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TextEditor from "../Components/TextEditor/TextEditor.jsx";
 import axios from "axios";
@@ -11,14 +11,99 @@ const CreateForum = () => {
   const [activeTab, setActiveTab] = useState("text");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
 
   const navigate = useNavigate();
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
+  ];
+
+  const dataURLtoFile = (dataurl, filename) => {
+    const arr = dataurl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Only JPEG, PNG, GIF, MP4, WebM, or MOV files are allowed", {
+          position: "top-center",
+        });
+        return;
+      }
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error("File size exceeds 100MB limit", { position: "top-center" });
+        return;
+      }
+      console.log(`File selected: Name=${file.name}, Type=${file.type}, Size=${file.size}`);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Only JPEG, PNG, GIF, MP4, WebM, or MOV files are allowed", {
+          position: "top-center",
+        });
+        return;
+      }
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error("File size exceeds 100MB limit", { position: "top-center" });
+        return;
+      }
+      console.log(`File dropped: Name=${file.name}, Type=${file.type}, Size=${file.size}`);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error("Error playing video preview:", err);
+          toast.error("Failed to play video preview", { position: "top-center" });
+        });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (activeTab === "text" && !content) {
+    const contentType = activeTab === "text" ? "html" : activeTab;
+    if (contentType === "html" && !content) {
       toast.error("Please add content to your post", {
         position: "top-center",
       });
@@ -26,8 +111,8 @@ const CreateForum = () => {
       return;
     }
 
-    if (activeTab === "images/video" && !image) {
-      toast.error("Please upload an image or video", {
+    if ((contentType === "image" || contentType === "video") && !image) {
+      toast.error(`Please upload an ${contentType}`, {
         position: "top-center",
       });
       setIsLoading(false);
@@ -38,11 +123,10 @@ const CreateForum = () => {
       const formData = new FormData();
       formData.append("title", title || "Untitled Post");
       formData.append("content", content);
-      formData.append("contentType", activeTab === "text" ? "html" : "image");
+      formData.append("contentType", contentType);
 
-      // Get userData from localStorage and set author as user._id and username
+      // Get userData from localStorage and set author and username
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
-      console.log(userData);
       if (!userData._id) {
         throw new Error("User ID not found in localStorage");
       }
@@ -53,9 +137,19 @@ const CreateForum = () => {
       formData.append("username", `${userData.firstName} ${userData.lastName}`);
 
       if (image) {
-        const file = dataURLtoFile(image, "upload.jpg");
+        const mimeType = image.split(";")[0].split(":")[1];
+        const extension = mimeType.split("/")[1];
+        const fileName = `upload.${extension === "jpeg" ? "jpg" : extension}`;
+        const file = dataURLtoFile(image, fileName);
         formData.append("image", file);
       }
+
+      console.log("Submitting form:", {
+        title: title || "Untitled Post",
+        contentType,
+        username: `${userData.firstName} ${userData.lastName}`,
+        hasImage: !!image,
+      });
 
       const token = localStorage.getItem("jwt");
       await axios.post(
@@ -73,60 +167,20 @@ const CreateForum = () => {
       setContent("");
       setImage(null);
       toast.success(
-        "Your Post is Under review!, you will notify once it is approved",
+        "Your Post is Under review! You will be notified once it is approved",
         { position: "top-center" }
       );
 
-      // Add a small delay to allow the toast to be visible before navigation
       setTimeout(() => {
         navigate("/forum");
       }, 4000);
     } catch (error) {
       console.error("Error creating post:", error);
-      toast.error(
-        `Failed to create post: ${error.message || "Unknown error"}`,
-        { position: "top-center" }
-      );
+      toast.error(`Failed to create post: ${error.message || "Unknown error"}`, {
+        position: "top-center",
+      });
       setIsLoading(false);
     }
-  };
-  const dataURLtoFile = (dataurl, filename) => {
-    const arr = dataurl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
   };
 
   return (
@@ -144,17 +198,27 @@ const CreateForum = () => {
               }`}
               onClick={() => setActiveTab("text")}
             >
-              text
+              Text
             </button>
             <button
               className={`pb-2 ${
-                activeTab === "images/video"
+                activeTab === "image"
                   ? "border-b-2 border-orange-500 font-semibold text-gray-800"
                   : "text-gray-500"
               }`}
-              onClick={() => setActiveTab("images/video")}
+              onClick={() => setActiveTab("image")}
             >
-              images/video
+              Image
+            </button>
+            <button
+              className={`pb-2 ${
+                activeTab === "video"
+                  ? "border-b-2 border-orange-500 font-semibold text-gray-800"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("video")}
+            >
+              Video
             </button>
           </div>
         </div>
@@ -178,7 +242,7 @@ const CreateForum = () => {
               />
             </div>
           )}
-          {activeTab === "images/video" && (
+          {(activeTab === "image" || activeTab === "video") && (
             <div
               className="mb-6 border border-gray-300 bg-white h-[332px] flex items-center justify-center"
               onDrop={handleDrop}
@@ -186,11 +250,51 @@ const CreateForum = () => {
             >
               {image ? (
                 <div className="relative w-full h-full">
-                  <img
-                    src={image}
-                    alt="Uploaded content"
-                    className="w-full h-full object-contain p-4"
-                  />
+                  {activeTab === "video" ? (
+                    <>
+                      <video
+                        ref={videoRef}
+                        src={image}
+                        alt="Uploaded video"
+                        className="w-full max-h-[300px] object-contain p-4 rounded-lg shadow-md"
+                        controls
+                        muted
+                        playsInline
+                        onError={(e) => {
+                          console.error("Video preview failed to load:", e);
+                          toast.error("Failed to load video preview", {
+                            position: "top-center",
+                          });
+                        }}
+                      >
+                        <source src={image} type="video/mp4" />
+                        <source src={image} type="video/webm" />
+                        <source src={image} type="video/quicktime" />
+                        Your browser does not support the video tag.
+                      </video>
+                      {!isPlaying && (
+                        <button
+                          onClick={handlePlay}
+                          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg"
+                          aria-label="Play video preview"
+                        >
+                          <svg
+                            className="w-12 h-12 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <img
+                      src={image}
+                      alt="Uploaded image"
+                      className="w-full max-h-[300px] object-contain p-4 rounded-lg shadow-md"
+                    />
+                  )}
                   <button
                     type="button"
                     className="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1"
@@ -212,7 +316,9 @@ const CreateForum = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center space-y-2 text-center">
-                  <p className="text-gray-500">Drag and drop or upload</p>
+                  <p className="text-gray-500">
+                    Drag and drop or upload an {activeTab}
+                  </p>
                   <label className="cursor-pointer">
                     <div className="bg-[#12153d] text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto">
                       <svg
@@ -230,7 +336,11 @@ const CreateForum = () => {
                     </div>
                     <input
                       type="file"
-                      accept="image/*,video/*"
+                      accept={
+                        activeTab === "image"
+                          ? "image/jpeg,image/png,image/gif"
+                          : "video/mp4,video/webm,video/quicktime"
+                      }
                       className="hidden"
                       onChange={handleFileUpload}
                     />
@@ -245,27 +355,37 @@ const CreateForum = () => {
               className="px-5 py-2 bg-gray-200 text-gray-800 cursor-pointer rounded-md hover:bg-gray-300 transition-colors"
               onClick={async () => {
                 try {
+                  const contentType = activeTab === "text" ? "html" : activeTab;
                   const formData = new FormData();
                   formData.append("title", title || "Untitled Draft");
                   formData.append("content", content);
-                  formData.append(
-                    "contentType",
-                    activeTab === "text" ? "html" : "image"
-                  );
-                  const userData =
-                    JSON.parse(localStorage.getItem("userData")) || {};
+                  formData.append("contentType", contentType);
+
+                  const userData = JSON.parse(localStorage.getItem("userData")) || {};
                   if (!userData._id) {
                     throw new Error("User ID not found in localStorage");
                   }
-                  if (!userData.username) {
+                  if (!userData.firstName) {
                     throw new Error("Username not found in localStorage");
                   }
                   formData.append("author", userData._id);
-                  formData.append("username", userData.username);
+                  formData.append("username", `${userData.firstName} ${userData.lastName}`);
+
                   if (image) {
-                    const file = dataURLtoFile(image, "upload.jpg");
+                    const mimeType = image.split(";")[0].split(":")[1];
+                    const extension = mimeType.split("/")[1];
+                    const fileName = `upload.${extension === "jpeg" ? "jpg" : extension}`;
+                    const file = dataURLtoFile(image, fileName);
                     formData.append("image", file);
                   }
+
+                  console.log("Saving draft:", {
+                    title: title || "Untitled Draft",
+                    contentType,
+                    username: `${userData.firstName} ${userData.lastName}`,
+                    hasImage: !!image,
+                  });
+
                   const token = localStorage.getItem("jwt");
                   await axios.post(
                     `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/draft`,
@@ -277,16 +397,16 @@ const CreateForum = () => {
                       },
                     }
                   );
-                  alert("Draft saved");
+                  toast.success("Draft saved", { position: "top-center" });
                 } catch (error) {
                   console.error("Error saving draft:", error);
-                  toast.error(
-                    `Failed to save draft: ${error.message || "Unknown error"}`
-                  );
+                  toast.error(`Failed to save draft: ${error.message || "Unknown error"}`, {
+                    position: "top-center",
+                  });
                 }
               }}
             >
-              save draft
+              Save Draft
             </button>
             <button
               type="submit"
@@ -317,10 +437,10 @@ const CreateForum = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  posting...
+                  Posting...
                 </>
               ) : (
-                "post"
+                "Post"
               )}
             </button>
           </div>
