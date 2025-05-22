@@ -163,31 +163,20 @@ export const ForumPosts = ({ post, onReact }) => {
         <div className="p-4">
           <div className="flex items-center mb-2">
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
-              {post.authorImage ? (
+              {post.author?.profileImage ? (
                 <img
-                  src={post.authorImage}
-                  alt="Author"
+                  src={post.author?.profileImage}
+                  alt={`${post.author?.username || "Anonymous"}'s profile`}
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
+                <span className="text-gray-500 font-bold text-sm">
+                  {(post.author?.username || "Anonymous").charAt(0).toUpperCase()}
+                </span>
               )}
             </div>
             <span className="text-sm text-gray-500">
-              {post.username || "Anonymous"}
+              {post.author?.username || "Anonymous"}
             </span>
             <span className="text-sm text-gray-400 ml-2">
               • {formatDate(post.createdAt)}
@@ -377,7 +366,7 @@ export const ForumPosts = ({ post, onReact }) => {
             </button>
 
             <div
-              className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left ${"opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100"} z-10`}
+              className={`absolute bottom-full left-0 mb-2 transition-all duration-200 transform scale-95 origin-bottom-left opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-hover:scale-100 z-10`}
             >
               <div className="bg-white rounded-full shadow-lg p-1 flex space-x-1 border border-gray-200">
                 <button
@@ -442,7 +431,6 @@ export const ForumPosts = ({ post, onReact }) => {
                   requireLogin("comment on posts");
                   return;
                 }
-                // Proceed with comment action
               }}
             >
               <svg
@@ -578,7 +566,7 @@ export const ForumPosts = ({ post, onReact }) => {
                     <path
                       fill="#fff"
                       fillRule="evenodd"
-                      d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z"
+                      d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.820c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z"
                       clipRule="evenodd"
                     ></path>
                   </svg>
@@ -661,10 +649,20 @@ export const ForumPosts = ({ post, onReact }) => {
           </div>
         </div>
       </div>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
 
 export default ForumPosts;
-
-// Define isLoggedIn based on user data

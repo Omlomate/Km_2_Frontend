@@ -12,7 +12,7 @@ const Navbar = () => {
   const { toggleSidebar, isSidebarOpen } = useSidebar();
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(isAuthenticated()); // Initialize with auth check
+  const [loggedIn, setLoggedIn] = useState(isAuthenticated());
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -75,7 +75,7 @@ const Navbar = () => {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch unread count for userId with isRead=false: ${response.status} ${response.statusText}`
+          `Failed to fetch unread count: ${response.status} ${response.statusText}`
         );
       }
 
@@ -185,28 +185,28 @@ const Navbar = () => {
   const hideLogin = () => {
     setIsLoginVisible(false);
     const isUserAuthenticated = isAuthenticated();
-    setLoggedIn(isUserAuthenticated); // Update state immediately
+    setLoggedIn(isUserAuthenticated);
     if (isUserAuthenticated) {
       localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
-      navigate("/related-keywords"); // Use navigate instead of window.location
+      navigate("/related-keywords");
     }
   };
 
   const hideRegister = () => {
     setIsRegisterVisible(false);
     const isUserAuthenticated = isAuthenticated();
-    setLoggedIn(isUserAuthenticated); // Update state immediately
+    setLoggedIn(isUserAuthenticated);
     if (isUserAuthenticated) {
       localStorage.setItem("selectedOption", "Research");
       const loginEvent = new CustomEvent("login-success", {
         detail: { redirectTo: "/related-keywords" },
       });
       window.dispatchEvent(loginEvent);
-      navigate("/related-keywords"); // Use navigate instead of window.location
+      navigate("/related-keywords");
     }
   };
 
@@ -323,9 +323,17 @@ const Navbar = () => {
                         >
                           <p className="text-sm">{notification.message}</p>
                           <span className="text-xs text-gray-500">
-                            {new Date(
-                              notification.createdAt
-                            ).toLocaleTimeString()}
+                            {new Date(notification.createdAt).toLocaleString(
+                              "en-US",
+                              {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
                           </span>
                         </div>
                       ))
