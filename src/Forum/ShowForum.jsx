@@ -43,8 +43,7 @@ const ShowForum = () => {
       setLoading(true);
       try {
         const baseUrl = import.meta.env.VITE_BACKEND_URL;
-        const response = await axios.get(`${baseUrl}/api/forum/posts/${id}`);
-        console.log("Post data:", response.data);
+        const response = await axios.get(`${baseUrl}/api/forum/posts/${id}`);       
         setPost(response.data);
         const userId = JSON.parse(localStorage.getItem("userData"))?._id;
         const initialLikes = {};
@@ -168,8 +167,7 @@ const ShowForum = () => {
 
   const handleEditComment = async (commentId) => {
     try {
-      const token = localStorage.getItem("jwt");
-      console.log("JWT Token for edit:", token);
+      const token = localStorage.getItem("jwt");    
       if (!token) {
         toast.error("Please log in to edit comments.");
         return;
@@ -212,8 +210,7 @@ const ShowForum = () => {
     }
 
     try {
-      const token = localStorage.getItem("jwt");
-      console.log("JWT Token for delete:", token);
+      const token = localStorage.getItem("jwt");    
       if (!token) {
         toast.error("Please log in to delete comments.");
         return;

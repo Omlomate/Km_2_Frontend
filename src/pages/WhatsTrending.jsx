@@ -77,6 +77,10 @@ const WhatsTrending = () => {
     console.log("selectedCountry Bdy:", selectedCountry);
 
     try {
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      const userId = userData._id || "";
+      const userName = ((userData.firstName || "") + " " + (userData.lastName || "")).trim();
+
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
@@ -85,6 +89,8 @@ const WhatsTrending = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-User-Id": userId,
+            "X-User-Name": userName,
           },
           body: JSON.stringify(requestBody),
         }

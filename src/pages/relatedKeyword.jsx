@@ -78,12 +78,22 @@ export const KeywordResearch = () => {
     setSearchLoading(true);
 
     try {
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      const userId = userData._id || "";
+      const userName = (userData.firstName || "") + " " + (userData.lastName || "");
+
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
         }/api/scraper/scrape?query=${encodeURIComponent(
           searchTerm
-        )}&engine=${searchEngine}&country=${country}`
+        )}&engine=${searchEngine}&country=${country}`,
+        {
+          headers: {
+            "X-User-Id": userId,
+            "X-User-Name": userName,
+          },
+        }
       );
 
       if (!response.ok) {

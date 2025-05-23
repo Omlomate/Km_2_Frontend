@@ -112,13 +112,21 @@ export const AudienceVolume = () => {
         return;
       }
 
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      const userId = userData._id || "";
+      const userName = ((userData.firstName || "") + " " + (userData.lastName || "")).trim();
+
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
         }/api/keywords/keyword-Everywhere-Volume`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-User-Id": userId,
+            "X-User-Name": userName,
+          },
           body: JSON.stringify({
             keywords: [searchTerm],
             country: selectedCountry.apiReference,
@@ -143,7 +151,6 @@ export const AudienceVolume = () => {
       setLoading(false);
     }
   };
-
   const handleCountryChange = (country) => {
     console.log("Country changed to:", country);
     setSelectedCountry(country);
