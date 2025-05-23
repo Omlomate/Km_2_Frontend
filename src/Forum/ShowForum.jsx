@@ -20,6 +20,23 @@ const ShowForum = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
 
+  // Parse author field (JSON string, plain string, or object)
+  const parseAuthor = (author) => {
+    if (typeof author === "string") {
+      try {
+        if (author.startsWith("{")) {
+          const parsed = JSON.parse(author);
+          return { username: parsed.username || "Anonymous", profileImage: parsed.profileImage };
+        }
+        return { username: author, profileImage: null };
+      } catch (e) {
+        console.warn(`Failed to parse author: ${author}`);
+        return { username: "Anonymous", profileImage: null };
+      }
+    }
+    return author || { username: "Anonymous", profileImage: null };
+  };
+
   // Fetch post on mount
   useEffect(() => {
     const fetchPost = async () => {
@@ -27,8 +44,8 @@ const ShowForum = () => {
       try {
         const baseUrl = import.meta.env.VITE_BACKEND_URL;
         const response = await axios.get(`${baseUrl}/api/forum/posts/${id}`);
+        console.log("Post data:", response.data);
         setPost(response.data);
-        // Initialize liked/disliked states based on user reactions
         const userId = JSON.parse(localStorage.getItem("userData"))?._id;
         const initialLikes = {};
         const initialDislikes = {};
@@ -73,10 +90,7 @@ const ShowForum = () => {
 
       const formData = new FormData();
       formData.append("content", comment);
-      formData.append("author", JSON.stringify({
-        username: `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous",
-        profileImage: userData.profileImage || null,
-      }));
+      formData.append("author", `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous");
       if (commentImage) {
         formData.append("image", commentImage);
       }
@@ -115,6 +129,10 @@ const ShowForum = () => {
 
     try {
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
+      if (!userData) {
+        toast.error("Please log in to reply.");
+        return;
+      }
       const token = localStorage.getItem("jwt");
       if (!token) {
         toast.error("Please log in to reply.");
@@ -125,10 +143,7 @@ const ShowForum = () => {
         `${import.meta.env.VITE_BACKEND_URL}/api/forum/posts/${id}/comments`,
         {
           content: replyText,
-          author: {
-            username: `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous",
-            profileImage: userData.profileImage || null,
-          },
+          author: `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || "Anonymous",
           parentId: commentId,
         },
         {
@@ -151,9 +166,10 @@ const ShowForum = () => {
     }
   };
 
-  const handleEditComment = async (commentId, content) => {
+  const handleEditComment = async (commentId) => {
     try {
       const token = localStorage.getItem("jwt");
+      console.log("JWT Token for edit:", token);
       if (!token) {
         toast.error("Please log in to edit comments.");
         return;
@@ -180,7 +196,13 @@ const ShowForum = () => {
       toast.success("Comment updated successfully!");
     } catch (error) {
       console.error("Error editing comment:", error);
-      toast.error("Failed to edit comment. Please try again.");
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("jwt");
+        navigate("/login");
+      } else {
+        toast.error("Failed to edit comment. Please try again.");
+      }
     }
   };
 
@@ -191,6 +213,7 @@ const ShowForum = () => {
 
     try {
       const token = localStorage.getItem("jwt");
+      console.log("JWT Token for delete:", token);
       if (!token) {
         toast.error("Please log in to delete comments.");
         return;
@@ -213,7 +236,13 @@ const ShowForum = () => {
       toast.success("Comment deleted successfully!");
     } catch (error) {
       console.error("Error deleting comment:", error);
-      toast.error("Failed to delete comment. Please try again.");
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("jwt");
+        navigate("/login");
+      } else {
+        toast.error("Failed to delete comment. Please try again.");
+      }
     }
   };
 
@@ -410,13 +439,12 @@ const ShowForum = () => {
   }
 
   if (!post) {
-    return null; // Handled by loading state
+    return null;
   }
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-6">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar */}
         <div className="hidden lg:block w-full lg:w-64 lg:flex-shrink-0 order-2 lg:order-1">
           <div className="bg-white rounded-lg shadow-lg p-4 mb-4 sticky top-4">
             <Link
@@ -436,7 +464,6 @@ const ShowForum = () => {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 order-1 lg:order-2">
           <button
             onClick={() => navigate("/forum")}
@@ -489,7 +516,6 @@ const ShowForum = () => {
 
               <h1 className="text-2xl font-bold mb-6">{post.title}</h1>
 
-              {/* Post Content */}
               <div className="prose max-w-none">
                 {post.contentType === "html" ? (
                   <div
@@ -529,7 +555,6 @@ const ShowForum = () => {
                 )}
               </div>
 
-              {/* Comments Section */}
               <section id="comment">
                 <div className="mt-8 border-t pt-6">
                   <div className="flex flex-col gap-2 mb-6">
@@ -620,7 +645,6 @@ const ShowForum = () => {
                       </button>
                     </div>
 
-                    {/* Preview area for selected image */}
                     <div
                       id="comment-image-preview"
                       className="hidden mt-2 relative"
@@ -672,375 +696,380 @@ const ShowForum = () => {
                     {post.comments && post.comments.length > 0 ? (
                       post.comments
                         .filter((comment) => !comment.parentId)
-                        .map((comment) => (
-                          <div
-                            key={comment._id}
-                            className="bg-gray-50 p-4 rounded-lg relative"
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-3">
-                                <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                  {comment.author?.profileImage ? (
-                                    <img
-                                      src={comment.author.profileImage}
-                                      alt={comment.author?.username || "Commenter"}
-                                      className="h-full w-full object-cover"
-                                    />
-                                  ) : (
-                                    <span className="text-indigo-600 font-bold">
-                                      {comment.author?.username?.charAt(0) || "A"}
-                                    </span>
-                                  )}
-                                </div>
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-medium">
-                                      {comment.author?.username || "Anonymous"}
-                                    </span>
-                                    <span className="text-xs text-gray-500">
-                                      {new Date(
-                                        comment.createdAt
-                                      ).toLocaleDateString()}
-                                    </span>
-                                  </div>
-                                  {editingCommentId === comment._id ? (
-                                    <div className="flex flex-col gap-2">
-                                      <input
-                                        type="text"
-                                        value={editText}
-                                        onChange={(e) =>
-                                          setEditText(e.target.value)
-                                        }
-                                        className="w-full py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
+                        .map((comment) => {
+                          const author = parseAuthor(comment.author);
+                          return (
+                            <div
+                              key={comment._id}
+                              className="bg-gray-50 p-4 rounded-lg relative"
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex items-start gap-3">
+                                  <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    {author.profileImage ? (
+                                      <img
+                                        src={author.profileImage}
+                                        alt={author.username}
+                                        className="h-full w-full object-cover"
                                       />
-                                      <div className="flex gap-2">
-                                        <button
-                                          onClick={() =>
-                                            handleEditComment(
-                                              comment._id,
-                                              editText
-                                            )
-                                          }
-                                          className="bg-[#12153d] text-white px-3 py-1 rounded-full hover:bg-[#12153d]/90 transition-colors"
-                                        >
-                                          Save
-                                        </button>
-                                        <button
-                                          onClick={() => {
-                                            setEditingCommentId(null);
-                                            setEditText("");
-                                          }}
-                                          className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-400 transition-colors"
-                                        >
-                                          Cancel
-                                        </button>
-                                      </div>
+                                    ) : (
+                                      <span className="text-indigo-600 font-bold">
+                                        {author.username.charAt(0) || "A"}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium">
+                                        {author.username}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        {new Date(
+                                          comment.createdAt
+                                        ).toLocaleDateString()}
+                                      </span>
                                     </div>
-                                  ) : (
-                                    <>
-                                      <p className="mt-1 text-gray-700">
-                                        {comment.content}
-                                      </p>
-                                      {comment.image &&
-                                        (comment.image.includes("video/") ? (
-                                          <video
-                                            src={comment.image}
-                                            alt="Comment attachment"
-                                            className="mt-2 max-w-xs rounded-lg"
-                                            controls
-                                            muted
-                                            playsInline
-                                          />
-                                        ) : (
-                                          <img
-                                            src={comment.image}
-                                            alt="Comment attachment"
-                                            className="mt-2 max-w-xs rounded-lg"
-                                          />
-                                        ))}
-                                      <div className="flex items-center mt-2 space-x-4">
-                                        <button
-                                          className={`flex items-center text-xs space-x-1 ${
-                                            likedComments[comment._id]
-                                              ? "text-blue-500"
-                                              : "text-gray-500"
-                                          } hover:text-blue-500`}
-                                          onClick={() =>
-                                            handleLikeComment(comment._id)
+                                    {editingCommentId === comment._id ? (
+                                      <div className="flex flex-col gap-2">
+                                        <input
+                                          type="text"
+                                          value={editText}
+                                          onChange={(e) =>
+                                            setEditText(e.target.value)
                                           }
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-4 w-4"
-                                            fill={
-                                              likedComments[comment._id]
-                                                ? "currentColor"
-                                                : "none"
+                                          className="w-full py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
+                                        />
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() =>
+                                              handleEditComment(comment._id)
                                             }
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
+                                            className="bg-[#12153d] text-white px-3 py-1 rounded-full hover:bg-[#12153d]/90 transition-colors"
                                           >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={1.5}
-                                              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                            Save
+                                          </button>
+                                          <button
+                                            onClick={() => {
+                                              setEditingCommentId(null);
+                                              setEditText("");
+                                            }}
+                                            className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-400 transition-colors"
+                                          >
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <>
+                                        <div
+                                          className="mt-1 text-gray-700"
+                                          dangerouslySetInnerHTML={{ __html: comment.content }}
+                                        />
+                                        {comment.image &&
+                                          (comment.image.includes("video/") ? (
+                                            <video
+                                              src={comment.image}
+                                              alt="Comment attachment"
+                                              className="mt-2 max-w-xs rounded-lg"
+                                              controls
+                                              muted
+                                              playsInline
                                             />
-                                          </svg>
-                                          <span>{comment.likes || 0}</span>
-                                        </button>
-                                        <button
-                                          className={`flex items-center text-xs space-x-1 ${
-                                            dislikedComments[comment._id]
-                                              ? "text-red-500"
-                                              : "text-gray-500"
-                                          } hover:text-red-500`}
-                                          onClick={() =>
-                                            handleDislikeComment(comment._id)
-                                          }
-                                        >
-                                          <svg
-                                            width="20px"
-                                            height="20px"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            fill={
-                                              dislikedComments[comment._id]
-                                                ? "currentColor"
-                                                : "none"
+                                          ) : (
+                                            <img
+                                              src={comment.image}
+                                              alt="Comment attachment"
+                                              className="mt-2 max-w-xs rounded-lg"
+                                            />
+                                          ))}
+                                        <div className="flex items-center mt-2 space-x-4">
+                                          <button
+                                            className={`flex items-center text-xs space-x-1 ${
+                                              likedComments[comment._id]
+                                                ? "text-blue-500"
+                                                : "text-gray-500"
+                                            } hover:text-blue-500`}
+                                            onClick={() =>
+                                              handleLikeComment(comment._id)
                                             }
-                                            xmlns="http://www.w3.org/2000/svg"
                                           >
-                                            <path
-                                              fillRule="evenodd"
-                                              clipRule="evenodd"
-                                              d="M15.0501 16.9558C15.4673 18.2075 14.5357 19.5 13.2164 19.5C12.5921 19.5 12.0063 19.1985 11.6435 18.6906L8.47164 14.25L5.85761 14.25L5.10761 13.5L5.10761 6L5.85761 5.25L16.8211 5.25L19.1247 9.85722C19.8088 11.2253 19.5407 12.8776 18.4591 13.9592C17.7927 14.6256 16.8888 15 15.9463 15L14.3982 15L15.0501 16.9558ZM9.60761 13.2596L12.8641 17.8187C12.9453 17.9325 13.0765 18 13.2164 18C13.5119 18 13.7205 17.7105 13.6271 17.4302L12.317 13.5L15.9463 13.5C16.491 13.5 17.0133 13.2836 17.3984 12.8985C18.0235 12.2735 18.1784 11.3186 17.7831 10.528L15.8941 6.75L9.60761 6.75L9.60761 13.2596ZM8.10761 6.75L6.60761 6.75L6.60761 12.75L8.10761 12.75L8.10761 6.75Z"
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              className="h-4 w-4"
+                                              fill={
+                                                likedComments[comment._id]
+                                                  ? "currentColor"
+                                                  : "none"
+                                              }
+                                              viewBox="0 0 24 24"
+                                              stroke="currentColor"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                              />
+                                            </svg>
+                                            <span>{comment.likes || 0}</span>
+                                          </button>
+                                          <button
+                                            className={`flex items-center text-xs space-x-1 ${
+                                              dislikedComments[comment._id]
+                                                ? "text-red-500"
+                                                : "text-gray-500"
+                                            } hover:text-red-500`}
+                                            onClick={() =>
+                                              handleDislikeComment(comment._id)
+                                            }
+                                          >
+                                            <svg
+                                              width="20px"
+                                              height="20px"
+                                              viewBox="0 0 24 24"
+                                              stroke="currentColor"
                                               fill={
                                                 dislikedComments[comment._id]
                                                   ? "currentColor"
                                                   : "none"
                                               }
-                                            />
-                                          </svg>
-                                          <span>{comment.dislikes || 0}</span>
-                                        </button>
-                                        <button
-                                          className="flex items-center text-xs space-x-1 text-gray-500 hover:text-green-500"
-                                          onClick={() =>
-                                            setReplyingTo(
-                                              replyingTo === comment._id
-                                                ? null
-                                                : comment._id
-                                            )
-                                          }
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-4 w-4"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={1.5}
-                                              d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-                                            />
-                                          </svg>
-                                          <span>Reply</span>
-                                        </button>
-                                      </div>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-                              <button
-                                className="text-gray-400 hover:text-gray-600"
-                                onClick={() => toggleOptions(comment._id)}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-5 w-5"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                              </button>
-                            </div>
-                            {showOptions === comment._id && (
-                              <div className="absolute right-4 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                                <button
-                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  onClick={() => {
-                                    setEditingCommentId(comment._id);
-                                    setEditText(comment.content);
-                                    setShowOptions(null);
-                                  }}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                                  onClick={() => handleDeleteComment(comment._id)}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            )}
-                            {replyingTo === comment._id && (
-                              <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="text"
-                                    placeholder="Write a reply..."
-                                    value={replyText}
-                                    onChange={(e) =>
-                                      setReplyText(e.target.value)
-                                    }
-                                    className="w-full mt-4 py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
-                                  />
-                                  <button
-                                    onClick={() =>
-                                      handleReplySubmit(comment._id)
-                                    }
-                                    className="bg-[#12153d] text-white p-2 rounded-full hover:bg-[#12153d]/90 cursor-pointer transition-colors flex-shrink-0"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-4 w-4 rotate-90"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                            {post.comments
-                              .filter((reply) => reply.parentId === comment._id)
-                              .map((reply) => (
-                                <div
-                                  key={reply._id}
-                                  className="mt-3 pl-10 pt-3 border-t border-gray-100"
-                                >
-                                  <div className="flex items-start gap-2">
-                                    <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                      {reply.author?.profileImage ? (
-                                        <img
-                                          src={reply.author.profileImage}
-                                          alt={reply.author?.username || "Commenter"}
-                                          className="h-full w-full object-cover"
-                                        />
-                                      ) : (
-                                        <span className="text-gray-600 font-bold text-sm">
-                                          {reply.author?.username?.charAt(0) ||
-                                            "A"}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-2">
-                                        <span className="font-medium text-sm">
-                                          {reply.author?.username || "Anonymous"}
-                                        </span>
-                                        <span className="text-xs text-gray-500">
-                                          {new Date(
-                                            reply.createdAt
-                                          ).toLocaleDateString()}
-                                        </span>
-                                      </div>
-                                      <p className="text-sm text-gray-700">
-                                        {reply.content}
-                                      </p>
-                                      {reply.image && (
-                                        <img
-                                          src={reply.image}
-                                          alt="Reply attachment"
-                                          className="mt-2 max-w-xs rounded-lg"
-                                        />
-                                      )}
-                                      <div className="flex items-center mt-2 space-x-4">
-                                        <button
-                                          className={`flex items-center text-xs space-x-1 ${
-                                            likedComments[reply._id]
-                                              ? "text-blue-500"
-                                              : "text-gray-500"
-                                          } hover:text-blue-500`}
-                                          onClick={() =>
-                                            handleLikeComment(reply._id)
-                                          }
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-3 w-3"
-                                            fill={
-                                              likedComments[reply._id]
-                                                ? "currentColor"
-                                                : "none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                fillRule="evenodd"
+                                                clipRule="evenodd"
+                                                d="M15.0501 16.9558C15.4673 18.2075 14.5357 19.5 13.2164 19.5C12.5921 19.5 12.0063 19.1985 11.6435 18.6906L8.47164 14.25L5.85761 14.25L5.10761 13.5L5.10761 6L5.85761 5.25L16.8211 5.25L19.1247 9.85722C19.8088 11.2253 19.5407 12.8776 18.4591 13.9592C17.7927 14.6256 16.8888 15 15.9463 15L14.3982 15L15.0501 16.9558ZM9.60761 13.2596L12.8641 17.8187C12.9453 17.9325 13.0765 18 13.2164 18C13.5119 18 13.7205 17.7105 13.6271 17.4302L12.317 13.5L15.9463 13.5C16.491 13.5 17.0133 13.2836 17.3984 12.8985C18.0235 12.2735 18.1784 11.3186 17.7831 10.528L15.8941 6.75L9.60761 6.75L9.60761 13.2596ZM8.10761 6.75L6.60761 6.75L6.60761 12.75L8.10761 12.75L8.10761 6.75Z"
+                                              />
+                                            </svg>
+                                            <span>{comment.dislikes || 0}</span>
+                                          </button>
+                                          <button
+                                            className="flex items-center text-xs space-x-1 text-gray-500 hover:text-green-500"
+                                            onClick={() =>
+                                              setReplyingTo(
+                                                replyingTo === comment._id
+                                                  ? null
+                                                  : comment._id
+                                              )
                                             }
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
                                           >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={1.5}
-                                              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                                            />
-                                          </svg>
-                                          <span>{reply.likes || 0}</span>
-                                        </button>
-                                        <button
-                                          className={`flex items-center text-xs space-x-1 ${
-                                            dislikedComments[reply._id]
-                                              ? "text-red-500"
-                                              : "text-gray-500"
-                                          } hover:text-red-500`}
-                                          onClick={() =>
-                                            handleDislikeComment(reply._id)
-                                          }
-                                        >
-                                          <svg
-                                            width="20px"
-                                            height="20px"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            fill={
-                                              dislikedComments[reply._id]
-                                                ? "currentColor"
-                                                : "none"
-                                            }
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <path
-                                              fillRule="evenodd"
-                                              clipRule="evenodd"
-                                              d="M15.0501 16.9558C15.4673 18.2075 14.5357 19.5 13.2164 19.5C12.5921 19.5 12.0063 19.1985 11.6435 18.6906L8.47164 14.25L5.85761 14.25L5.10761 13.5L5.10761 6L5.85761 5.25L16.8211 5.25L19.1247 9.85722C19.8088 11.2253 19.5407 12.8776 18.4591 13.9592C17.7927 14.6256 16.8888 15 15.9463 15L14.3982 15L15.0501 16.9558ZM9.60761 13.2596L12.8641 17.8187C12.9453 17.9325 13.0765 18 13.2164 18C13.5119 18 13.7205 17.7105 13.6271 17.4302L12.317 13.5L15.9463 13.5C16.491 13.5 17.0133 13.2836 17.3984 12.8985C18.0235 12.2735 18.1784 11.3186 17.7831 10.528L15.8941 6.75L9.60761 6.75L9.60761 13.2596ZM8.10761 6.75L6.60761 6.75L6.60761 12.75L8.10761 12.75L8.10761 6.75Z"
-                                              fill={
-                                                dislikedComments[reply._id]
-                                                  ? "currentColor"
-                                                  : "none"
-                                              }
-                                            />
-                                          </svg>
-                                          <span>{reply.dislikes || 0}</span>
-                                        </button>
-                                      </div>
-                                    </div>
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              className="h-4 w-4"
+                                              fill="none"
+                                              viewBox="0 0 24 24"
+                                              stroke="currentColor"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={1.5}
+                                                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                                              />
+                                            </svg>
+                                            <span>Reply</span>
+                                          </button>
+                                        </div>
+                                      </>
+                                    )}
                                   </div>
                                 </div>
-                              ))}
-                          </div>
-                        ))
+                                <button
+                                  className="text-gray-400 hover:text-gray-600"
+                                  onClick={() => toggleOptions(comment._id)}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                  </svg>
+                                </button>
+                              </div>
+                              {showOptions === comment._id && (
+                                <div className="absolute right-4 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                  <button
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    onClick={() => {
+                                      setEditingCommentId(comment._id);
+                                      setEditText(comment.content);
+                                      setShowOptions(null);
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                    onClick={() => handleDeleteComment(comment._id)}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              )}
+                              {replyingTo === comment._id && (
+                                <div className="flex flex-col gap-2">
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Write a reply..."
+                                      value={replyText}
+                                      onChange={(e) =>
+                                        setReplyText(e.target.value)
+                                      }
+                                      className="w-full mt-4 py-2 px-3 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-[#12153d] border border-gray-200 text-sm"
+                                    />
+                                    <button
+                                      onClick={() =>
+                                        handleReplySubmit(comment._id)
+                                      }
+                                      className="bg-[#12153d] text-white p-2 rounded-full hover:bg-[#12153d]/90 cursor-pointer transition-colors flex-shrink-0"
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4 rotate-90"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                              {post.comments
+                                .filter((reply) => reply.parentId === comment._id)
+                                .map((reply) => {
+                                  const replyAuthor = parseAuthor(reply.author);
+                                  return (
+                                    <div
+                                      key={reply._id}
+                                      className="mt-3 pl-10 pt-3 border-t border-gray-100"
+                                    >
+                                      <div className="flex items-start gap-2">
+                                        <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                          {replyAuthor.profileImage ? (
+                                            <img
+                                              src={replyAuthor.profileImage}
+                                              alt={replyAuthor.username}
+                                              className="h-full w-full object-cover"
+                                            />
+                                          ) : (
+                                            <span className="text-gray-600 font-bold text-sm">
+                                              {replyAuthor.username.charAt(0) || "A"}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <div className="flex-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className="font-medium text-sm">
+                                              {replyAuthor.username}
+                                            </span>
+                                            <span className="text-xs text-gray-500">
+                                              {new Date(
+                                                reply.createdAt
+                                              ).toLocaleDateString()}
+                                            </span>
+                                          </div>
+                                          <div
+                                            className="text-sm text-gray-700"
+                                            dangerouslySetInnerHTML={{ __html: reply.content }}
+                                          />
+                                          {reply.image && (
+                                            reply.image.includes("video/") ? (
+                                              <video
+                                                src={reply.image}
+                                                alt="Reply attachment"
+                                                className="mt-2 max-w-xs rounded-lg"
+                                                controls
+                                                muted
+                                                playsInline
+                                              />
+                                            ) : (
+                                              <img
+                                                src={reply.image}
+                                                alt="Reply attachment"
+                                                className="mt-2 max-w-xs rounded-lg"
+                                              />
+                                            )
+                                          )}
+                                          <div className="flex items-center mt-2 space-x-4">
+                                            <button
+                                              className={`flex items-center text-xs space-x-1 ${
+                                                likedComments[reply._id]
+                                                  ? "text-blue-500"
+                                                  : "text-gray-500"
+                                              } hover:text-blue-500`}
+                                              onClick={() =>
+                                                handleLikeComment(reply._id)
+                                              }
+                                            >
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-3 w-3"
+                                                fill={
+                                                  likedComments[reply._id]
+                                                    ? "currentColor"
+                                                    : "none"
+                                                }
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth={1.5}
+                                                  d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                                                />
+                                              </svg>
+                                              <span>{reply.likes || 0}</span>
+                                            </button>
+                                            <button
+                                              className={`flex items-center text-xs space-x-1 ${
+                                                dislikedComments[reply._id]
+                                                  ? "text-red-500"
+                                                  : "text-gray-500"
+                                                } hover:text-red-500`}
+                                              onClick={() =>
+                                                handleDislikeComment(reply._id)
+                                              }
+                                            >
+                                              <svg
+                                                width="20px"
+                                                height="20px"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                fill={
+                                                  dislikedComments[reply._id]
+                                                    ? "currentColor"
+                                                    : "none"
+                                                }
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <path
+                                                  fillRule="evenodd"
+                                                  clipRule="evenodd"
+                                                  d="M15.0501 16.9558C15.4673 18.2075 14.5357 19.5 13.2164 19.5C12.5921 19.5 12.0063 19.1985 11.6435 18.6906L8.47164 14.25L5.85761 14.25L5.10761 13.5L5.10761 6L5.85761 5.25L16.8211 5.25L19.1247 9.85722C19.8088 11.2253 19.5407 12.8776 18.4591 13.9592C17.7927 14.6256 16.8888 15 15.9463 15L14.3982 15L15.0501 16.9558ZM9.60761 13.2596L12.8641 17.8187C12.9453 17.9325 13.0765 18 13.2164 18C13.5119 18 13.7205 17.7105 13.6271 17.4302L12.317 13.5L15.9463 13.5C16.491 13.5 17.0133 13.2836 17.3984 12.8985C18.0235 12.2735 18.1784 11.3186 17.7831 10.528L15.8941 6.75L9.60761 6.75L9.60761 13.2596ZM8.10761 6.75L6.60761 6.75L6.60761 12.75L8.10761 12.75L8.10761 6.75Z"
+                                                />
+                                              </svg>
+                                              <span>{reply.dislikes || 0}</span>
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          );
+                        })
                     ) : (
                       <div className="text-center text-gray-500 py-4">
                         No comments yet. Be the first to comment!
@@ -1053,7 +1082,6 @@ const ShowForum = () => {
           </div>
         </div>
 
-        {/* Right Advertisement */}
         <div className="hidden xl:block w-64 order-3">
           <div className="sticky top-4">
             <div className="bg-[#12153D] w-[300px] h-[250px] rounded-lg flex items-center justify-center text-white font-medium shadow-lg">
