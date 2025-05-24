@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-const SpamRiskCircle = ({ percentage, description }) => {
+// Spam score data with categories and descriptions based on the image
+const SPAM_SCORE_DATA = {
+  1: { category: "Natural & Trusted", description: "This keyword is completely natural and widely used in genuine content. It has no signs of manipulation or overuse, making it perfectly safe for SEO." },
+  2: { category: "Highly Organic", description: "This keyword is used in a natural way with minimal SEO optimization. There are no spam signals detected, and it is safe to include in your content." },
+ 3: { category: "Mostly Safe", description: "The keyword is slightly optimized but still considered safe. There’s no significant risk of spam, and it should perform well in search rankings." },
+  4: { category: "Moderately Optimized", description: "This keyword is being optimized, but still within reasonable limits. It’s fine for SEO, but excessive use could slightly impact readability." },
+  5: { category: "Mildly Overused", description: "The keyword appears somewhat frequently in content, which may raise minor red flags for search engines. Ensure it is used in a balanced way." },
+  6: { category: "Aggressively Optimized", description: "The keyword is being repeated more than necessary, making the content look heavily SEO-driven. Consider reducing its usage for better rankings." },
+  7: { category: "Borderline Spammy", description: "The keyword is used excessively and may be perceived as keyword stuffing. Search engines could start reducing rankings if overused." },
+  8: { category: "Spam-Prone", description: "This keyword is over-optimized and frequently flagged in low-quality content. Its misuse could lead to lower rankings or content devaluation." },
+  9: { category: "Heavily Manipulated", description: "The keyword shows clear signs of spam tactics. Search engines may already be suppressing results for pages that use it excessively." },
+  10: { category: "Toxic & Blacklisted", description: "This keyword is heavily spammed across the web and is often associated with black-hat SEO tactics. Using it could result in penalties or deindexing." }
+};
+
+const SpamRiskCircle = ({ percentage, onDataChange }) => {
   const firstDigit = percentage ? String(percentage).charAt(0) : '0';
   const displayPercentage = parseInt(firstDigit, 10);
   const scaledPercentage = displayPercentage * 10;
@@ -9,7 +23,7 @@ const SpamRiskCircle = ({ percentage, description }) => {
   const circumference = 2 * Math.PI * radius;
   const [offset, setOffset] = useState(circumference);
 
-  // Get colors based on risk level
+  // Get colors based on score level
   const getColors = () => {
     if (displayPercentage <= 3) {
       return {
@@ -31,14 +45,20 @@ const SpamRiskCircle = ({ percentage, description }) => {
 
   const colors = getColors();
   
+  // Updated to return category and description
   const getRiskText = () => {
-    if (displayPercentage <= 3) return "Low";
-    if (displayPercentage <= 6) return "Medium";
-    return "High";
+    return SPAM_SCORE_DATA[displayPercentage] || { category: "Unknown", description: "No description available for this score." };
   };
   
-  const riskText = getRiskText();
+  const { category, description } = getRiskText();
   
+  // Notify parent about the category and description
+  useEffect(() => {
+    if (onDataChange) {
+      onDataChange({ category, description });
+    }
+  }, [category, description, onDataChange]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setOffset(circumference - (scaledPercentage / 100) * circumference);
@@ -100,8 +120,8 @@ const SpamRiskCircle = ({ percentage, description }) => {
           <span className="text-4xl font-bold transition-all duration-300" style={{ color: colors.main }}>
             {firstDigit}
           </span>
-          <p className="text-sm font-medium mt-1 mb-1" style={{ color: colors.main }}>{riskText} Risk</p>
-          <p className="text-xs font-medium text-gray-600 px-2">{description}</p>
+          <p className="text-sm font-medium mt-1 mb-1" style={{ color: colors.main }}>{category}</p>
+          {/* <p className="text-xs font-medium text-gray-600 px-2">{description}</p> */}
         </div>
       </div>
     </div>

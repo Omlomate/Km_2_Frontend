@@ -554,7 +554,7 @@ const ShowForum = () => {
 
               <section id="comment">
                 <div className="mt-8 border-t pt-6">
-                  <div className="flex flex-col gap-2 mb-6">
+                  <div className="flex flex-col gap-2 mb-6 pl-[9px]">
                     <div className="flex items-center gap-2">
                       <input
                         type="text"
@@ -658,6 +658,7 @@ const ShowForum = () => {
                         controls
                         muted
                         playsInline
+                        
                       />
                       <button
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"

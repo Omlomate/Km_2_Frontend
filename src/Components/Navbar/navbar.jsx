@@ -304,11 +304,11 @@ const Navbar = () => {
                   )}
                 </button>
                 {showNotifications && (
-                  <div className="absolute top-10 right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-50">
+                  <div className="absolute top-12 right-30 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 max-h-[25rem] overflow-y-auto">
                     {isLoadingNotifications ? (
-                      <div className="py-4 flex flex-col items-center justify-center">
+                      <div className="py-6 flex flex-col items-center justify-center">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#E5590F]"></div>
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-sm text-gray-500 mt-3">
                           Loading notifications...
                         </p>
                       </div>
@@ -316,17 +316,19 @@ const Navbar = () => {
                       notifications.map((notification) => (
                         <div
                           key={notification._id}
-                          className="py-2 border-b last:border-b-0 cursor-pointer hover:bg-gray-100"
+                          className="flex flex-col py-3 px-4 cursor-pointer hover:bg-gray-50 transition-all duration-200 rounded-md hover:shadow-sm  "
                           onClick={() =>
                             handleNotificationClick(notification.postId)
                           }
                         >
-                          <p className="text-sm">{notification.message}</p>
-                          <span className="text-xs text-gray-500">
+                          <p className="text-sm font-medium text-gray-800">
+                            {notification.message}
+                          </p>
+                          <span className="text-xs text-gray-500 mt-1">
                             {new Date(notification.createdAt).toLocaleString(
                               "en-US",
                               {
-                                month: "2-digit",
+                                month: "short",
                                 day: "2-digit",
                                 year: "numeric",
                                 hour: "numeric",
@@ -338,7 +340,25 @@ const Navbar = () => {
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-gray-500">No notifications</p>
+                      <div className="py-6 flex flex-col items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-10 w-10 text-gray-300"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                          />
+                        </svg>
+                        <p className="text-sm text-gray-500 mt-3">
+                          No notifications
+                        </p>
+                      </div>
                     )}
                   </div>
                 )}
@@ -367,7 +387,7 @@ const Navbar = () => {
                   onClick={showLogin}
                   className="group flex items-center justify-start w-11 h-11 bg-[#E5590F] rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
                 >
-                  <div className="flex items-center justify-center w-full transition-all duration-300 group-hover:justify-start group-hover:px-3">
+                  <div className="flex items-center justify-center w-full transition-all duration-300 group-hover:justify-start group_hover:px-3">
                     <svg
                       className="w-4 h-4"
                       viewBox="0 0 512 512"

@@ -6,7 +6,7 @@ import useKeywordData from "../hooks/useKeywordData";
 import SpamRiskCircle from "../Components/ui/Graphs/SpamRiskCircle";
 import Loader from "../Components/Loading/Loader";
 
-export const AdCompetition = () => {
+export const SpamScore = () => {
   const [keywordData, setKeywordData] = useState(null);
   const { data: data3, loading } = useKeywordData();
   const [hover, setHover] = useState(false);
@@ -304,6 +304,14 @@ export const AdCompetition = () => {
                               <SpamRiskCircle
                                 percentage={keywordData.spamRiskScore}
                                 description="Spam Risk Level"
+                                onDataChange={(data) => {
+                                  // Update keywordData with the category and description from SpamRiskCircle
+                                  setKeywordData(prevData => ({
+                                    ...prevData,
+                                    spam_category: data.category,
+                                    spam_description: data.description
+                                  }));
+                                }}
                               />
                             </div>
                           </div>
@@ -415,4 +423,4 @@ export const AdCompetition = () => {
   );
 };
 
-export default AdCompetition;
+export default SpamScore
