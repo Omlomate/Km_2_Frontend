@@ -22,8 +22,14 @@ const formatValue = (value) => {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-2 border border-gray-200 rounded shadow">
-        <p className="text-sm">{`${label}: ${formatValue(payload[0].value)}`}</p>
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg transition-all duration-300 transform scale-105">
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500 font-medium mb-1">{label}</span>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#12153D] mr-2"></div>
+            <span className="text-base font-bold text-[#12153D]">{formatValue(payload[0].value)}</span>
+          </div>
+        </div>
       </div>
     );
   }
