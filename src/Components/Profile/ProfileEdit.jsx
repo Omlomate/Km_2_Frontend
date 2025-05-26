@@ -89,50 +89,58 @@ const ProfileEdit = () => {
   
   // Update handleSubmit function
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-  
-    const formDataToSend = new FormData();
-    formDataToSend.append("firstName", formData.firstName);
-    formDataToSend.append("lastName", formData.lastName);
-    formDataToSend.append("username", formData.username);
-    formDataToSend.append("email", formData.email);
-    formDataToSend.append("phoneNumber", formData.phoneNumber);
-    formDataToSend.append("country", formData.country);
-  
-    // ✅ Only append profileImage if the user selected a new file
-    if (avatarFile instanceof File) {
-      formDataToSend.append("profileImage", avatarFile);
-    }
-  
-    console.log([...formDataToSend.entries()]); // Debugging
-  
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/update-profile/profile`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-          body: formDataToSend, // ✅ Correct way to send FormData
-        }
-      );
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        alert("Profile updated successfully!");
-        localStorage.setItem("userData", JSON.stringify(data.updatedUser));
-      } else {
-        alert("Failed to update profile: " + data.message);
+  e.preventDefault();
+  setIsLoading(true);
+
+  const formDataToSend = new FormData();
+  formDataToSend.append("firstName", formData.firstName);
+  formDataToSend.append("lastName", formData.lastName);
+  formDataToSend.append("username", formData.username);
+  formDataToSend.append("email", formData.email);
+  formDataToSend.append("phoneNumber", formData.phoneNumber);
+  formDataToSend.append("country", formData.country);
+
+  // ✅ Append profileImage: Use avatarFile if a file is uploaded, otherwise use avatar URL
+  if (avatarFile instanceof File) {
+    formDataToSend.append("profileImage", avatarFile);
+  } else if (avatar) {
+    formDataToSend.append("profileImage", avatar); // Send the default avatar URL
+  }
+
+  console.log([...formDataToSend.entries()]); // Debugging
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/update-profile/profile`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: formDataToSend,
       }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    } finally {
-      setIsLoading(false);
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Profile updated successfully!");
+      localStorage.setItem("userData", JSON.stringify(data.updatedUser));
+      // ✅ Update local avatar state with the response if needed
+      if (data.updatedUser.profileImage) {
+        setAvatar(data.updatedUser.profileImage);
+      }
+    } else {
+      alert("Failed to update profile: " + data.message);
     }
-  };
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    alert("An error occurred while updating the profile.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleAvatarSelect = (avatarUrl) => {
     setAvatar(avatarUrl);
