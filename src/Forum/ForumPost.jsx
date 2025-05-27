@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Configure base URL for API requests
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_BASE_URL || "https://keywordraja.com";
 
 export const ForumPosts = ({ post, onReact }) => {
   const [reacted, setReacted] = useState(post.userReacted || false);
