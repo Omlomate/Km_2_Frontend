@@ -235,7 +235,7 @@ export const ForumPosts = ({ post, onReact }) => {
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           ) : (
-            <p className="text-sm text-gray-700 mb-4">{post.content}</p>
+            <p className="text-sm text-gray-700 mb-4 forum-content" dangerouslySetInnerHTML={{ __html: post.content }} />
           )}
         </div>
 
